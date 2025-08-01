@@ -11,8 +11,10 @@
 <meta property="og:type" content="website">
 <meta property="og:title" content="Дмитрий Костюк — иллюзионист">
 <meta property="og:description" content="Кинематографичное шоу, персонализация, вау-эффект.">
-<meta property="og:image" content="images/portrait.jpg?v=7">
+<meta property="og:image" content="images/portrait.jpg">
 <meta property="og:locale" content="ru_RU">
+
+<!-- <script>window.YA_METRICA_ID = 12345678;</script> -->
 
 <!-- Шрифты -->
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -20,8 +22,8 @@
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@900&family=Inter:wght@400;600&display=swap" rel="stylesheet">
 
 <!-- Preload главного фона -->
-<link rel="preload" as="image" href="images/portrait.webp?v=7" type="image/webp" imagesizes="100vw">
-<link rel="preload" as="image" href="images/portrait.jpg?v=7" type="image/jpeg" imagesizes="100vw">
+<link rel="preload" as="image" href="images/portrait.webp?v=8" type="image/webp" imagesizes="100vw">
+<link rel="preload" as="image" href="images/portrait.jpg?v=8" type="image/jpeg" imagesizes="100vw">
 
 <style>
 /* ===== Design tokens ===== */
@@ -38,10 +40,8 @@
   --fs-h2:clamp(22px, 4.6vw, 32px);
   --fs-h3:clamp(18px, 3.8vw, 20px);
 
-  /* положение лица на фоне (на мобилке переопределим) */
   --face-pos:50% 28%;
-  /* фоновое фото с кэш-бастером */
-  --hero-photo: url('images/portrait.jpg?v=7');
+  --hero-photo: url('images/portrait.jpg?v=8');
 }
 
 /* ===== Base ===== */
@@ -54,7 +54,7 @@ body{
     radial-gradient(1200px 600px at 60% -10%, rgba(255,255,255,.06), transparent 60%),
     radial-gradient(1600px 800px at -30% 120%, rgba(203,161,53,.06), transparent 70%),
     var(--hero-photo);
-  background-size:auto,auto,cover;              /* на мобилке станет contain */
+  background-size:auto,auto,cover;
   background-position:center,center,var(--face-pos);
   overflow-x:hidden;
 }
@@ -238,34 +238,27 @@ input:focus-visible,select:focus-visible,textarea:focus-visible{
 /* Подвал */
 footer{ padding:2rem 1rem; text-align:center; font-size:.9rem; color:#888; border-top:1px solid #222; margin-top:2rem }
 
-/* ===== Адаптив под моб/планшет/десктоп для hero-фона ===== */
+/* Планшет/десктоп */
+@media (min-width:900px){
+  .hero-cta .btn--primary{ width:auto; min-width:360px }
+  .packGrid{ display:grid; grid-template-columns: repeat(3, minmax(260px,1fr)); overflow:visible; padding:0 }
+  .pack{ min-width:unset }
+  .sectionBox{ width:clamp(300px, 88vw, 980px) }
+}
 
-/* Мобильные: помещаем фото целиком (contain) и подстраиваем позицию лица */
+/* ===== Адаптив главного фона ===== */
 @media (max-width: 480px){
-  :root{ --face-pos: 50% 15%; } /* если надо ниже/выше — меняйте второе число */
+  :root{ --face-pos: 50% 0%; } /* прижали фото к верху */
   body{
     background-attachment: scroll;
-    background-size: auto, auto, contain;   /* было cover → теперь contain */
-    background-position: center, center, var(--face-pos);
+    background-size: auto, auto, contain;      /* фото целиком по ширине */
+    background-position: center, center, 50% 0%;
   }
   .hero{ padding-top: calc(56px + env(safe-area-inset-top)); }
 }
-
-/* Планшеты */
-@media (min-width: 481px) and (max-width: 900px){
-  :root{ --face-pos: 50% 24%; }
-  body{ background-size:auto,auto,cover; background-position:center,center,var(--face-pos); }
-}
-
-/* Небольшие десктопы */
-@media (min-width: 901px) and (max-width: 1199px){
-  :root{ --face-pos: 50% 28%; }
-}
-
-/* Большие экраны */
-@media (min-width: 1200px){
-  :root{ --face-pos: 50% 36%; }
-}
+@media (min-width: 481px) and (max-width: 900px){ :root{ --face-pos: 50% 22%; } }
+@media (min-width: 901px) and (max-width: 1199px){ :root{ --face-pos: 50% 28%; } }
+@media (min-width: 1200px){ :root{ --face-pos: 50% 36%; } }
 </style>
 </head>
 <body>
@@ -476,19 +469,16 @@ footer{ padding:2rem 1rem; text-align:center; font-size:.9rem; color:#888; borde
 
 <!-- ===== JS ===== -->
 <script>
-/* Аналитика */
 function track(event, params){
   try{ if(window.gtag) gtag('event', event, params||{}); }catch(e){}
   try{ if(window.ym && window.YA_METRICA_ID) ym(window.YA_METRICA_ID,'reachGoal',event, params||{}); }catch(e){}
 }
 
-/* Поддержка WebP + кэш-бастер */
+/* Поддержка WebP фона */
 (function(){
   var img=new Image();
-  img.onload=function(){
-    if(img.width>0) document.documentElement.style.setProperty('--hero-photo',"url('images/portrait.webp?v=7')");
-  };
-  img.src='images/portrait.webp?v=7';
+  img.onload=function(){ if(img.width>0) document.documentElement.style.setProperty('--hero-photo',"url('images/portrait.webp?v=8')"); };
+  img.src='images/portrait.webp?v=8';
 })();
 
 /* iOS 100vh фикса */
@@ -499,140 +489,151 @@ function track(event, params){
 
 /* Topbar появление */
 (function(){
-  const tb=document.getElementById('topbar');
+  var tb=document.getElementById('topbar');
   if(!tb) return;
   if('IntersectionObserver' in window){
-    const io=new IntersectionObserver(([v])=> tb.classList.toggle('show', !v.isIntersecting), {threshold:.05});
+    var io=new IntersectionObserver(function(entries){
+      var v=entries[0]; tb.classList.toggle('show', !v.isIntersecting);
+    }, {threshold:.05});
     io.observe(document.getElementById('hero'));
   }else{
-    addEventListener('scroll',()=>tb.classList.add('show'),{passive:true});
+    addEventListener('scroll',function(){tb.classList.add('show')},{passive:true});
   }
 })();
 
-/* Модалки + Esc */
+/* Открытие/закрытие модалок + Esc */
 (function(){
   function closeModal(m){ if(m){ m.classList.remove('open'); m.dispatchEvent(new CustomEvent('modal:closed')); } }
-  addEventListener('click',e=>{
-    const op=e.target.closest && e.target.closest('[data-open]');
-    if(op){ e.preventDefault(); const id='modal-'+op.getAttribute('data-open'); const m=document.getElementById(id); if(m){ m.classList.add('open'); if(id==='modal-discount'){ track('discount_open'); } } }
+  addEventListener('click',function(e){
+    var op=e.target.closest && e.target.closest('[data-open]');
+    if(op){
+      e.preventDefault();
+      var id='modal-'+op.getAttribute('data-open');
+      var m=document.getElementById(id);
+      if(m){ m.classList.add('open'); if(id==='modal-discount'){ track('discount_open'); } }
+    }
     if(e.target.hasAttribute && e.target.hasAttribute('data-close')) closeModal(e.target.closest('.modal'));
     if(e.target.classList && e.target.classList.contains('modal__bg')) closeModal(e.target.closest('.modal'));
   });
-  addEventListener('keydown',e=>{ if(e.key==='Escape'){ document.querySelectorAll('.modal.open').forEach(closeModal); } });
+  addEventListener('keydown',function(e){ if(e.key==='Escape'){ document.querySelectorAll('.modal.open').forEach(closeModal); } });
 })();
 
 /* FAB вверх/вниз */
 (function(){
-  const fab=document.getElementById('fab'), iconPath=document.getElementById('fabPath');
+  var fab=document.getElementById('fab'), iconPath=document.getElementById('fabPath');
   if(!fab||!iconPath) return;
   function updateArrow(){
-    const atTop=scrollY<=10;
+    var atTop=scrollY<=10;
     iconPath.setAttribute('d', atTop ? 'M12 16 18 10H6z' : 'M12 8 6 14h12z');
     fab.setAttribute('aria-label', atTop ? 'Вниз' : 'Вверх');
   }
   updateArrow();
   addEventListener('scroll',updateArrow,{passive:true});
   addEventListener('resize',updateArrow);
-  fab.onclick=()=>{
-    const atTop=scrollY<=10;
+  fab.onclick=function(){
+    var atTop=scrollY<=10;
     scrollTo({top: atTop ? document.documentElement.scrollHeight : 0, behavior:'smooth'});
     iconPath.setAttribute('d', atTop ? 'M12 8 6 14h12z' : 'M12 16 18 10H6z');
   };
 })();
 
 /* Счётчик клиентов */
-(()=>{ 
-  const BASE_SHOWS=1838,BASE_YEARS=7,BASE_YEAR=2024,STEP=100;
-  const diff=new Date().getFullYear()-BASE_YEAR,
-        targetShows=BASE_SHOWS+STEP*diff,targetYears=BASE_YEARS+diff;
-  const span=document.getElementById('shows'),exp=document.getElementById('exp'),dur=1800;
+(function(){ 
+  var BASE_SHOWS=1838,BASE_YEARS=7,BASE_YEAR=2024,STEP=100;
+  var diff=new Date().getFullYear()-BASE_YEAR,
+      targetShows=BASE_SHOWS+STEP*diff,targetYears=BASE_YEARS+diff;
+  var span=document.getElementById('shows'),exp=document.getElementById('exp'),dur=1800;
   if(!span||!exp) return;
   function animate(){
-    const t0=performance.now();
-    (function tick(t){const p=Math.min(1,(t-t0)/dur);
+    var t0=performance.now();
+    (function tick(t){
+      var p=Math.min(1,(t-t0)/dur);
       span.textContent=Math.floor(targetShows*p).toLocaleString('ru-RU');
-      if(p<1) requestAnimationFrame(tick); else exp.textContent=`${targetYears} лет опыта`;
+      if(p<1) requestAnimationFrame(tick); else exp.textContent=targetYears+' лет опыта';
     })(t0);
   }
   if('IntersectionObserver' in window){
-    const io=new IntersectionObserver(([e],o)=>{ if(!e.isIntersecting) return; o.disconnect(); animate(); },{threshold:.6});
+    var io=new IntersectionObserver(function(entries,o){ if(!entries[0].isIntersecting) return; o.disconnect(); animate(); },{threshold:.6});
     io.observe(span);
   }else animate();
 })();
 
 /* ===== Игра ===== */
-(()=>{
-const modal=document.getElementById('modal-discount'); if(!modal) return;
+(function(){
+var modal=document.getElementById('modal-discount'); if(!modal) return;
 
-const ranks=["A","2","3","4","5","6","7","8","9","10","J","Q","K"];
-const suits=[["S","♠"],["H","♥"],["D","♦"],["C","♣"]];
-const sym=s=>suits.find(v=>v[0]===s)[1];
-const img=c=>`https://deckofcardsapi.com/static/img/${c.replace('10','0')}.png`;
+var ranks=["A","2","3","4","5","6","7","8","9","10","J","Q","K"];
+var suits=[["S","♠"],["H","♥"],["D","♦"],["C","♣"]];
+var sym=function(s){return suits.find(function(v){return v[0]===s;})[1];};
+var img=function(c){return "https://deckofcardsapi.com/static/img/"+c.replace('10','0')+".png";};
 
-ranks.forEach(r=>suits.forEach(([c])=>{
-  const l=document.createElement('link'); l.rel='preload'; l.as='image'; l.href=img(r+c); document.head.appendChild(l);
-}));
+// прелоад
+ranks.forEach(function(r){suits.forEach(function(sc){
+  var l=document.createElement('link'); l.rel='preload'; l.as='image'; l.href=img(r+sc[0]); document.head.appendChild(l);
+});});
 
-const selWrap=modal.querySelector('.selects'),
-      cards=[...modal.querySelectorAll('.card')],
-      faces=[...modal.querySelectorAll('.face')],
-      timer=modal.querySelector('#timer'),
-      bar=modal.querySelector('#fill'),
-      btn=modal.querySelector('#guessBtn'),
-      result=modal.querySelector('#result');
+var selWrap=modal.querySelector('.selects'),
+    cards=[].slice.call(modal.querySelectorAll('.card')),
+    faces=[].slice.call(modal.querySelectorAll('.face')),
+    timer=modal.querySelector('#timer'),
+    bar=modal.querySelector('#fill'),
+    btn=modal.querySelector('#guessBtn'),
+    result=modal.querySelector('#result');
 
 if(cards.length!==3||faces.length!==3) return;
 
-let selects=[];
-
+var selects=[];
 function buildSelects(){
   selWrap.innerHTML=''; selects=[];
-  for(let i=0;i<3;i++){
-    const s=document.createElement('select'); s.className='cardSel'; s.required=true;
+  for(var i=0;i<3;i++){
+    var s=document.createElement('select'); s.className='cardSel'; s.required=true;
     s.innerHTML='<option value="" selected disabled hidden>Карта</option>';
-    ranks.forEach(r=>suits.forEach(([c])=>{
-      s.insertAdjacentHTML('beforeend',`<option value="${r+c}" style="color:${(c==='H'||c==='D')?'#c11':'#000'}">${r+sym(c)}</option>`);
-    }));
+    ranks.forEach(function(r){suits.forEach(function(sc){
+      s.insertAdjacentHTML('beforeend','<option value="'+r+sc[0]+'" style="color:'+
+        ((sc[0]==='H'||sc[0]==='D')?'#c11':'#000')+'">'+r+sym(sc[0])+'</option>');
+    });});
     selects.push(s); selWrap.appendChild(s);
   }
-  selects.forEach(sel=>sel.addEventListener('change',()=>{
-    const ch=selects.map(s=>s.value);
-    selects.forEach(s2=>[...s2.options].forEach(o=>{ if(!o.value) return; o.disabled = ch.includes(o.value)&&s2!==sel; }));
-  }));
+  selects.forEach(function(sel){
+    sel.addEventListener('change',function(){
+      var ch=selects.map(function(s){return s.value;});
+      selects.forEach(function(s2){[].slice.call(s2.options).forEach(function(o){
+        if(!o.value) return; o.disabled = ch.includes(o.value)&&s2!==sel;
+      });});
+    });
+  });
 }
 
-const rand=a=>a[(Math.random()*a.length)|0];
-const uniq=a=>{ let c; do{ c=rand(ranks)+rand(suits)[0]; }while(a.includes(c)); return c; };
-const smoke=c=>{ for(let i=0;i<3;i++){ const s=document.createElement('span'); s.style.cssText='position:absolute;left:50%;bottom:50%;width:14px;height:14px;border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,.9)0,rgba(255,255,255,0)70%);pointer-events:none;animation:puff .9s ease-out forwards'; s.style.left=`calc(50% + ${(Math.random()-.5)*20}px)`; s.style.animationDelay=`${i*0.12}s`; c.appendChild(s); s.onanimationend=()=>s.remove(); } };
+function rand(a){ return a[(Math.random()*a.length)|0]; }
+function uniq(a){ var c; do{ c=rand(ranks)+rand(suits)[0]; }while(a.includes(c)); return c; }
+function smoke(c){ for(var i=0;i<3;i++){ var s=document.createElement('span'); s.style.cssText='position:absolute;left:50%;bottom:50%;width:14px;height:14px;border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,.9)0,rgba(255,255,255,0)70%);pointer-events:none;animation:puff .9s ease-out forwards'; s.style.left='calc(50% + '+((Math.random()-.5)*20)+'px)'; s.style.animationDelay=(i*0.12)+'s'; c.appendChild(s); s.onanimationend=function(){this.remove();}; } }
 
-let secret=[],t=10,int,tried=false;
-
+var secret=[],t=10,int,tried=false;
 function nextRound(){
   tried=false;
   secret=[]; while(secret.length<3) secret.push(uniq(secret));
-  faces.forEach(f=>f.innerHTML=''); cards.forEach(c=>c.classList.remove('flipped'));
-  result.textContent=''; selects.forEach(s=>{ s.selectedIndex=0; [...s.options].forEach(o=>o.disabled=false); });
+  faces.forEach(function(f){f.innerHTML='';}); cards.forEach(function(c){c.classList.remove('flipped');});
+  result.textContent=''; selects.forEach(function(s){ s.selectedIndex=0; [].slice.call(s.options).forEach(function(o){o.disabled=false;}); });
   t=10; timer.textContent=t; if(bar) bar.style.transform='scaleX(1)'; clearInterval(int);
-  int=setInterval(()=>{t--; timer.textContent=t; if(bar) bar.style.transform=`scaleX(${t/10})`; if(!t) nextRound();},1000);
+  int=setInterval(function(){t--; timer.textContent=t; if(bar) bar.style.transform='scaleX('+(t/10)+')'; if(!t) nextRound();},1000);
 }
 
-document.querySelectorAll('[data-open="discount"]').forEach(b=>b.addEventListener('click',()=>{ buildSelects(); nextRound(); }));
+[].slice.call(document.querySelectorAll('[data-open="discount"]')).forEach(function(b){ b.addEventListener('click',function(){ buildSelects(); nextRound(); }); });
+modal.addEventListener('modal:closed', function(){ clearInterval(int); result.textContent=''; });
 
-modal.addEventListener('modal:closed', ()=>{ clearInterval(int); result.textContent=''; });
-
-btn.onclick=()=>{
+btn.onclick=function(){
   if(tried){ return; }
-  if(!selects.every(s=>s.value)){ alert('Выберите три разные карты'); return; }
+  if(!selects.every(function(s){return s.value;})){ alert('Выберите три разные карты'); return; }
   clearInterval(int); tried=true;
-  const picks=selects.map(s=>s.value), hits=picks.filter(c=>secret.includes(c)).length, disc=[0,10,15,20][hits];
-  secret.forEach((c,i)=>{ faces[i].innerHTML=`<img src="${img(c)}" alt="">`; cards[i].classList.add('flipped'); smoke(cards[i]); });
-  result.textContent = disc ? `Поздравляем! Скидка ${disc}%` : 'Увы, скидки нет.';
+  var picks=selects.map(function(s){return s.value;}), hits=picks.filter(function(c){return secret.includes(c);}).length, disc=[0,10,15,20][hits];
+  secret.forEach(function(c,i){ faces[i].innerHTML='<img src="'+img(c)+'" alt="">'; cards[i].classList.add('flipped'); smoke(cards[i]); });
+  result.textContent = disc ? ('Поздравляем! Скидка '+disc+'%') : 'Увы, скидки нет.';
   if(disc){ sessionStorage.setItem('promoDiscount',disc); track('discount_win',{value:disc}); if(window.recalcIfReady) window.recalcIfReady(); }
 };
 })();
 
 /* ===== Калькулятор ===== */
-(()=>{
+(function(){
 const travel={
  "Вологодская":{fee:9000,cities:{Вологда:9000,Череповец:15000,Сокол:12000}},
  "Владимирская":{fee:10000,cities:{Владимир:10000,Ковров:10000,Муром:17000,Александров:10000,"Гусь хрустальный":13500}},
@@ -688,7 +689,7 @@ const area=f.area, city=f.city, when=f.when, guests=f.guests,
 Object.keys(travel).forEach(r=>area.add(new Option(r,r)));
 function fillSel(sel,obj){ sel.innerHTML='<option disabled selected hidden>Программа</option>'; Object.keys(obj).forEach(k=>sel.add(new Option(k,k))); }
 const fmt=n=>Number(n).toLocaleString('ru-RU'),
-      hol=d=>{ if(!d) return 1; const dt=new Date(d),m=dt.getMonth()+1,day=dt.getDate(),k=`${String(m).padStart(2,'0')}-${String(day).padStart(2,'0')}`; return (m===12&&day>=20)||(м===1&&day<=8)||["02-23","03-08","05-09"].includes(k)?1.5:1; };
+      hol=d=>{ if(!d) return 1; const dt=new Date(d),m=dt.getMonth()+1,day=dt.getDate(),k=`${String(m).padStart(2,'0')}-${String(day).padStart(2,'0')}`; return (m===12&&day>=20)||(m===1&&day<=8)||["02-23","03-08","05-09"].includes(k)?1.5:1; };
 
 area.onchange=()=>{ city.disabled=false; city.innerHTML='<option disabled selected hidden>Город</option>'; Object.keys(travel[area.value].cities).forEach(c=>city.add(new Option(c,c))); };
 [city,when].forEach(el=>el.onchange=()=>el.style.borderColor='');
@@ -700,12 +701,15 @@ svc.onchange=()=>{ desc.textContent= services[cat.value][svc.value].d || ''; };
 function isFilled(){ return area.value && city.value && when.value && guests.value && cat.value && svc.value; }
 
 function calc(){
-  const base=services[cat.value][svc.value].p,
-        road=(travel[area.value].cities[city.value]!==undefined ? travel[area.value].cities[city.value] : travel[area.value].fee),
-        guest=(guests.value==='custom'?(gRange.value-200)*80:+guests.value),
-        sub=base+road+guest, coef=hol(when.value), holUp=Math.round(sub*(coef-1)),
-        discP=+sessionStorage.getItem('promoDiscount')||0, disc=Math.round((sub+holUp)*discP/100),
-        sum=sub+holUp-disc;
+  const base=services[cat.value][svc.value].p;
+  const road=(travel[area.value].cities[city.value]!==undefined ? travel[area.value].cities[city.value] : travel[area.value].fee);
+  const guest=(guests.value==='custom'?(gRange.value-200)*80:+guests.value);
+  const sub=base+road+guest;
+  const coef=hol(when.value);
+  const holUp=Math.round(sub*(coef-1));
+  const discP=+sessionStorage.getItem('promoDiscount')||0;
+  const disc=Math.round((sub+holUp)*discP/100);
+  const sum=sub+holUp-disc;
 
   total.textContent='Итого — '+fmt(sum)+' ₽'; total.style.display='block';
   total.classList.add('flash'); setTimeout(()=>total.classList.remove('flash'),900);
@@ -733,10 +737,13 @@ calcBtn.addEventListener('click', ()=>{
 window.recalcIfReady = ()=>{ if(isFilled()) calc(); };
 })();
 
-/* Промо клик */
-document.getElementById('promoBtn')?.addEventListener('click',()=>track('promo_click'));
+/* Клик промо — событие */
+(function(){
+  var btn=document.getElementById('promoBtn');
+  if(btn) btn.addEventListener('click',function(){ track('promo_click'); });
+})();
 
-/* Отправка формы (заглушка под /api/lead) */
+/* Телеграм-отправка через serverless */
 (function(){
 const form = document.getElementById('orderForm'); if(!form) return;
 form.addEventListener('submit', async (e)=>{
@@ -762,7 +769,9 @@ form.addEventListener('submit', async (e)=>{
     'images/gallery/event-09.webp','images/gallery/event-10.webp'
   ];
   const grid=document.getElementById('galleryGrid');
-  const lb=document.getElementById('lightbox'), lbImg=lb?.querySelector('img');
+  const lb=document.getElementById('lightbox');
+  const lbImg=lb ? lb.querySelector('img') : null;
+
   if(grid){
     grid.innerHTML='';
     GALLERY_FILES.forEach(src=>{
@@ -771,15 +780,17 @@ form.addEventListener('submit', async (e)=>{
       grid.appendChild(img);
     });
   }
-  lb?.addEventListener('click',e=>{
-    if(e.target===lb || e.target.classList.contains('modal__bg')) lb.classList.remove('open');
-  });
-  document.addEventListener('keydown',e=>{
-    if(e.key==='Escape' && lb?.classList.contains('open')) lb.classList.remove('open');
-  });
+  if(lb){
+    lb.addEventListener('click',e=>{
+      if(e.target===lb || (e.target.classList && e.target.classList.contains('modal__bg'))) lb.classList.remove('open');
+    });
+    document.addEventListener('keydown',e=>{
+      if(e.key==='Escape' && lb.classList.contains('open')) lb.classList.remove('open');
+    });
+  }
 })();
 
-/* FAQ (19 пунктов) */
+/* FAQ */
 (function(){
   const FAQ = [
     { q: "За сколько бронировать дату?", a: "Обычно за 1–2 недели; популярные даты — за месяц и раньше." },
@@ -806,7 +817,7 @@ form.addEventListener('submit', async (e)=>{
   box.innerHTML = FAQ.map((item,i)=>`<details><summary>${i+1}. ${item.q}</summary><div>${item.a}</div></details>`).join('');
 })();
 
-/* Мобильный: wa.me → tel: */
+/* Промо-контакты: если мобильный — tel: */
 (function(){
   try{
     const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
