@@ -60,6 +60,7 @@ body{
 }
 a{color:inherit;text-decoration:none}
 
+/* Снижаем анимации, если у пользователя они отключены */
 @media (prefers-reduced-motion: reduce){
   *{animation:none !important; transition:none !important}
 }
@@ -127,7 +128,7 @@ input:focus-visible,select:focus-visible,textarea:focus-visible{
 
 .subtitle-float{
   font:900 clamp(18px,4.6vw,32px) var(--ff-head);
-  color:var(--gold); letter-spacing:.14ем; animation:float 6s ease-in-out infinite;
+  color:var(--gold); letter-spacing:.14em; animation:float 6s ease-in-out infinite;
 }
 @keyframes float{0%,100%{transform:translateY(-8px)}50%{transform:translateY(8px)}}
 
@@ -218,9 +219,12 @@ input:focus-visible,select:focus-visible,textarea:focus-visible{
 /* Галерея */
 .gallery{ display:grid; grid-template-columns: repeat(auto-fit, minmax(140px,1fr)); gap:.6rem }
 .gallery img{ width:100%; height:160px; object-fit:cover; border-radius:10px; border:1px solid #2e2f36; cursor:pointer }
+
+/* Лайтбокс */
 .lightbox{ position:fixed; inset:0; background:rgba(0,0,0,.85); display:none; align-items:center; justify-content:center; z-index:100 }
 .lightbox.open{ display:flex }
-.lightbox img{ max-width:92vw; max-height:90dvh; border-radius:10px; border:1px solid #333 }
+.lightbox img{ max-width:92vw; max-height:90dvh; border-radius:10px; border:1px solid #333; position:relative; z-index:2; }
+.lightbox .modal__bg{ z-index:1; } /* фон ниже картинки */
 
 /* FAB */
 .fab{
@@ -284,7 +288,7 @@ footer{ padding:2rem 1rem; text-align:center; font-size:.9rem; color:#888; borde
         <li>Персонализация под событие</li>
         <li>Интерактив со зрителями</li>
       </ul>
-      <a href="#calc" class="btn btn--primary">Узнать точную стоимость</a>
+      <a href="#calc" class="btn btn--primary" aria-label="Узнать точную стоимость — Частные события">Узнать точную стоимость</a>
     </article>
     <article class="pack">
       <h3>Микромагия · Корпоратив</h3>
@@ -294,7 +298,7 @@ footer{ padding:2rem 1rem; text-align:center; font-size:.9rem; color:#888; borde
         <li>Фокусы в руках гостей</li>
         <li>Идеально для банкетов</li>
       </ul>
-      <a href="#calc" class="btn btn--primary">Узнать точную стоимость</a>
+      <a href="#calc" class="btn btn--primary" aria-label="Узнать точную стоимость — Микромагия">Узнать точную стоимость</a>
     </article>
     <article class="pack">
       <h3>Концерт / «СЕКРЕТ»</h3>
@@ -304,7 +308,7 @@ footer{ padding:2rem 1rem; text-align:center; font-size:.9rem; color:#888; borde
         <li>Сценическое оформление</li>
         <li>Для больших залов</li>
       </ul>
-      <a href="#calc" class="btn btn--primary">Узнать точную стоимость</a>
+      <a href="#calc" class="btn btn--primary" aria-label="Узнать точную стоимость — Концерт">Узнать точную стоимость</a>
     </article>
   </div>
 </section>
@@ -383,7 +387,7 @@ footer{ padding:2rem 1rem; text-align:center; font-size:.9rem; color:#888; borde
   </p>
 </section>
 
-<!-- FAB -->
+<!-- стрелка вверх/вниз -->
 <button class="fab" id="fab" aria-label="Прокрутка">
   <svg id="fabIcon" viewBox="0 0 24 24" aria-hidden="true">
     <path id="fabPath" d="M12 16 18 10H6z"/>
@@ -400,7 +404,7 @@ footer{ padding:2rem 1rem; text-align:center; font-size:.9rem; color:#888; borde
     <div class="modal__close"><button data-close aria-label="Закрыть">✕</button></div>
     <div class="modal__body">
       <h2 class="sectionTitle">Угадай карту и получи скидку</h2>
-      <p class="rules">1 совпадение — 10 %, 2 — 15 %, 3 — 20 %. Колода обновляется каждые 10 с.</p>
+      <p class="rules">1 совпадение — 10 %, 2 — 15 %, 3 — 20 %. Попытка одна; колода обновляется каждые 10 с.</p>
 
       <div class="gameWrap">
         <div class="deck">
@@ -451,25 +455,26 @@ footer{ padding:2rem 1rem; text-align:center; font-size:.9rem; color:#888; borde
 
 <!-- ===== JS ===== -->
 <script>
+/* ---------- утилиты аналитики ---------- */
 function track(event, params){
   try{ if(window.gtag) gtag('event', event, params||{}); }catch(e){}
   try{ if(window.ym && window.YA_METRICA_ID) ym(window.YA_METRICA_ID,'reachGoal',event, params||{}); }catch(e){}
 }
 
-/* WebP для фона */
+/* Поддержка WebP фона */
 (function(){
   var img=new Image();
   img.onload=function(){ if(img.width>0) document.documentElement.style.setProperty('--hero-photo',"url('images/portrait.webp')"); };
   img.src='images/portrait.webp';
 })();
 
-/* iOS 100vh */
+/* iOS 100vh фикса */
 (function(){
   function setVH(){ document.documentElement.style.setProperty('--vh', window.innerHeight + 'px'); }
   setVH(); addEventListener('resize', setVH); addEventListener('orientationchange', setVH);
 })();
 
-/* topbar */
+/* Topbar появление */
 (function(){
   const tb=document.getElementById('topbar');
   if(!tb) return;
@@ -481,7 +486,7 @@ function track(event, params){
   }
 })();
 
-/* модалки + Esc */
+/* Открытие/закрытие модалок + Esc */
 (function(){
   function closeModal(m){ if(m){ m.classList.remove('open'); m.dispatchEvent(new CustomEvent('modal:closed')); } }
   addEventListener('click',e=>{
@@ -512,7 +517,7 @@ function track(event, params){
   };
 })();
 
-/* счётчик клиентов */
+/* Счётчик клиентов */
 (()=>{ 
   const BASE_SHOWS=1838,BASE_YEARS=7,BASE_YEAR=2024,STEP=100;
   const diff=new Date().getFullYear()-BASE_YEAR,
@@ -532,7 +537,7 @@ function track(event, params){
   }else animate();
 })();
 
-/* ===== Игра ===== */
+/* ===== Игра (одна попытка за раунд) ===== */
 (()=>{
 const modal=document.getElementById('modal-discount'); if(!modal) return;
 
@@ -541,6 +546,7 @@ const suits=[["S","♠"],["H","♥"],["D","♦"],["C","♣"]];
 const sym=s=>suits.find(v=>v[0]===s)[1];
 const img=c=>`https://deckofcardsapi.com/static/img/${c.replace('10','0')}.png`;
 
+// прелоад
 ranks.forEach(r=>suits.forEach(([c])=>{
   const l=document.createElement('link'); l.rel='preload'; l.as='image'; l.href=img(r+c); document.head.appendChild(l);
 }));
@@ -577,9 +583,10 @@ const rand=a=>a[(Math.random()*a.length)|0];
 const uniq=a=>{ let c; do{ c=rand(ranks)+rand(suits)[0]; }while(a.includes(c)); return c; };
 const smoke=c=>{ for(let i=0;i<3;i++){ const s=document.createElement('span'); s.style.cssText='position:absolute;left:50%;bottom:50%;width:14px;height:14px;border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,.9)0,rgba(255,255,255,0)70%);pointer-events:none;animation:puff .9s ease-out forwards'; s.style.left=`calc(50% + ${(Math.random()-.5)*20}px)`; s.style.animationDelay=`${i*0.12}s`; c.appendChild(s); s.onanimationend=()=>s.remove(); } };
 
-let secret=[],t=10,int;
+let secret=[],t=10,int,tried=false;
 
 function nextRound(){
+  tried=false;
   secret=[]; while(secret.length<3) secret.push(uniq(secret));
   faces.forEach(f=>f.innerHTML=''); cards.forEach(c=>c.classList.remove('flipped'));
   result.textContent=''; selects.forEach(s=>{ s.selectedIndex=0; [...s.options].forEach(o=>o.disabled=false); });
@@ -587,12 +594,16 @@ function nextRound(){
   int=setInterval(()=>{t--; timer.textContent=t; if(bar) bar.style.transform=`scaleX(${t/10})`; if(!t) nextRound();},1000);
 }
 
+// открытие модалки — новая раздача
 document.querySelectorAll('[data-open="discount"]').forEach(b=>b.addEventListener('click',()=>{ buildSelects(); nextRound(); }));
+
+// закрытие — сброс
 modal.addEventListener('modal:closed', ()=>{ clearInterval(int); result.textContent=''; });
 
 btn.onclick=()=>{
+  if(tried){ return; } // одна попытка
   if(!selects.every(s=>s.value)){ alert('Выберите три разные карты'); return; }
-  clearInterval(int);
+  clearInterval(int); tried=true;
   const picks=selects.map(s=>s.value), hits=picks.filter(c=>secret.includes(c)).length, disc=[0,10,15,20][hits];
   secret.forEach((c,i)=>{ faces[i].innerHTML=`<img src="${img(c)}" alt="">`; cards[i].classList.add('flipped'); smoke(cards[i]); });
   result.textContent = disc ? `Поздравляем! Скидка ${disc}%` : 'Увы, скидки нет.';
@@ -652,16 +663,12 @@ const area=f.area, city=f.city, when=f.when, guests=f.guests,
       breakdown=document.getElementById('breakdown'),
       afterCalc=document.getElementById('afterCalc');
 
-(function(){
-  const d=new Date(); d.setDate(d.getDate()+1);
-  const min = d.toISOString().split('T')[0];
-  when.min = min;
-})();
+(function(){ const d=new Date(); d.setDate(d.getDate()+1); when.min = d.toISOString().split('T')[0]; })();
 
 Object.keys(travel).forEach(r=>area.add(new Option(r,r)));
 function fillSel(sel,obj){ sel.innerHTML='<option disabled selected hidden>Программа</option>'; Object.keys(obj).forEach(k=>sel.add(new Option(k,k))); }
 const fmt=n=>Number(n).toLocaleString('ru-RU'),
-      hol=d=>{ if(!d) return 1; const dt=new Date(d),m=dt.getMonth()+1,day=dt.getDate(),k=`${String(m).padStart(2,'0')}-${String(day).padStart(2,'0')}`; return (m===12&&day>=20)||(м===1&&day<=8)||["02-23","03-08","05-09"].includes(k)?1.5:1; };
+      hol=d=>{ if(!d) return 1; const dt=new Date(d),m=dt.getMonth()+1,day=dt.getDate(),k=`${String(m).padStart(2,'0')}-${String(day).padStart(2,'0')}`; return (m===12&&day>=20)||(m===1&&day<=8)||["02-23","03-08","05-09"].includes(k)?1.5:1; };
 
 area.onchange=()=>{ city.disabled=false; city.innerHTML='<option disabled selected hidden>Город</option>'; Object.keys(travel[area.value].cities).forEach(c=>city.add(new Option(c,c))); };
 [city,when].forEach(el=>el.onchange=()=>el.style.borderColor='');
@@ -706,10 +713,10 @@ calcBtn.addEventListener('click', ()=>{
 window.recalcIfReady = ()=>{ if(isFilled()) calc(); };
 })();
 
-/* Клик промо */
+/* Клик промо — событие */
 document.getElementById('promoBtn')?.addEventListener('click',()=>track('promo_click'));
 
-/* Отправка заявки (пример) */
+/* Телеграм-отправка через serverless */
 (function(){
 const form = document.getElementById('orderForm'); if(!form) return;
 form.addEventListener('submit', async (e)=>{
@@ -727,34 +734,30 @@ form.addEventListener('submit', async (e)=>{
 });
 })();
 
-/* Галерея + лайтбокс */
+/* Галерея + лайтбокс (event-01.webp … event-10.webp) */
 (function(){
   const GALLERY_FILES = [
-    'images/gallery/event-01.webp',
-    'images/gallery/event-02.webp',
-    'images/gallery/event-03.webp',
-    'images/gallery/event-04.webp',
-    'images/gallery/event-05.webp',
-    'images/gallery/event-06.webp',
-    'images/gallery/event-07.webp',
-    'images/gallery/event-08.webp',
-    'images/gallery/event-09.webp',
-    'images/gallery/event-10.webp'
+    'images/gallery/event-01.webp','images/gallery/event-02.webp','images/gallery/event-03.webp','images/gallery/event-04.webp',
+    'images/gallery/event-05.webp','images/gallery/event-06.webp','images/gallery/event-07.webp','images/gallery/event-08.webp',
+    'images/gallery/event-09.webp','images/gallery/event-10.webp'
   ];
-
   const grid=document.getElementById('galleryGrid');
   const lb=document.getElementById('lightbox'), lbImg=lb?.querySelector('img');
-
   if(grid){
     grid.innerHTML='';
     GALLERY_FILES.forEach(src=>{
-      const img=new Image();
-      img.src=src; img.loading='lazy'; img.decoding='async'; img.alt='';
+      const img=new Image(); img.src=src; img.loading='lazy'; img.decoding='async'; img.alt='';
       img.addEventListener('click',()=>{ if(lb && lbImg){ lbImg.src=src; lb.classList.add('open'); }});
       grid.appendChild(img);
     });
   }
-  lb?.addEventListener('click',e=>{ if(e.target===lb) lb.classList.remove('open'); });
+  // закрытие лайтбокса
+  lb?.addEventListener('click',e=>{
+    if(e.target===lb || e.target.classList.contains('modal__bg')) lb.classList.remove('open');
+  });
+  document.addEventListener('keydown',e=>{
+    if(e.key==='Escape' && lb?.classList.contains('open')) lb.classList.remove('open');
+  });
 })();
 
 /* FAQ (19 пунктов) */
@@ -784,7 +787,7 @@ form.addEventListener('submit', async (e)=>{
   box.innerHTML = FAQ.map((item,i)=>`<details><summary>${i+1}. ${item.q}</summary><div>${item.a}</div></details>`).join('');
 })();
 
-/* Телефонная ссылка для мобильных */
+/* Промо-контакты: если мобильный — tel: */
 (function(){
   try{
     const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
