@@ -245,26 +245,27 @@ footer{ padding:2rem 1rem; text-align:center; font-size:.9rem; color:#888; borde
   .pack{ min-width:unset }
   .sectionBox{ width:clamp(300px, 88vw, 980px) }
 }
-  /* ===== Адаптив под моб/планшет/десктоп для hero-фона ===== */
-/* На мобильных: другое положение лица + отключаем fixed-фон */
+/* ===== Адаптив под моб/планшет/десктоп для hero-фона ===== */
+
+/* Мобильные (iPhone 13 входит сюда) */
 @media (max-width: 480px){
-  :root{ --face-pos: 50% 14%; }   /* поднимите/опустите второе число, если нужно */
-  body{ background-attachment: scroll; }
+  :root{ --face-pos: 50% 44%; }   /* было 14% — опустили лицо ниже */
+  body{ background-attachment: scroll; } /* отключаем fixed на мобилках */
 }
 
 /* Планшеты */
 @media (min-width: 481px) and (max-width: 900px){
-  :root{ --face-pos: 50% 22%; }
+  :root{ --face-pos: 50% 36%; }   /* было 22% */
 }
 
-/* Небольшие десктопы/ноутбуки */
+/* Небольшие ноутбуки/десктопы */
 @media (min-width: 901px) and (max-width: 1199px){
-  :root{ --face-pos: 50% 28%; }
+  :root{ --face-pos: 50% 32%; }   /* было 28% */
 }
 
 /* Большие экраны */
 @media (min-width: 1200px){
-  :root{ --face-pos: 50% 36%; }
+  :root{ --face-pos: 50% 28%; }   /* было 36% */
 }
 </style>
 </head>
