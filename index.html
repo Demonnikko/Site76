@@ -11,7 +11,7 @@
 <meta property="og:type" content="website">
 <meta property="og:title" content="Дмитрий Костюк — иллюзионист">
 <meta property="og:description" content="Кинематографичное шоу, персонализация, вау-эффект.">
-<meta property="og:image" content="images/portrait.jpg?v=2">
+<meta property="og:image" content="images/portrait.jpg?v=7">
 <meta property="og:locale" content="ru_RU">
 
 <!-- Шрифты -->
@@ -20,8 +20,8 @@
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@900&family=Inter:wght@400;600&display=swap" rel="stylesheet">
 
 <!-- Preload главного фона -->
-<link rel="preload" as="image" href="images/portrait.webp?v=2" type="image/webp" imagesizes="100vw">
-<link rel="preload" as="image" href="images/portrait.jpg?v=2"  type="image/jpeg" imagesizes="100vw">
+<link rel="preload" as="image" href="images/portrait.webp?v=7" type="image/webp" imagesizes="100vw">
+<link rel="preload" as="image" href="images/portrait.jpg?v=7" type="image/jpeg" imagesizes="100vw">
 
 <style>
 /* ===== Design tokens ===== */
@@ -38,9 +38,10 @@
   --fs-h2:clamp(22px, 4.6vw, 32px);
   --fs-h3:clamp(18px, 3.8vw, 20px);
 
-  /* стартовое положение лица и фон */
+  /* положение лица на фоне (на мобилке переопределим) */
   --face-pos:50% 28%;
-  --hero-photo: url('images/portrait.jpg?v=2');
+  /* фоновое фото с кэш-бастером */
+  --hero-photo: url('images/portrait.jpg?v=7');
 }
 
 /* ===== Base ===== */
@@ -53,13 +54,13 @@ body{
     radial-gradient(1200px 600px at 60% -10%, rgba(255,255,255,.06), transparent 60%),
     radial-gradient(1600px 800px at -30% 120%, rgba(203,161,53,.06), transparent 70%),
     var(--hero-photo);
-  background-size:auto,auto,cover;
+  background-size:auto,auto,cover;              /* на мобилке станет contain */
   background-position:center,center,var(--face-pos);
   overflow-x:hidden;
 }
 a{color:inherit;text-decoration:none}
 
-/* Снижаем анимации, если отключены в системе */
+/* Снижаем анимации */
 @media (prefers-reduced-motion: reduce){
   *{animation:none !important; transition:none !important}
 }
@@ -222,8 +223,8 @@ input:focus-visible,select:focus-visible,textarea:focus-visible{
 /* Лайтбокс */
 .lightbox{ position:fixed; inset:0; background:rgba(0,0,0,.85); display:none; align-items:center; justify-content:center; z-index:100 }
 .lightbox.open{ display:flex }
-.lightbox img{ max-width:92vw; max-height:90dvh; border-radius:10px; border:1px solid #333; position:relative; z-index:2 }
-.lightbox .modal__bg{ position:absolute; inset:0; background:transparent; z-index:1 } /* фон ниже картинки */
+.lightbox img{ max-width:92vw; max-height:90dvh; border-radius:10px; border:1px solid #333; position:relative; z-index:2; }
+.lightbox .modal__bg{ z-index:1; }
 
 /* FAB */
 .fab{
@@ -237,28 +238,30 @@ input:focus-visible,select:focus-visible,textarea:focus-visible{
 /* Подвал */
 footer{ padding:2rem 1rem; text-align:center; font-size:.9rem; color:#888; border-top:1px solid #222; margin-top:2rem }
 
-/* Планшет/десктоп */
-@media (min-width:900px){
-  .hero-cta .btn--primary{ width:auto; min-width:360px }
-  .packGrid{ display:grid; grid-template-columns: repeat(3, minmax(260px,1fr)); overflow:visible; padding:0 }
-  .pack{ min-width:unset }
-  .sectionBox{ width:clamp(300px, 88vw, 980px) }
+/* ===== Адаптив под моб/планшет/десктоп для hero-фона ===== */
+
+/* Мобильные: помещаем фото целиком (contain) и подстраиваем позицию лица */
+@media (max-width: 480px){
+  :root{ --face-pos: 50% 15%; } /* если надо ниже/выше — меняйте второе число */
+  body{
+    background-attachment: scroll;
+    background-size: auto, auto, contain;   /* было cover → теперь contain */
+    background-position: center, center, var(--face-pos);
+  }
+  .hero{ padding-top: calc(56px + env(safe-area-inset-top)); }
 }
 
-/* ===== Адаптив для hero-фона ===== */
-/* Мобильные (iPhone 13 сюда входит) */
-@media (max-width: 480px){
-  :root{ --face-pos: 50% 14%; }       /* поднимите/опустите второе число при необходимости */
-  body{ background-attachment: scroll; } /* отключаем fixed на iOS */
-}
 /* Планшеты */
 @media (min-width: 481px) and (max-width: 900px){
-  :root{ --face-pos: 50% 22%; }
+  :root{ --face-pos: 50% 24%; }
+  body{ background-size:auto,auto,cover; background-position:center,center,var(--face-pos); }
 }
-/* Небольшие ноутбуки/десктопы */
+
+/* Небольшие десктопы */
 @media (min-width: 901px) and (max-width: 1199px){
   :root{ --face-pos: 50% 28%; }
 }
+
 /* Большие экраны */
 @media (min-width: 1200px){
   :root{ --face-pos: 50% 36%; }
@@ -473,22 +476,19 @@ footer{ padding:2rem 1rem; text-align:center; font-size:.9rem; color:#888; borde
 
 <!-- ===== JS ===== -->
 <script>
-/* ---------- утилиты аналитики ---------- */
+/* Аналитика */
 function track(event, params){
   try{ if(window.gtag) gtag('event', event, params||{}); }catch(e){}
   try{ if(window.ym && window.YA_METRICA_ID) ym(window.YA_METRICA_ID,'reachGoal',event, params||{}); }catch(e){}
 }
 
-/* Поддержка WebP фона (с подменой переменной + кэш-брейк) */
+/* Поддержка WebP + кэш-бастер */
 (function(){
   var img=new Image();
   img.onload=function(){
-    if(img.width>0){
-      document.documentElement.style
-        .setProperty('--hero-photo',"url('images/portrait.webp?v=2')");
-    }
+    if(img.width>0) document.documentElement.style.setProperty('--hero-photo',"url('images/portrait.webp?v=7')");
   };
-  img.src='images/portrait.webp?v=2';
+  img.src='images/portrait.webp?v=7';
 })();
 
 /* iOS 100vh фикса */
@@ -509,7 +509,7 @@ function track(event, params){
   }
 })();
 
-/* Открытие/закрытие модалок + Esc */
+/* Модалки + Esc */
 (function(){
   function closeModal(m){ if(m){ m.classList.remove('open'); m.dispatchEvent(new CustomEvent('modal:closed')); } }
   addEventListener('click',e=>{
@@ -560,7 +560,7 @@ function track(event, params){
   }else animate();
 })();
 
-/* ===== Игра (одна попытка за раунд) ===== */
+/* ===== Игра ===== */
 (()=>{
 const modal=document.getElementById('modal-discount'); if(!modal) return;
 
@@ -569,7 +569,6 @@ const suits=[["S","♠"],["H","♥"],["D","♦"],["C","♣"]];
 const sym=s=>suits.find(v=>v[0]===s)[1];
 const img=c=>`https://deckofcardsapi.com/static/img/${c.replace('10','0')}.png`;
 
-// прелоад
 ranks.forEach(r=>suits.forEach(([c])=>{
   const l=document.createElement('link'); l.rel='preload'; l.as='image'; l.href=img(r+c); document.head.appendChild(l);
 }));
@@ -617,14 +616,12 @@ function nextRound(){
   int=setInterval(()=>{t--; timer.textContent=t; if(bar) bar.style.transform=`scaleX(${t/10})`; if(!t) nextRound();},1000);
 }
 
-// открытие модалки — новая раздача
 document.querySelectorAll('[data-open="discount"]').forEach(b=>b.addEventListener('click',()=>{ buildSelects(); nextRound(); }));
 
-// закрытие — сброс
 modal.addEventListener('modal:closed', ()=>{ clearInterval(int); result.textContent=''; });
 
 btn.onclick=()=>{
-  if(tried){ return; } // одна попытка
+  if(tried){ return; }
   if(!selects.every(s=>s.value)){ alert('Выберите три разные карты'); return; }
   clearInterval(int); tried=true;
   const picks=selects.map(s=>s.value), hits=picks.filter(c=>secret.includes(c)).length, disc=[0,10,15,20][hits];
@@ -691,7 +688,7 @@ const area=f.area, city=f.city, when=f.when, guests=f.guests,
 Object.keys(travel).forEach(r=>area.add(new Option(r,r)));
 function fillSel(sel,obj){ sel.innerHTML='<option disabled selected hidden>Программа</option>'; Object.keys(obj).forEach(k=>sel.add(new Option(k,k))); }
 const fmt=n=>Number(n).toLocaleString('ru-RU'),
-      hol=d=>{ if(!d) return 1; const dt=new Date(d),m=dt.getMonth()+1,day=dt.getDate(),k=`${String(m).padStart(2,'0')}-${String(day).padStart(2,'0')}`; return (m===12&&day>=20)||(m===1&&day<=8)||["02-23","03-08","05-09"].includes(k)?1.5:1; };
+      hol=d=>{ if(!d) return 1; const dt=new Date(d),m=dt.getMonth()+1,day=dt.getDate(),k=`${String(m).padStart(2,'0')}-${String(day).padStart(2,'0')}`; return (m===12&&day>=20)||(м===1&&day<=8)||["02-23","03-08","05-09"].includes(k)?1.5:1; };
 
 area.onchange=()=>{ city.disabled=false; city.innerHTML='<option disabled selected hidden>Город</option>'; Object.keys(travel[area.value].cities).forEach(c=>city.add(new Option(c,c))); };
 [city,when].forEach(el=>el.onchange=()=>el.style.borderColor='');
@@ -708,26 +705,21 @@ function calc(){
         guest=(guests.value==='custom'?(gRange.value-200)*80:+guests.value),
         sub=base+road+guest, coef=hol(when.value), holUp=Math.round(sub*(coef-1)),
         discP=+sessionStorage.getItem('promoDiscount')||0, disc=Math.round((sub+holUp)*discP/100),
-        sum=sub+holUp-дисc?0:0; // placeholder to keep structure
-  const sum2 = sub + holUp - Math.round((sub + holUp) * discP / 100);
+        sum=sub+holUp-disc;
 
-  const totalEl = total;
-  totalEl.textContent = 'Итого — ' + fmt(sum2) + ' ₽';
-  totalEl.style.display='block';
-  totalEl.classList.add('flash'); setTimeout(()=>totalEl.classList.remove('flash'),900);
-
+  total.textContent='Итого — '+fmt(sum)+' ₽'; total.style.display='block';
+  total.classList.add('flash'); setTimeout(()=>total.classList.remove('flash'),900);
   breakdown.innerHTML=`База: ${fmt(sub)} ₽<br>— Услуга: ${fmt(base)} ₽<br>— Дорога: ${fmt(road)} ₽<br>— Гости: ${fmt(guest)} ₽`+
     (holUp?`<br>Праздничная надбавка: +${fmt(holUp)} ₽`:'')+
-    (discP?`<br>Скидка ${discP}%: −${fmt(Math.round((sub+holUp)*discP/100))} ₽`:'')+
-    `<br><b>К оплате: ${fmt(sum2)} ₽</b>`;
+    (disc?`<br>Скидка ${discP}%: −${fmt(disc)} ₽`:'')+
+    `<br><b>К оплате: ${fmt(sum)} ₽</b>`;
   breakdown.style.display='block'; afterCalc.style.display='flex';
-
   window.orderData={ area:area.value, city:city.value, date:when.value,
     guests:(guests.value==='custom'?gRange.value+'+':guests.options[guests.selectedIndex].text),
-    service:svc.value, price:fmt(sum2)+' ₽', discount:discP?discP+'%':'нет' };
+    service:svc.value, price:fmt(sum)+' ₽', discount:discP?discP+'%':'нет' };
 
-  totalEl.scrollIntoView({behavior:'smooth', block:'center'});
-  track('calc_calculated',{value:sum2});
+  total.scrollIntoView({behavior:'smooth', block:'center'});
+  track('calc_calculated',{value:sum});
 }
 
 calcBtn.addEventListener('click', ()=>{
@@ -741,10 +733,10 @@ calcBtn.addEventListener('click', ()=>{
 window.recalcIfReady = ()=>{ if(isFilled()) calc(); };
 })();
 
-/* Клик промо — событие */
+/* Промо клик */
 document.getElementById('promoBtn')?.addEventListener('click',()=>track('promo_click'));
 
-/* Телеграм-отправка через serverless */
+/* Отправка формы (заглушка под /api/lead) */
 (function(){
 const form = document.getElementById('orderForm'); if(!form) return;
 form.addEventListener('submit', async (e)=>{
@@ -779,7 +771,6 @@ form.addEventListener('submit', async (e)=>{
       grid.appendChild(img);
     });
   }
-  // закрытие лайтбокса
   lb?.addEventListener('click',e=>{
     if(e.target===lb || e.target.classList.contains('modal__bg')) lb.classList.remove('open');
   });
@@ -815,7 +806,7 @@ form.addEventListener('submit', async (e)=>{
   box.innerHTML = FAQ.map((item,i)=>`<details><summary>${i+1}. ${item.q}</summary><div>${item.a}</div></details>`).join('');
 })();
 
-/* Промо-контакты: если мобильный — tel: */
+/* Мобильный: wa.me → tel: */
 (function(){
   try{
     const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
