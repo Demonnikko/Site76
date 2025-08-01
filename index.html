@@ -11,10 +11,8 @@
 <meta property="og:type" content="website">
 <meta property="og:title" content="Дмитрий Костюк — иллюзионист">
 <meta property="og:description" content="Кинематографичное шоу, персонализация, вау-эффект.">
-<meta property="og:image" content="images/portrait.jpg">
+<meta property="og:image" content="images/portrait.jpg?v=2">
 <meta property="og:locale" content="ru_RU">
-
-<!-- <script>window.YA_METRICA_ID = 12345678;</script> -->
 
 <!-- Шрифты -->
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -22,8 +20,8 @@
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@900&family=Inter:wght@400;600&display=swap" rel="stylesheet">
 
 <!-- Preload главного фона -->
-<link rel="preload" as="image" href="images/portrait.webp" type="image/webp" imagesizes="100vw">
-<link rel="preload" as="image" href="images/portrait.jpg" type="image/jpeg" imagesizes="100vw">
+<link rel="preload" as="image" href="images/portrait.webp?v=2" type="image/webp" imagesizes="100vw">
+<link rel="preload" as="image" href="images/portrait.jpg?v=2"  type="image/jpeg" imagesizes="100vw">
 
 <style>
 /* ===== Design tokens ===== */
@@ -40,8 +38,9 @@
   --fs-h2:clamp(22px, 4.6vw, 32px);
   --fs-h3:clamp(18px, 3.8vw, 20px);
 
+  /* стартовое положение лица и фон */
   --face-pos:50% 28%;
-  --hero-photo: url('images/portrait.jpg');
+  --hero-photo: url('images/portrait.jpg?v=2');
 }
 
 /* ===== Base ===== */
@@ -60,7 +59,7 @@ body{
 }
 a{color:inherit;text-decoration:none}
 
-/* Снижаем анимации, если у пользователя они отключены */
+/* Снижаем анимации, если отключены в системе */
 @media (prefers-reduced-motion: reduce){
   *{animation:none !important; transition:none !important}
 }
@@ -223,8 +222,8 @@ input:focus-visible,select:focus-visible,textarea:focus-visible{
 /* Лайтбокс */
 .lightbox{ position:fixed; inset:0; background:rgba(0,0,0,.85); display:none; align-items:center; justify-content:center; z-index:100 }
 .lightbox.open{ display:flex }
-.lightbox img{ max-width:92vw; max-height:90dvh; border-radius:10px; border:1px solid #333; position:relative; z-index:2; }
-.lightbox .modal__bg{ z-index:1; } /* фон ниже картинки */
+.lightbox img{ max-width:92vw; max-height:90dvh; border-radius:10px; border:1px solid #333; position:relative; z-index:2 }
+.lightbox .modal__bg{ position:absolute; inset:0; background:transparent; z-index:1 } /* фон ниже картинки */
 
 /* FAB */
 .fab{
@@ -245,10 +244,11 @@ footer{ padding:2rem 1rem; text-align:center; font-size:.9rem; color:#888; borde
   .pack{ min-width:unset }
   .sectionBox{ width:clamp(300px, 88vw, 980px) }
 }
+
 /* ===== Адаптив для hero-фона ===== */
 /* Мобильные (iPhone 13 сюда входит) */
 @media (max-width: 480px){
-  :root{ --face-pos: 50% 14%; }   /* было 44% — поднимаем лицо выше */
+  :root{ --face-pos: 50% 14%; }       /* поднимите/опустите второе число при необходимости */
   body{ background-attachment: scroll; } /* отключаем fixed на iOS */
 }
 /* Планшеты */
@@ -422,7 +422,7 @@ footer{ padding:2rem 1rem; text-align:center; font-size:.9rem; color:#888; borde
     <div class="modal__close"><button data-close aria-label="Закрыть">✕</button></div>
     <div class="modal__body">
       <h2 class="sectionTitle">Угадай карту и получи скидку</h2>
-      <p class="rules">1 совпадение - 10%, 2 - 15%, 3 — 20%. Колода обновляется каждые 10 с.</p>
+      <p class="rules">1 совпадение — 10 %, 2 — 15 %, 3 — 20 %. Попытка одна; колода обновляется каждые 10 с.</p>
 
       <div class="gameWrap">
         <div class="deck">
@@ -479,11 +479,16 @@ function track(event, params){
   try{ if(window.ym && window.YA_METRICA_ID) ym(window.YA_METRICA_ID,'reachGoal',event, params||{}); }catch(e){}
 }
 
-/* Поддержка WebP фона */
+/* Поддержка WebP фона (с подменой переменной + кэш-брейк) */
 (function(){
   var img=new Image();
-  img.onload=function(){ if(img.width>0) document.documentElement.style.setProperty('--hero-photo',"url('images/portrait.webp')"); };
-  img.src='images/portrait.webp';
+  img.onload=function(){
+    if(img.width>0){
+      document.documentElement.style
+        .setProperty('--hero-photo',"url('images/portrait.webp?v=2')");
+    }
+  };
+  img.src='images/portrait.webp?v=2';
 })();
 
 /* iOS 100vh фикса */
@@ -703,21 +708,26 @@ function calc(){
         guest=(guests.value==='custom'?(gRange.value-200)*80:+guests.value),
         sub=base+road+guest, coef=hol(when.value), holUp=Math.round(sub*(coef-1)),
         discP=+sessionStorage.getItem('promoDiscount')||0, disc=Math.round((sub+holUp)*discP/100),
-        sum=sub+holUp-disc;
+        sum=sub+holUp-дисc?0:0; // placeholder to keep structure
+  const sum2 = sub + holUp - Math.round((sub + holUp) * discP / 100);
 
-  total.textContent='Итого — '+fmt(sum)+' ₽'; total.style.display='block';
-  total.classList.add('flash'); setTimeout(()=>total.classList.remove('flash'),900);
+  const totalEl = total;
+  totalEl.textContent = 'Итого — ' + fmt(sum2) + ' ₽';
+  totalEl.style.display='block';
+  totalEl.classList.add('flash'); setTimeout(()=>totalEl.classList.remove('flash'),900);
+
   breakdown.innerHTML=`База: ${fmt(sub)} ₽<br>— Услуга: ${fmt(base)} ₽<br>— Дорога: ${fmt(road)} ₽<br>— Гости: ${fmt(guest)} ₽`+
     (holUp?`<br>Праздничная надбавка: +${fmt(holUp)} ₽`:'')+
-    (disc?`<br>Скидка ${discP}%: −${fmt(disc)} ₽`:'')+
-    `<br><b>К оплате: ${fmt(sum)} ₽</b>`;
+    (discP?`<br>Скидка ${discP}%: −${fmt(Math.round((sub+holUp)*discP/100))} ₽`:'')+
+    `<br><b>К оплате: ${fmt(sum2)} ₽</b>`;
   breakdown.style.display='block'; afterCalc.style.display='flex';
+
   window.orderData={ area:area.value, city:city.value, date:when.value,
     guests:(guests.value==='custom'?gRange.value+'+':guests.options[guests.selectedIndex].text),
-    service:svc.value, price:fmt(sum)+' ₽', discount:discP?discP+'%':'нет' };
+    service:svc.value, price:fmt(sum2)+' ₽', discount:discP?discP+'%':'нет' };
 
-  total.scrollIntoView({behavior:'smooth', block:'center'});
-  track('calc_calculated',{value:sum});
+  totalEl.scrollIntoView({behavior:'smooth', block:'center'});
+  track('calc_calculated',{value:sum2});
 }
 
 calcBtn.addEventListener('click', ()=>{
