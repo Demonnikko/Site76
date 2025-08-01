@@ -245,6 +245,27 @@ footer{ padding:2rem 1rem; text-align:center; font-size:.9rem; color:#888; borde
   .pack{ min-width:unset }
   .sectionBox{ width:clamp(300px, 88vw, 980px) }
 }
+  /* ===== Адаптив под моб/планшет/десктоп для hero-фона ===== */
+/* На мобильных: другое положение лица + отключаем fixed-фон */
+@media (max-width: 480px){
+  :root{ --face-pos: 50% 14%; }   /* поднимите/опустите второе число, если нужно */
+  body{ background-attachment: scroll; }
+}
+
+/* Планшеты */
+@media (min-width: 481px) and (max-width: 900px){
+  :root{ --face-pos: 50% 22%; }
+}
+
+/* Небольшие десктопы/ноутбуки */
+@media (min-width: 901px) and (max-width: 1199px){
+  :root{ --face-pos: 50% 28%; }
+}
+
+/* Большие экраны */
+@media (min-width: 1200px){
+  :root{ --face-pos: 50% 36%; }
+}
 </style>
 </head>
 <body>
