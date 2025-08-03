@@ -7,7 +7,7 @@
 
 <!-- SEO -->
 <meta name="description" content="Премиальное шоу иллюзиониста Дмитрия Костюка. Узнайте стоимость и забронируйте дату.">
-<meta name="theme-color" content="#0B0B0F">
+<meta name="theme-color" content="#000000">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Дмитрий Костюк — иллюзионист">
 <meta property="og:description" content="Кинематографичное шоу, персонализация, вау-эффект.">
@@ -19,14 +19,14 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@900&family=Inter:wght@400;600&display=swap" rel="stylesheet">
 
-<!-- Preload фото -->
+<!-- Preload главного фона -->
 <link rel="preload" as="image" href="images/portrait.webp" type="image/webp" imagesizes="100vw">
 <link rel="preload" as="image" href="images/portrait.jpg" type="image/jpeg" imagesizes="100vw">
 
 <style>
-/* ===== Дизайн-токены ===== */
+/* ===== Design tokens ===== */
 :root{
-  --bg:#050509; --text:#EEE;
+  --bg:#000; --text:#EEE;
   --gold:#CBA135; --gold2:#E7C776;
   --panel:rgba(0,0,0,.55);
   --r:12px;
@@ -38,34 +38,27 @@
   --fs-h2:clamp(22px, 4.6vw, 32px);
   --fs-h3:clamp(18px, 3.8vw, 20px);
 
-  /* позиция лица и источник фото (WebP подменим через JS) */
+  /* положение лица; при необходимости правьте в медиазапросах */
   --face-pos:50% 28%;
+  /* js подменит на webp, иначе jpg */
   --hero-photo: url('images/portrait.jpg');
-  --hero-size: cover;
 }
 
-/* ===== База ===== */
+/* ===== Base ===== */
 *{margin:0;box-sizing:border-box}
 html{scroll-behavior:smooth}
 body{
   font:400 var(--fs-body) var(--ff-text); color:var(--text);
-  background: var(--bg) no-repeat fixed;
-  /* только декоративные градиенты — БЕЗ фото */
-  background-image:
-    radial-gradient(1200px 600px at 60% -10%, rgba(255,255,255,.06), transparent 60%),
-    radial-gradient(1600px 800px at -30% 120%, rgba(203,161,53,.06), transparent 70%);
-  background-size:auto,auto;
-  background-position:center,center;
+  background:#000;                 /* ЧИСТО ЧЁРНЫЙ по всей странице */
   overflow-x:hidden;
 }
 a{color:inherit;text-decoration:none}
 
-/* Меньше анимаций при системной настройке */
 @media (prefers-reduced-motion: reduce){
   *{animation:none !important; transition:none !important}
 }
 
-/* Кнопки */
+/* Buttons */
 .btn{
   display:inline-flex; align-items:center; justify-content:center; gap:.55rem;
   padding:1rem 1.2rem; border-radius:var(--r);
@@ -82,7 +75,7 @@ a{color:inherit;text-decoration:none}
 .btn--primary:is(:hover,:focus-visible){filter:brightness(1.06)}
 .btn svg{width:1.2em;height:1.2em}
 
-/* Поля ввода */
+/* Inputs */
 input,select,textarea{
   width:100%; padding:.78rem .95rem; border-radius:var(--r);
   background:#15171e; border:1.8px solid #2f3138; color:#fff; font:400 var(--fs-body) var(--ff-text);
@@ -91,7 +84,7 @@ input:focus-visible,select:focus-visible,textarea:focus-visible{
   outline:0; border-color:var(--gold); box-shadow:0 0 0 3px #cba13566;
 }
 
-/* Верхняя панель */
+/* Topbar */
 .topbar{
   position:fixed; inset:0 0 auto 0; z-index:98;
   display:flex; overflow:auto; gap:.4rem; justify-content:center; align-items:center;
@@ -102,32 +95,34 @@ input:focus-visible,select:focus-visible,textarea:focus-visible{
 .topbar.show{transform:translateY(0)}
 .topbar::-webkit-scrollbar{display:none}
 .topbar .link{
-  appearance:none; background:transparent; border:none; cursor:pointer;
+  appearance:none; -webkit-appearance:none; background:transparent; border:none; cursor:pointer;
   color:var(--gold2); font:600 .95rem var(--ff-text); padding:.5rem .75rem; border-radius:8px; white-space:nowrap;
 }
 .topbar .link:hover,.topbar .link:focus-visible{background:rgba(255,255,255,.08); color:var(--gold);}
 
-/* HERO */
+/* Hero */
 .hero{
-  position:relative; /* важно для фона в ::before */
   min-height: var(--vh, 100dvh);
   display:flex; flex-direction:column; align-items:center; justify-content:center;
   text-align:center; gap:1rem;
   padding: calc(64px + env(safe-area-inset-top)) 12px 28px;
+  position:relative;                  /* для псевдослоёв с фоном */
 }
-/* Фото только в пределах hero */
+/* Фото — только внутри hero */
 .hero::before{
   content:""; position:absolute; inset:0; z-index:-1;
-  background-image: var(--hero-photo);
-  background-repeat:no-repeat;
+  background: var(--hero-photo) no-repeat;
+  background-size:cover;
   background-position: var(--face-pos);
-  background-size: var(--hero-size);
 }
-/* Плавный переход вниз — убирает жёсткий край */
+/* Плавный переход к абсолютному #000 (без видимых границ) */
 .hero::after{
-  content:""; position:absolute; left:0; right:0; bottom:-1px; height:120px; z-index:-1;
-  background: linear-gradient(to bottom, transparent, rgba(5,5,9,.85) 60%, var(--bg) 100%);
+  content:""; position:absolute; inset:0; pointer-events:none; z-index:0;
+  background:
+    linear-gradient(to bottom, rgba(0,0,0,0) 48%, #000 82%),
+    linear-gradient(90deg, #000 0 3%, rgba(0,0,0,0) 14% 86%, #000 97% 100%);
 }
+
 .title{
   position:relative; color:var(--gold);
   font:900 var(--fs-h1) var(--ff-head); letter-spacing:.06em;
@@ -139,11 +134,13 @@ input:focus-visible,select:focus-visible,textarea:focus-visible{
   animation:sweep 7s linear infinite;
 }
 @keyframes sweep{from{background-position:-200% 0}to{background-position:200% 0}}
+
 .subtitle-float{
   font:900 clamp(18px,4.6vw,32px) var(--ff-head);
   color:var(--gold); letter-spacing:.14em; animation:float 6s ease-in-out infinite;
 }
 @keyframes float{0%,100%{transform:translateY(-8px)}50%{transform:translateY(8px)}}
+
 .hero-cta{display:flex; width:100%; justify-content:center}
 .hero-cta .btn--primary{ width:min(92vw, 480px); }
 
@@ -177,7 +174,7 @@ input:focus-visible,select:focus-visible,textarea:focus-visible{
 
 /* Калькулятор */
 #calc form{ display:flex; flex-direction:column; gap:.9rem }
-#slider{ display:none; flex-direction:column; gap:.35рем; align-items:center }
+#slider{ display:none; flex-direction:column; gap:.35rem; align-items:center }
 #gNum{ color:var(--gold2) }
 .total,.breakdown,.afterCalc{ display:none }
 .total{ font:600 1.5rem var(--ff-text); color:var(--gold); margin-top:.9rem; transition:box-shadow .6s, color .6s }
@@ -258,23 +255,9 @@ footer{ padding:2rem 1rem; text-align:center; font-size:.9rem; color:#888; borde
   .sectionBox{ width:clamp(300px, 88vw, 980px) }
 }
 
-/* ===== Настройка фото под размеры экрана ===== */
-/* Мобилки: поднимаем лицо, масштаб по высоте экрана */
-@media (max-width:480px){
-  :root{ --face-pos: 50% 8%; --hero-size: auto 95vh; }
-  body{ background-attachment:scroll; }
-}
-/* Планшеты */
-@media (min-width:481px) and (max-width:900px){
-  :root{ --face-pos: 50% 18%; --hero-size: cover; }
-}
-/* Небольшие ноутбуки */
-@media (min-width:901px) and (max-width:1199px){
-  :root{ --face-pos: 50% 26%; --hero-size: cover; }
-}
-/* Большие экраны */
-@media (min-width:1200px){
-  :root{ --face-pos: 50% 34%; --hero-size: cover; }
+/* Мобильные — чуть поднять лицо при желании */
+@media (max-width: 480px){
+  :root{ --face-pos: 50% 22%; }
 }
 </style>
 </head>
@@ -435,7 +418,7 @@ footer{ padding:2rem 1rem; text-align:center; font-size:.9rem; color:#888; borde
     <div class="modal__close"><button data-close aria-label="Закрыть">✕</button></div>
     <div class="modal__body">
       <h2 class="sectionTitle">Угадай карту и получи скидку</h2>
-      <p class="rules">1 совпадение — 10%, 2 — 15%, 3 — 20%. Колода обновляется каждые 10 с.</p>
+      <p class="rules">1 совпадение — 10 %, 2 — 15 %, 3 — 20 %. Колода обновляется каждые 10 с.</p>
 
       <div class="gameWrap">
         <div class="deck">
@@ -486,13 +469,13 @@ footer{ padding:2rem 1rem; text-align:center; font-size:.9rem; color:#888; borde
 
 <!-- ===== JS ===== -->
 <script>
-/* Аналитика-утилита */
+/* ---------- утилиты аналитики ---------- */
 function track(event, params){
   try{ if(window.gtag) gtag('event', event, params||{}); }catch(e){}
   try{ if(window.ym && window.YA_METRICA_ID) ym(window.YA_METRICA_ID,'reachGoal',event, params||{}); }catch(e){}
 }
 
-/* Поддержка WebP: безопасно подменяем переменную */
+/* Поддержка WebP фона */
 (function(){
   var img=new Image();
   img.onload=function(){ if(img.width>0) document.documentElement.style.setProperty('--hero-photo',"url('images/portrait.webp')"); };
@@ -505,7 +488,7 @@ function track(event, params){
   setVH(); addEventListener('resize', setVH); addEventListener('orientationchange', setVH);
 })();
 
-/* Появление topbar */
+/* Topbar появление */
 (function(){
   const tb=document.getElementById('topbar');
   if(!tb) return;
@@ -577,7 +560,7 @@ const suits=[["S","♠"],["H","♥"],["D","♦"],["C","♣"]];
 const sym=s=>suits.find(v=>v[0]===s)[1];
 const img=c=>`https://deckofcardsapi.com/static/img/${c.replace('10','0')}.png`;
 
-// прелоад карточек
+// прелоад
 ranks.forEach(r=>suits.forEach(([c])=>{
   const l=document.createElement('link'); l.rel='preload'; l.as='image'; l.href=img(r+c); document.head.appendChild(l);
 }));
@@ -624,10 +607,15 @@ function nextRound(){
   t=10; timer.textContent=t; if(bar) bar.style.transform='scaleX(1)'; clearInterval(int);
   int=setInterval(()=>{t--; timer.textContent=t; if(bar) bar.style.transform=`scaleX(${t/10})`; if(!t) nextRound();},1000);
 }
+
+// открытие модалки — новая раздача
 document.querySelectorAll('[data-open="discount"]').forEach(b=>b.addEventListener('click',()=>{ buildSelects(); nextRound(); }));
+
+// закрытие — сброс
 modal.addEventListener('modal:closed', ()=>{ clearInterval(int); result.textContent=''; });
+
 btn.onclick=()=>{
-  if(tried){ return; }
+  if(tried){ return; } // внутреннее ограничение попыток остаётся
   if(!selects.every(s=>s.value)){ alert('Выберите три разные карты'); return; }
   clearInterval(int); tried=true;
   const picks=selects.map(s=>s.value), hits=picks.filter(c=>secret.includes(c)).length, disc=[0,10,15,20][hits];
@@ -750,7 +738,11 @@ form.addEventListener('submit', async (e)=>{
   const fd=new FormData(form), data={}; fd.forEach((v,k)=>data[k]=v);
   data.order = window.orderData||{};
   try{
-    const res = await fetch('/api/lead', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(data)});
+    const res = await fetch('https://site76-azure.vercel.app/api/lead', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify(data)
+    });
     if(!res.ok) throw new Error('HTTP '+res.status);
     form.style.display='none'; document.getElementById('thanks').style.display='block';
     track('order_submit');
