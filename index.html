@@ -14,13 +14,11 @@
 <meta property="og:image" content="images/portrait.jpg">
 <meta property="og:locale" content="ru_RU">
 
-<!-- iPhone: иконка для «Добавить на экран Домой» -->
+<!-- iPhone: иконка на «Домой» -->
 <link rel="apple-touch-icon" href="images/icons/apple-touch-icon.png">
 <meta name="apple-mobile-web-app-title" content="Дмитрий Костюк">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black">
-
-<!-- <script>window.YA_METRICA_ID = 12345678;</script> -->
 
 <!-- Шрифты -->
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -66,7 +64,7 @@ body{
 }
 a{color:inherit;text-decoration:none}
 
-/* Снижаем анимации, если у пользователя они отключены */
+/* Снижаем анимации при настройке пользователя */
 @media (prefers-reduced-motion: reduce){
   *{animation:none !important; transition:none !important}
 }
@@ -122,7 +120,7 @@ input:focus-visible,select:focus-visible,textarea:focus-visible{
 }
 .title{
   position:relative; color:var(--gold);
-  font:900 var(--fs-h1) var(--ff-head); letter-spacing:.06em;
+  font:900 var(--fs-h1) var(--ff-head); letter-spacing:.06ем;
 }
 .title::before{
   content:attr(data-txt); position:absolute; inset:0;
@@ -177,7 +175,7 @@ input:focus-visible,select:focus-visible,textarea:focus-visible{
 .total{ font:600 1.5rem var(--ff-text); color:var(--gold); margin-top:.9rem; transition:box-shadow .6s, color .6s }
 .total.flash{ box-shadow:0 0 0 9999px rgba(203,161,53,.05) inset; color:var(--gold2) }
 .breakdown{ color:#cfcfcf; font-size:.95rem; line-height:1.45; margin-top:.3rem }
-#calcBtn{ display:inline-block; margin:.6рем auto 0; }
+#calcBtn{ display:inline-block; margin:.6rem auto 0; } /* исправлено rem */
 .afterCalc{ display:flex; gap:.6rem; justify-content:center; margin-top:1rem; flex-wrap:wrap }
 
 /* Модальные окна */
@@ -230,7 +228,7 @@ input:focus-visible,select:focus-visible,textarea:focus-visible{
 .lightbox{ position:fixed; inset:0; background:rgba(0,0,0,.85); display:none; align-items:center; justify-content:center; z-index:100 }
 .lightbox.open{ display:flex }
 .lightbox img{ max-width:92vw; max-height:90dvh; border-radius:10px; border:1px solid #333; position:relative; z-index:2; }
-.lightbox .modal__bg{ z-index:1; } /* фон ниже картинки */
+.lightbox .modal__bg{ z-index:1; }
 
 /* FAB */
 .fab{
@@ -251,6 +249,7 @@ footer{ padding:2rem 1rem; text-align:center; font-size:.9rem; color:#888; borde
   .pack{ min-width:unset }
   .sectionBox{ width:clamp(300px, 88vw, 980px) }
 }
+
 /* ===== Адаптив позиционирования фона ===== */
 @media (max-width: 480px){
   :root{ --face-pos: 50% 14%; }
@@ -403,7 +402,7 @@ footer{ padding:2rem 1rem; text-align:center; font-size:.9rem; color:#888; borde
   <h2 class="sectionTitle">Контакты</h2>
   <p style="line-height:1.8">
     Tel./WhatsApp:&nbsp;<a id="waLink" href="https://wa.me/79092763386" style="color:var(--gold2)">+7&nbsp;909&nbsp;276-33-86</a><br>
-    Telegram:&nbsp;<a href="https://t.me/Dmitrokko" style="color:var(--gold2)">@Dmitrokko</a>
+    Telegram:&nbsp;<a href="https://t.me/Dmitrokko" style="color:var(--gold2)">@Dмитrokko</a>
   </p>
 </section>
 
@@ -557,7 +556,7 @@ function track(event, params){
   }else animate();
 })();
 
-/* ===== Игра (одна попытка за раунд) ===== */
+/* ===== Игра (fixed selector typo) ===== */
 (()=>{
 const modal=document.getElementById('modal-discount'); if(!modal) return;
 
@@ -576,7 +575,7 @@ const selWrap=modal.querySelector('.selects'),
       faces=[...modal.querySelectorAll('.face')],
       timer=modal.querySelector('#timer'),
       bar=modal.querySelector('#fill'),
-      btn=modal.querySelector('#guessBtn'],
+      btn=modal.querySelector('#guessBtn'),
       result=modal.querySelector('#result');
 
 if(cards.length!==3||faces.length!==3) return;
@@ -705,7 +704,7 @@ function calc(){
         guest=(guests.value==='custom'?(gRange.value-200)*80:+guests.value),
         sub=base+road+guest, coef=hol(when.value), holUp=Math.round(sub*(coef-1)),
         discP=+sessionStorage.getItem('promoDiscount')||0, disc=Math.round((sub+holUp)*discP/100),
-        sum=sub+holUp-диск;
+        sum=sub+holUp-disc; /* исправлено: disc */
 
   total.textContent='Итого — '+fmt(sum)+' ₽'; total.style.display='block';
   total.classList.add('flash'); setTimeout(()=>total.classList.remove('flash'),900);
@@ -754,7 +753,7 @@ form.addEventListener('submit', async (e)=>{
 });
 })();
 
-/* Галерея + лайтбокс (event-01.webp … event-10.webp) */
+/* Галерея + лайтбокс */
 (function(){
   const GALLERY_FILES = [
     'images/gallery/event-01.webp','images/gallery/event-02.webp','images/gallery/event-03.webp','images/gallery/event-04.webp',
