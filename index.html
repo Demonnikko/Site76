@@ -745,7 +745,12 @@ form.addEventListener('submit', async (e)=>{
   const fd=new FormData(form), data={}; fd.forEach((v,k)=>data[k]=v);
   data.order = window.orderData||{};
   try{
-    const res = await fetch('/api/lead', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(data)});
+    - const res = await fetch('/api/lead', {
++ const res = await fetch('https://site76-azure.vercel.app/api/lead', {
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body: JSON.stringify(data)
+  });
     if(!res.ok) throw new Error('HTTP '+res.status);
     form.style.display='none'; document.getElementById('thanks').style.display='block';
     track('order_submit');
