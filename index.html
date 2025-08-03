@@ -737,29 +737,39 @@ window.recalcIfReady = ()=>{ if(isFilled()) calc(); };
 /* Клик промо — событие */
 document.getElementById('promoBtn')?.addEventListener('click',()=>track('promo_click'));
 
-/* Телеграм-отправка через serverless */
+<!-- Телеграм-отправка через serverless -->
+<script>
 (function(){
-const form = document.getElementById('orderForm'); if(!form) return;
-form.addEventListener('submit', async (e)=>{
-  e.preventDefault();
-  const fd=new FormData(form), data={}; fd.forEach((v,k)=>data[k]=v);
-  data.order = window.orderData||{};
-  try{
-    - const res = await fetch('/api/lead', {
-+ const res = await fetch('https://site76-azure.vercel.app/api/lead', {
-    method:'POST',
-    headers:{'Content-Type':'application/json'},
-    body: JSON.stringify(data)
-  });
-    if(!res.ok) throw new Error('HTTP '+res.status);
-    form.style.display='none'; document.getElementById('thanks').style.display='block';
-    track('order_submit');
-  }catch(err){
-    alert('Не удалось отправить заявку. Сообщите, пожалуйста, по телефону или в Telegram.');
-  }
-});
-})();
+  const API_BASE = 'https://site76-azure.vercel.app'; // твой домен на Vercel
 
+  const form = document.getElementById('orderForm'); 
+  if(!form) return;
+
+  form.addEventListener('submit', async (e)=>{
+    e.preventDefault();
+
+    const fd = new FormData(form);
+    const data = Object.fromEntries(fd.entries());
+    data.order = window.orderData || {};
+
+    try{
+      const res = await fetch(`${API_BASE}/api/lead`, {
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body: JSON.stringify(data)
+      });
+      if(!res.ok) throw new Error('HTTP '+res.status);
+
+      form.style.display='none';
+      document.getElementById('thanks').style.display='block';
+      track('order_submit');
+    }catch(err){
+      console.error(err);
+      alert('Не удалось отправить заявку. Сообщите, пожалуйста, по телефону или в Telegram.');
+    }
+  });
+})();
+</script>
 /* Галерея + лайтбокс (event-01.webp … event-10.webp) */
 (function(){
   const GALLERY_FILES = [
