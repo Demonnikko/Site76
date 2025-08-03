@@ -7,12 +7,20 @@
 
 <!-- SEO -->
 <meta name="description" content="Премиальное шоу иллюзиониста Дмитрия Костюка. Узнайте стоимость и забронируйте дату.">
-<meta name="theme-color" content="#000000">
+<meta name="theme-color" content="#0B0B0F">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Дмитрий Костюк — иллюзионист">
 <meta property="og:description" content="Кинематографичное шоу, персонализация, вау-эффект.">
 <meta property="og:image" content="images/portrait.jpg">
 <meta property="og:locale" content="ru_RU">
+
+<!-- iPhone: иконка для «Добавить на экран Домой» -->
+<link rel="apple-touch-icon" href="images/icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-title" content="Дмитрий Костюк">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+<!-- <script>window.YA_METRICA_ID = 12345678;</script> -->
 
 <!-- Шрифты -->
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -21,35 +29,39 @@
 
 <!-- Preload главного фона -->
 <link rel="preload" as="image" href="images/portrait.webp" type="image/webp" imagesizes="100vw">
-<link rel="preload" as="image" href="images/portrait.jpg"  type="image/jpeg" imagesizes="100vw">
+<link rel="preload" as="image" href="images/portrait.jpg" type="image/jpeg" imagesizes="100vw">
 
 <style>
 /* ===== Design tokens ===== */
 :root{
-  --bg:#000; --text:#EEE;
+  --bg:#050509; --text:#EEE;
   --gold:#CBA135; --gold2:#E7C776;
   --panel:rgba(0,0,0,.55);
   --r:12px;
   --ff-head:'Cinzel',serif; --ff-text:'Inter',sans-serif;
 
   --fs-body:clamp(15px, 2.8vw, 16px);
-  --fs-btn: clamp(15px, 2.8vw, 16px);
-  --fs-h1: clamp(28px, 8.2vw, 64px);
-  --fs-h2: clamp(22px, 4.6vw, 32px);
-  --fs-h3: clamp(18px, 3.8vw, 20px);
+  --fs-btn:clamp(15px, 2.8vw, 16px);
+  --fs-h1:clamp(28px, 8.2vw, 64px);
+  --fs-h2:clamp(22px, 4.6vw, 32px);
+  --fs-h3:clamp(18px, 3.8vw, 20px);
 
-  /* положение лица на фоне */
-  --face-pos:50% 36%;
-  --hero-photo:url('images/portrait.jpg');
+  --face-pos:50% 28%;
+  --hero-photo: url('images/portrait.jpg');
 }
 
 /* ===== Base ===== */
 *{margin:0;box-sizing:border-box}
 html{scroll-behavior:smooth}
 body{
-  font:400 var(--fs-body) var(--ff-text);
-  color:var(--text);
-  background:#000;              /* везде абсолютно чёрный */
+  font:400 var(--fs-body) var(--ff-text); color:var(--text);
+  background: var(--bg) no-repeat fixed;
+  background-image:
+    radial-gradient(1200px 600px at 60% -10%, rgba(255,255,255,.06), transparent 60%),
+    radial-gradient(1600px 800px at -30% 120%, rgba(203,161,53,.06), transparent 70%),
+    var(--hero-photo);
+  background-size:auto,auto,cover;
+  background-position:center,center,var(--face-pos);
   overflow-x:hidden;
 }
 a{color:inherit;text-decoration:none}
@@ -107,14 +119,6 @@ input:focus-visible,select:focus-visible,textarea:focus-visible{
   display:flex; flex-direction:column; align-items:center; justify-content:center;
   text-align:center; gap:1rem;
   padding: calc(64px + env(safe-area-inset-top)) 12px 28px;
-  /* фон фото на секции hero */
-  background:
-    radial-gradient(110% 85% at 50% 20%, rgba(0,0,0,0) 60%, rgba(0,0,0,.9) 96%, #000 100%),
-    var(--hero-photo);
-  background-size:cover, cover;
-  background-position:center, var(--face-pos);
-  background-repeat:no-repeat;
-  background-attachment:scroll;
 }
 .title{
   position:relative; color:var(--gold);
@@ -173,7 +177,7 @@ input:focus-visible,select:focus-visible,textarea:focus-visible{
 .total{ font:600 1.5rem var(--ff-text); color:var(--gold); margin-top:.9rem; transition:box-shadow .6s, color .6s }
 .total.flash{ box-shadow:0 0 0 9999px rgba(203,161,53,.05) inset; color:var(--gold2) }
 .breakdown{ color:#cfcfcf; font-size:.95rem; line-height:1.45; margin-top:.3rem }
-#calcBtn{ display:inline-block; margin:.6rem auto 0; }
+#calcBtn{ display:inline-block; margin:.6рем auto 0; }
 .afterCalc{ display:flex; gap:.6rem; justify-content:center; margin-top:1rem; flex-wrap:wrap }
 
 /* Модальные окна */
@@ -226,7 +230,7 @@ input:focus-visible,select:focus-visible,textarea:focus-visible{
 .lightbox{ position:fixed; inset:0; background:rgba(0,0,0,.85); display:none; align-items:center; justify-content:center; z-index:100 }
 .lightbox.open{ display:flex }
 .lightbox img{ max-width:92vw; max-height:90dvh; border-radius:10px; border:1px solid #333; position:relative; z-index:2; }
-.lightbox .modal__bg{ z-index:1; }
+.lightbox .modal__bg{ z-index:1; } /* фон ниже картинки */
 
 /* FAB */
 .fab{
@@ -247,21 +251,17 @@ footer{ padding:2rem 1rem; text-align:center; font-size:.9rem; color:#888; borde
   .pack{ min-width:unset }
   .sectionBox{ width:clamp(300px, 88vw, 980px) }
 }
-
-/* ===== Адаптив для позиции лица в hero ===== */
-/* Мобильные (iPhone 13 входит сюда) */
+/* ===== Адаптив позиционирования фона ===== */
 @media (max-width: 480px){
-  :root{ --face-pos: 50% 44%; }
+  :root{ --face-pos: 50% 14%; }
+  body{ background-attachment: scroll; }
 }
-/* Планшеты */
 @media (min-width: 481px) and (max-width: 900px){
-  :root{ --face-pos: 50% 36%; }
+  :root{ --face-pos: 50% 22%; }
 }
-/* Небольшие ноутбуки/десктопы */
 @media (min-width: 901px) and (max-width: 1199px){
-  :root{ --face-pos: 50% 32%; }
+  :root{ --face-pos: 50% 28%; }
 }
-/* Большие экраны */
 @media (min-width: 1200px){
   :root{ --face-pos: 50% 36%; }
 }
@@ -424,7 +424,7 @@ footer{ padding:2rem 1rem; text-align:center; font-size:.9rem; color:#888; borde
     <div class="modal__close"><button data-close aria-label="Закрыть">✕</button></div>
     <div class="modal__body">
       <h2 class="sectionTitle">Угадай карту и получи скидку</h2>
-      <p class="rules">1 совпадение — 10 %, 2 — 15 %, 3 — 20 %. Колода обновляется каждые 10 с.</p>
+      <p class="rules">1 совпадение — 10 %, 2 — 15 %, 3 — 20 %. Попытка одна; колода обновляется каждые 10 с.</p>
 
       <div class="gameWrap">
         <div class="deck">
@@ -481,7 +481,7 @@ function track(event, params){
   try{ if(window.ym && window.YA_METRICA_ID) ym(window.YA_METRICA_ID,'reachGoal',event, params||{}); }catch(e){}
 }
 
-/* Поддержка WebP фона (подменяем переменную) */
+/* Поддержка WebP фона */
 (function(){
   var img=new Image();
   img.onload=function(){ if(img.width>0) document.documentElement.style.setProperty('--hero-photo',"url('images/portrait.webp')"); };
@@ -494,7 +494,7 @@ function track(event, params){
   setVH(); addEventListener('resize', setVH); addEventListener('orientationchange', setVH);
 })();
 
-/* topbar появление */
+/* Topbar появление */
 (function(){
   const tb=document.getElementById('topbar');
   if(!tb) return;
@@ -506,7 +506,7 @@ function track(event, params){
   }
 })();
 
-/* открытие/закрытие модалок + Esc */
+/* Открытие/закрытие модалок + Esc */
 (function(){
   function closeModal(m){ if(m){ m.classList.remove('open'); m.dispatchEvent(new CustomEvent('modal:closed')); } }
   addEventListener('click',e=>{
@@ -537,7 +537,7 @@ function track(event, params){
   };
 })();
 
-/* счётчик клиентов */
+/* Счётчик клиентов */
 (()=>{ 
   const BASE_SHOWS=1838,BASE_YEARS=7,BASE_YEAR=2024,STEP=100;
   const diff=new Date().getFullYear()-BASE_YEAR,
@@ -557,7 +557,7 @@ function track(event, params){
   }else animate();
 })();
 
-/* ===== Игра ===== */
+/* ===== Игра (одна попытка за раунд) ===== */
 (()=>{
 const modal=document.getElementById('modal-discount'); if(!modal) return;
 
@@ -576,7 +576,7 @@ const selWrap=modal.querySelector('.selects'),
       faces=[...modal.querySelectorAll('.face')],
       timer=modal.querySelector('#timer'),
       bar=modal.querySelector('#fill'),
-      btn=modal.querySelector('#guessBtn'),
+      btn=modal.querySelector('#guessBtn'],
       result=modal.querySelector('#result');
 
 if(cards.length!==3||faces.length!==3) return;
@@ -603,9 +603,10 @@ const rand=a=>a[(Math.random()*a.length)|0];
 const uniq=a=>{ let c; do{ c=rand(ranks)+rand(suits)[0]; }while(a.includes(c)); return c; };
 const smoke=c=>{ for(let i=0;i<3;i++){ const s=document.createElement('span'); s.style.cssText='position:absolute;left:50%;bottom:50%;width:14px;height:14px;border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,.9)0,rgba(255,255,255,0)70%);pointer-events:none;animation:puff .9s ease-out forwards'; s.style.left=`calc(50% + ${(Math.random()-.5)*20}px)`; s.style.animationDelay=`${i*0.12}s`; c.appendChild(s); s.onanimationend=()=>s.remove(); } };
 
-let secret=[],t=10,int;
+let secret=[],t=10,int,tried=false;
 
 function nextRound(){
+  tried=false;
   secret=[]; while(secret.length<3) secret.push(uniq(secret));
   faces.forEach(f=>f.innerHTML=''); cards.forEach(c=>c.classList.remove('flipped'));
   result.textContent=''; selects.forEach(s=>{ s.selectedIndex=0; [...s.options].forEach(o=>o.disabled=false); });
@@ -613,12 +614,16 @@ function nextRound(){
   int=setInterval(()=>{t--; timer.textContent=t; if(bar) bar.style.transform=`scaleX(${t/10})`; if(!t) nextRound();},1000);
 }
 
+// открытие модалки — новая раздача
 document.querySelectorAll('[data-open="discount"]').forEach(b=>b.addEventListener('click',()=>{ buildSelects(); nextRound(); }));
+
+// закрытие — сброс
 modal.addEventListener('modal:closed', ()=>{ clearInterval(int); result.textContent=''; });
 
 btn.onclick=()=>{
+  if(tried){ return; } // одна попытка
   if(!selects.every(s=>s.value)){ alert('Выберите три разные карты'); return; }
-  clearInterval(int);
+  clearInterval(int); tried=true;
   const picks=selects.map(s=>s.value), hits=picks.filter(c=>secret.includes(c)).length, disc=[0,10,15,20][hits];
   secret.forEach((c,i)=>{ faces[i].innerHTML=`<img src="${img(c)}" alt="">`; cards[i].classList.add('flipped'); smoke(cards[i]); });
   result.textContent = disc ? `Поздравляем! Скидка ${disc}%` : 'Увы, скидки нет.';
@@ -700,7 +705,7 @@ function calc(){
         guest=(guests.value==='custom'?(gRange.value-200)*80:+guests.value),
         sub=base+road+guest, coef=hol(when.value), holUp=Math.round(sub*(coef-1)),
         discP=+sessionStorage.getItem('promoDiscount')||0, disc=Math.round((sub+holUp)*discP/100),
-        sum=sub+holUp-disc;
+        sum=sub+holUp-диск;
 
   total.textContent='Итого — '+fmt(sum)+' ₽'; total.style.display='block';
   total.classList.add('flash'); setTimeout(()=>total.classList.remove('flash'),900);
@@ -731,30 +736,22 @@ window.recalcIfReady = ()=>{ if(isFilled()) calc(); };
 /* Клик промо — событие */
 document.getElementById('promoBtn')?.addEventListener('click',()=>track('promo_click'));
 
-/* Телеграм-отправка через serverless (Vercel) */
+/* Телеграм-отправка через serverless */
 (function(){
-  const API_BASE = 'https://site76-azure.vercel.app'; // ваш домен проекта на Vercel
-  const form = document.getElementById('orderForm'); if(!form) return;
-
-  form.addEventListener('submit', async (e)=>{
-    e.preventDefault();
-    const fd=new FormData(form);
-    const data=Object.fromEntries(fd.entries());
-    data.order = window.orderData||{};
-    try{
-      const res = await fetch(`${API_BASE}/api/lead`, {
-        method:'POST',
-        headers:{'Content-Type':'application/json'},
-        body: JSON.stringify(data)
-      });
-      if(!res.ok) throw new Error('HTTP '+res.status);
-      form.style.display='none'; document.getElementById('thanks').style.display='block';
-      track('order_submit');
-    }catch(err){
-      console.error(err);
-      alert('Не удалось отправить заявку. Сообщите, пожалуйста, по телефону или в Telegram.');
-    }
-  });
+const form = document.getElementById('orderForm'); if(!form) return;
+form.addEventListener('submit', async (e)=>{
+  e.preventDefault();
+  const fd=new FormData(form), data={}; fd.forEach((v,k)=>data[k]=v);
+  data.order = window.orderData||{};
+  try{
+    const res = await fetch('/api/lead', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(data)});
+    if(!res.ok) throw new Error('HTTP '+res.status);
+    form.style.display='none'; document.getElementById('thanks').style.display='block';
+    track('order_submit');
+  }catch(err){
+    alert('Не удалось отправить заявку. Сообщите, пожалуйста, по телефону или в Telegram.');
+  }
+});
 })();
 
 /* Галерея + лайтбокс (event-01.webp … event-10.webp) */
@@ -798,7 +795,7 @@ document.getElementById('promoBtn')?.addEventListener('click',()=>track('promo_c
     { q: "Способы оплаты?", a: "Безнал, СБП, наличные. Предусмотрен договор и чек." },
     { q: "Какой возраст для детских шоу?", a: "Для детей 8+; для младших — по согласованию и с адаптацией интерактива." },
     { q: "Можно снимать фото/видео?", a: "Да, съёмка приветствуется." },
-    { q: "Есть ли официальное оформление?", a: "Работаю по договору, предоставляю кассовый чек." },
+    { q: "Есть ли официальное оформление?", a: "Да, работаю по договору, предоставляю кассовый чек." },
     { q: "Возможна площадка под открытым небом?", a: "Летом при безветренной погоде, с резервным планом на дождь." },
     { q: "Безопасны ли спецэффекты?", a: "Используются только сертифицированные и безопасные эффекты." },
     { q: "Можно ли интегрировать бренд компании?", a: "Да, интегрируем лого и смыслы бренда в интерактив и номера." },
