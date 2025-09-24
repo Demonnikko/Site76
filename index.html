@@ -22,9 +22,8 @@
 <!-- Preload главного фона -->
 <link rel="preload" as="image" href="images/portrait.webp" type="image/webp" imagesizes="100vw">
 <link rel="preload" as="image" href="images/portrait.jpg" type="image/jpeg" imagesizes="100vw">
-<!-- Превью для промо-видео -->
-<link rel="preload" as="image" href="images/promo-poster.jpg" type="image/jpeg">
-<link rel="preload" as="video" href="media/promo.mp4" type="video/mp4">
+<!-- Preload логотипа -->
+<link rel="preload" as="image" href="images/logo.jpg" type="image/jpeg" imagesizes="25vw">
 
 <style>
 /* ===== Design tokens ===== */
@@ -41,7 +40,9 @@
   --fs-h2:clamp(22px, 4.6vw, 32px);
   --fs-h3:clamp(18px, 3.8vw, 20px);
 
+  /* положение лица; при необходимости правьте в медиазапросах */
   --face-pos:50% 28%;
+  /* js подменит на webp, иначе jpg */
   --hero-photo: url('images/portrait.jpg');
 }
 
@@ -51,7 +52,7 @@ html{scroll-behavior:smooth}
 body{
   font:400 var(--fs-body) var(--ff-text); color:var(--text);
   background:#000;
-  overflow-x:hidden; /* только вертикальная прокрутка */
+  overflow-x:hidden;
 }
 a{color:inherit;text-decoration:none}
 
@@ -80,57 +81,55 @@ a{color:inherit;text-decoration:none}
 input,select,textarea{
   width:100%; padding:.78rem .95rem; border-radius:var(--r);
   background:#15171e; border:1.8px solid #2f3138; color:#fff; font:400 var(--fs-body) var(--ff-text);
-  -webkit-appearance:none; appearance:none; /* чтобы дата не выпирала */
-}
-input[type="date"]{ /* выравниваем визуально дату с остальными */
-  min-height:2.8rem;
 }
 input:focus-visible,select:focus-visible,textarea:focus-visible{
   outline:0; border-color:var(--gold); box-shadow:0 0 0 3px #cba13566;
 }
 
-/* ===== Header (brand + contacts + burger) ===== */
-.header{
+/* ===== Topbar (добавили логотип и иконки) ===== */
+.topbar{
   position:fixed; inset:0 0 auto 0; z-index:98;
-  display:flex; align-items:center; justify-content:space-between; gap:.6rem;
-  padding:.6rem .8rem; background:rgba(5,5,9,.86); backdrop-filter:blur(8px);
+  display:flex; align-items:center; gap:.8rem;
+  padding:.35rem .6rem; background:rgba(5,5,9,.86); backdrop-filter:blur(8px);
   border-bottom:1px solid rgba(200,200,220,.12);
+  transform:translateY(-100%); transition:transform .45s ease;
 }
-.brand{
-  display:flex; align-items:center; gap:.6rem; font:900 1.05rem var(--ff-head); letter-spacing:.06em; color:var(--gold2)
+.topbar.show{transform:translateY(0)}
+.topbar__row{
+  width:100%; max-width:1200px; margin:0 auto;
+  display:grid; grid-template-columns:auto 1fr auto; align-items:center; gap:.6rem;
 }
-.brand img{ width:36px; height:36px; border-radius:50%; object-fit:cover; display:block }
-.header__right{ display:flex; align-items:center; gap:.45rem }
+.brand{display:flex; align-items:center; gap:.6rem}
+.brand img{height:44px; width:auto; display:block; border-radius:8px; object-fit:contain}
 
-/* круглые иконки */
-.iconBtn{
-  width:44px; height:44px; display:grid; place-items:center;
-  border-radius:50%; border:none; background:#14151b; cursor:pointer;
-  box-shadow: inset 0 0 0 1px #2f3138;
+/* ссылки навигации как и было */
+.navlinks{
+  display:flex; justify-content:center; gap:.4rem; overflow:auto;
 }
-.iconBtn img{ width:22px; height:22px; display:block }
+.navlinks::-webkit-scrollbar{display:none}
+.navlinks .link{
+  appearance:none; -webkit-appearance:none; background:transparent; border:none; cursor:pointer;
+  color:var(--gold2); font:600 .95rem var(--ff-text); padding:.5rem .75rem; border-radius:8px; white-space:nowrap;
+}
+.navlinks .link:hover,.navlinks .link:focus-visible{background:rgba(255,255,255,.08); color:var(--gold);}
 
-/* бургер */
-.burger{
-  width:48px; height:44px; border-radius:12px;
-  border:none; cursor:pointer; position:relative;
-  background:linear-gradient(160deg,var(--gold),var(--gold2)); color:#111;
-  box-shadow:0 12px 26px rgba(203,161,53,.22), inset 0 0 0 1px rgba(255,255,255,.18);
+/* иконки контактов (шапка и футер) */
+.contacts{
+  display:flex; align-items:center; gap:.4rem;
 }
-.burger span, .burger::before, .burger::after{
-  content:""; position:absolute; left:50%; transform:translateX(-50%);
-  width:22px; height:2px; background:#111; border-radius:999px;
+.icon-btn{
+  width:42px; height:42px; display:grid; place-items:center; border-radius:50%;
+  background:#141620; border:1px solid #2f3138; transition:.2s;
 }
-.burger span{ top:50%; transform:translate(-50%,-50%) }
-.burger::before{ top:12px }
-.burger::after{ bottom:12px }
+.icon-btn:hover{border-color:var(--gold); box-shadow:0 0 0 3px rgba(203,161,53,.18)}
+.icon-btn img{width:22px; height:22px; display:block}
 
 /* Hero */
 .hero{
   min-height: var(--vh, 100dvh);
   display:flex; flex-direction:column; align-items:center; justify-content:center;
   text-align:center; gap:1rem;
-  padding: calc(64px + env(safe-area-inset-top) + 44px) 12px 28px; /* + header height */
+  padding: calc(64px + env(safe-area-inset-top)) 12px 28px;
   position:relative;
 }
 .hero::before{
@@ -267,9 +266,11 @@ input:focus-visible,select:focus-visible,textarea:focus-visible{
 .fab svg{ width:26px; height:26px }
 
 /* Подвал */
-footer{ padding:2rem 1rem 1.2rem; text-align:center; font-size:.9rem; color:#888; border-top:1px solid #222; margin-top:2rem }
-.footer-contacts{ display:flex; justify-content:center; gap:.5rem; margin:.6rem 0 0 }
-.footer-contacts .iconBtn{ background:#0f1014 }
+footer{ padding:1.2rem 1rem 2rem; text-align:center; font-size:.9rem; color:#888; border-top:1px solid #222; margin-top:2rem }
+.footer-contacts{
+  display:flex; justify-content:center; gap:.5rem; margin-bottom:.6rem;
+}
+.footer-contacts .icon-btn{ width:46px; height:46px }
 
 /* Планшет/десктоп */
 @media (min-width:900px){
@@ -279,7 +280,7 @@ footer{ padding:2rem 1rem 1.2rem; text-align:center; font-size:.9rem; color:#888
   .sectionBox{ width:clamp(300px, 88vw, 980px) }
 }
 
-/* Мобильные — поднять лицо */
+/* Мобильные — чуть поднять лицо при желании */
 @media (max-width: 480px){
   :root{ --face-pos: 50% 22%; }
 }
@@ -287,25 +288,37 @@ footer{ padding:2rem 1rem 1.2rem; text-align:center; font-size:.9rem; color:#888
 </head>
 <body>
 
-<!-- ===== FIXED HEADER ===== -->
-<header class="header" aria-label="Шапка">
-  <div class="brand">
-    <img src="images/portrait.jpg" alt="Логотип">
-    Дмитрий Костюк
-  </div>
-  <div class="header__right">
-    <!-- иконки: телефон/WA, Telegram, VK -->
-    <a class="iconBtn" href="https://wa.me/79092763386" aria-label="WhatsApp">
-      <img src="images/icons/phone.svg" alt="">
+<!-- ===== TOPBAR с логотипом и иконками ===== -->
+<header class="topbar" id="topbar" aria-label="Шапка сайта">
+  <div class="topbar__row">
+    <!-- ЛОГО -->
+    <a class="brand" href="#hero">
+      <img src="images/logo.jpg" alt="Логотип Дмитрий Костюк" loading="eager" decoding="sync">
     </a>
-    <a class="iconBtn" href="https://t.me/Dmitrokko" target="_blank" rel="noopener" aria-label="Telegram">
-      <img src="images/icons/telegram.svg" alt="">
-    </a>
-    <a class="iconBtn" href="https://vk.com/dmitrokko" target="_blank" rel="noopener" aria-label="ВКонтакте">
-      <img src="images/icons/vk.svg" alt="">
-    </a>
-    <!-- Бургер -->
-    <button class="burger" id="burger" aria-label="Открыть меню"><span></span></button>
+
+    <!-- НАВИГАЦИЯ (как было) -->
+    <nav class="navlinks" aria-label="Навигация">
+      <a class="link" href="#hero">Главная</a>
+      <button class="link" data-open="discount" type="button">Скидка</button>
+      <a class="link" href="#calc">Узнать стоимость</a>
+      <a class="link" href="#order">Бронь</a>
+      <a class="link" href="#contacts">Контакты</a>
+      <button class="link" data-open="faq" type="button">Вопросы</button>
+      <button class="link" data-open="gallery" type="button">Галерея</button>
+    </nav>
+
+    <!-- ИКОНКИ КОНТАКТОВ -->
+    <div class="contacts" aria-label="Быстрые контакты">
+      <a class="icon-btn" href="https://wa.me/79092763386" title="Телефон / WhatsApp" aria-label="Телефон / WhatsApp">
+        <img src="images/icons/phone.svg" alt="">
+      </a>
+      <a class="icon-btn" href="https://t.me/Dmitrokko" target="_blank" rel="noopener" title="Telegram" aria-label="Telegram">
+        <img src="images/icons/telegram.svg" alt="">
+      </a>
+      <a class="icon-btn" href="https://vk.com/dmitrokko" target="_blank" rel="noopener" title="Группа ВКонтакте" aria-label="VK">
+        <img src="images/icons/vk.svg" alt="">
+      </a>
+    </div>
   </div>
 </header>
 
@@ -315,8 +328,7 @@ footer{ padding:2rem 1rem 1.2rem; text-align:center; font-size:.9rem; color:#888
   <p class="subtitle-float">Иллюзионист</p>
 
   <div class="hero-cta">
-    <!-- теперь открывает модалку с видео -->
-    <button id="promoBtn" class="btn btn--primary" type="button" aria-label="Смотреть промо">Смотреть промо</button>
+    <a id="promoBtn" class="btn btn--primary" href="https://disk.yandex.ru/d/4YSqFX1mrJc91Q" target="_blank" rel="noopener" aria-label="Смотреть промо">Смотреть промо</a>
   </div>
 
   <div class="metrics" aria-live="polite">
@@ -332,7 +344,7 @@ footer{ padding:2rem 1rem 1.2rem; text-align:center; font-size:.9rem; color:#888
   <div class="packGrid">
     <article class="pack">
       <h3>Частные события</h3>
-      <div class="from">от 18&nbsp;500&nbsp;₽</div>
+      <div class="from">от 14&nbsp;000&nbsp;₽</div>
       <ul>
         <li>20–40 минут</li>
         <li>Персонализация под событие</li>
@@ -428,6 +440,15 @@ footer{ padding:2rem 1rem 1.2rem; text-align:center; font-size:.9rem; color:#888
   </div>
 </section>
 
+<!-- Контакты (якорь для ссылок) -->
+<section id="contacts" class="sectionBox" style="display:block">
+  <h2 class="sectionTitle">Контакты</h2>
+  <p style="line-height:1.8">
+    Tel./WhatsApp:&nbsp;<a id="waLink" href="https://wa.me/79092763386" style="color:var(--gold2)">+7&nbsp;909&nbsp;276-33-86</a><br>
+    Telegram:&nbsp;<a href="https://t.me/Dmitrokko" style="color:var(--gold2)">@Dmitrokko</a>
+  </p>
+</section>
+
 <!-- стрелка вверх/вниз -->
 <button class="fab" id="fab" aria-label="Прокрутка">
   <svg id="fabIcon" viewBox="0 0 24 24" aria-hidden="true">
@@ -435,53 +456,24 @@ footer{ padding:2rem 1rem 1.2rem; text-align:center; font-size:.9rem; color:#888
   </svg>
 </button>
 
+<!-- ===== FOOTER с иконками ===== -->
 <footer>
   <div class="footer-contacts" aria-label="Контакты внизу">
-    <a class="iconBtn" href="https://wa.me/79092763386" aria-label="WhatsApp/Телефон">
+    <a class="icon-btn" href="https://wa.me/79092763386" title="Телефон / WhatsApp" aria-label="Телефон / WhatsApp">
       <img src="images/icons/phone.svg" alt="">
     </a>
-    <a class="iconBtn" href="https://t.me/Dmitrokko" target="_blank" rel="noopener" aria-label="Telegram">
+    <a class="icon-btn" href="https://t.me/Dmitrokko" target="_blank" rel="noopener" title="Telegram" aria-label="Telegram">
       <img src="images/icons/telegram.svg" alt="">
     </a>
-    <a class="iconBtn" href="https://vk.com/dmitrokko" target="_blank" rel="noopener" aria-label="ВКонтакте">
+    <a class="icon-btn" href="https://vk.com/dmitrokko" target="_blank" rel="noopener" title="Группа ВКонтакте" aria-label="VK">
       <img src="images/icons/vk.svg" alt="">
     </a>
   </div>
-  <div style="margin-top:.6rem">© 2025 · <span>ИП Дмитрий Костюк</span> · Работаем официально</div>
+  © 2025 · <span>ИП Дмитрий Костюк</span> · Работаем официально
 </footer>
 
 <!-- ===== МОДАЛКИ ===== -->
-
-<!-- Меню -->
-<div class="modal" id="modal-menu" aria-hidden="true" role="dialog" aria-label="Меню">
-  <div class="modal__bg" data-close></div>
-  <div class="modal__panel">
-    <div class="modal__close"><button data-close aria-label="Закрыть">✕</button></div>
-    <div class="modal__body" style="display:grid; gap:.6rem">
-      <h2 class="sectionTitle">Меню</h2>
-      <button class="btn btn--primary" data-open="discount" type="button">Скидка</button>
-      <button class="btn" data-open="faq" type="button">Вопросы</button>
-      <button class="btn" data-open="gallery" type="button">Галерея</button>
-    </div>
-  </div>
-</div>
-
-<!-- Промо-видео -->
-<div class="modal" id="modal-promo" aria-hidden="true" role="dialog" aria-label="Промо-видео">
-  <div class="modal__bg" data-close></div>
-  <div class="modal__panel">
-    <div class="modal__close"><button data-close aria-label="Закрыть">✕</button></div>
-    <div class="modal__body">
-      <h2 class="sectionTitle">Промо</h2>
-      <video id="promoVideo" controls preload="metadata" poster="images/promo-poster.jpg" style="width:100%;height:auto;border-radius:12px;outline:none">
-        <source src="media/promo.mp4" type="video/mp4">
-        Ваш браузер не поддерживает видео.
-      </video>
-    </div>
-  </div>
-</div>
-
-<!-- Игра (Скидка) -->
+<!-- Игра -->
 <div class="modal" id="modal-discount" aria-hidden="true" role="dialog" aria-label="Игра: угадай карту">
   <div class="modal__bg" data-close></div>
   <div class="modal__panel">
@@ -539,23 +531,47 @@ footer{ padding:2rem 1rem 1.2rem; text-align:center; font-size:.9rem; color:#888
 
 <!-- ===== JS ===== -->
 <script>
-/* ---------- утилиты аналитики (безопасно игнорировать, если нет счётчиков) ---------- */
+/* ---------- утилиты аналитики ---------- */
 function track(event, params){
   try{ if(window.gtag) gtag('event', event, params||{}); }catch(e){}
   try{ if(window.ym && window.YA_METRICA_ID) ym(window.YA_METRICA_ID,'reachGoal',event, params||{}); }catch(e){}
 }
 
-/* WebP фон */
+/* Поддержка WebP фона */
 (function(){
   var img=new Image();
   img.onload=function(){ if(img.width>0) document.documentElement.style.setProperty('--hero-photo',"url('images/portrait.webp')"); };
   img.src='images/portrait.webp';
 })();
 
-/* iOS 100vh fix */
+/* iOS 100vh фикса */
 (function(){
   function setVH(){ document.documentElement.style.setProperty('--vh', window.innerHeight + 'px'); }
   setVH(); addEventListener('resize', setVH); addEventListener('orientationchange', setVH);
+})();
+
+/* Topbar появление */
+(function(){
+  const tb=document.getElementById('topbar');
+  if(!tb) return;
+  if('IntersectionObserver' in window){
+    const io=new IntersectionObserver(([v])=> tb.classList.toggle('show', !v.isIntersecting), {threshold:.05});
+    io.observe(document.getElementById('hero'));
+  }else{
+    addEventListener('scroll',()=>tb.classList.add('show'),{passive:true});
+  }
+})();
+
+/* Открытие/закрытие модалок + Esc */
+(function(){
+  function closeModal(m){ if(m){ m.classList.remove('open'); m.dispatchEvent(new CustomEvent('modal:closed')); } }
+  addEventListener('click',e=>{
+    const op=e.target.closest && e.target.closest('[data-open]');
+    if(op){ e.preventDefault(); const id='modal-'+op.getAttribute('data-open'); const m=document.getElementById(id); if(m){ m.classList.add('open'); if(id==='modal-discount'){ track('discount_open'); } } }
+    if(e.target.hasAttribute && e.target.hasAttribute('data-close')) closeModal(e.target.closest('.modal'));
+    if(e.target.classList && e.target.classList.contains('modal__bg')) closeModal(e.target.closest('.modal'));
+  });
+  addEventListener('keydown',e=>{ if(e.key==='Escape'){ document.querySelectorAll('.modal.open').forEach(closeModal); } });
 })();
 
 /* FAB вверх/вниз */
@@ -575,33 +591,6 @@ function track(event, params){
     scrollTo({top: atTop ? document.documentElement.scrollHeight : 0, behavior:'smooth'});
     iconPath.setAttribute('d', atTop ? 'M12 8 6 14h12z' : 'M12 16 18 10H6z');
   };
-})();
-
-/* Показ/закрытие модалок + Esc (единый центр) */
-(function(){
-  function openModal(id){
-    const m=document.getElementById('modal-'+id);
-    if(m){ m.classList.add('open'); if(id==='discount') track('discount_open'); }
-  }
-  function closeModal(m){
-    if(m){ m.classList.remove('open'); m.dispatchEvent(new CustomEvent('modal:closed')); }
-  }
-  addEventListener('click',e=>{
-    const trg=e.target;
-    if(trg.hasAttribute && trg.hasAttribute('data-close')){ closeModal(trg.closest('.modal')); }
-    if(trg.classList && trg.classList.contains('modal__bg')){ closeModal(trg.closest('.modal')); }
-    const op=trg.closest && trg.closest('[data-open]');
-    if(op){ e.preventDefault(); openModal(op.getAttribute('data-open')); }
-  });
-  addEventListener('keydown',e=>{ if(e.key==='Escape'){ document.querySelectorAll('.modal.open').forEach(closeModal); } });
-  // бургер
-  document.getElementById('burger')?.addEventListener('click', ()=> openModal('menu'));
-  // промо
-  document.getElementById('promoBtn')?.addEventListener('click', ()=> openModal('promo'));
-  // пауза видео при закрытии
-  document.getElementById('modal-promo')?.addEventListener('modal:closed', ()=>{
-    const v=document.getElementById('promoVideo'); try{ v && v.pause(); }catch(e){}
-  });
 })();
 
 /* Счётчик клиентов */
@@ -624,7 +613,7 @@ function track(event, params){
   }else animate();
 })();
 
-/* ===== Игра (починка выбора) ===== */
+/* ===== Игра ===== */
 (()=>{
 const modal=document.getElementById('modal-discount'); if(!modal) return;
 
@@ -633,7 +622,7 @@ const suits=[["S","♠"],["H","♥"],["D","♦"],["C","♣"]];
 const sym=s=>suits.find(v=>v[0]===s)[1];
 const img=c=>`https://deckofcardsapi.com/static/img/${c.replace('10','0')}.png`;
 
-// прелоад изображений карт (не критично)
+// прелоад картинок карт
 ranks.forEach(r=>suits.forEach(([c])=>{
   const l=document.createElement('link'); l.rel='preload'; l.as='image'; l.href=img(r+c); document.head.appendChild(l);
 }));
@@ -660,13 +649,9 @@ function buildSelects(){
     }));
     selects.push(s); selWrap.appendChild(s);
   }
-  // запрет дубликатов
   selects.forEach(sel=>sel.addEventListener('change',()=>{
-    const chosen=selects.map(s=>s.value).filter(Boolean);
-    selects.forEach(s2=>[...s2.options].forEach(o=>{
-      if(!o.value) return;
-      o.disabled = chosen.includes(o.value) && s2.value!==o.value;
-    }));
+    const ch=selects.map(s=>s.value);
+    selects.forEach(s2=>[...s2.options].forEach(o=>{ if(!o.value) return; o.disabled = ch.includes(o.value)&&s2!==sel; }));
   }));
 }
 
@@ -685,16 +670,14 @@ function nextRound(){
   int=setInterval(()=>{t--; timer.textContent=t; if(bar) bar.style.transform=`scaleX(${t/10})`; if(!t) nextRound();},1000);
 }
 
-// открытие модалки — строим селекты/новая раздача
-document.querySelectorAll('[data-open="discount"]').forEach(b=>b.addEventListener('click',()=>{
-  buildSelects(); nextRound();
-}));
+// открытие модалки — новая раздача
+document.querySelectorAll('[data-open="discount"]').forEach(b=>b.addEventListener('click',()=>{ buildSelects(); nextRound(); }));
 
 // закрытие — сброс
 modal.addEventListener('modal:closed', ()=>{ clearInterval(int); result.textContent=''; });
 
 btn.onclick=()=>{
-  if(tried){ return; }
+  if(tried){ return; } // ограничение попыток как и было
   if(!selects.every(s=>s.value)){ alert('Выберите три разные карты'); return; }
   clearInterval(int); tried=true;
   const picks=selects.map(s=>s.value), hits=picks.filter(c=>secret.includes(c)).length, disc=[0,10,15,20][hits];
@@ -704,7 +687,7 @@ btn.onclick=()=>{
 };
 })();
 
-/* ===== Калькулятор (значения из твоего ТЗ) ===== */
+/* ===== Калькулятор ===== */
 (()=>{
 const travel={
  "Вологодская":{fee:9000,cities:{Вологда:9000,Череповец:15000,Сокол:12000}},
@@ -721,9 +704,9 @@ const services={
   "Индив. детское шоу (30 мин)":     {p:17000,d:"30 мин шоу + фокус имениннику + мастер-класс (11-й ребёнок +1000 ₽)"}
  },
  std:{
-  "Взрослое шоу (20 минут)":         {p:17500,d:"Сет из 3–4 трюков"},
-  "Взрослое шоу (30 минут)":         {p:23750,d:"Универсальный вариант"},
-  "Взрослое шоу (40 минут)":         {p:30000,d:"Расширенный вариант"}
+  "Взрослое шоу (20 минут)":         {p:14000,d:"Сет из 3–4 трюков"},
+  "Взрослое шоу (30 минут)":         {p:19000,d:"Универсальный вариант"},
+  "Взрослое шоу (40 минут)":         {p:24000,d:"Расширенный вариант"}
  },
  close:{
   "Микромагия (30 мин)":             {p:13000,d:"Фокусы в руках гостей"},
@@ -732,14 +715,14 @@ const services={
   "Микромагия (3 ч)":                {p:36000,d:"Максимальное покрытие"}
  },
  spec:{
-  "Свадебное шоу (20 мин)":          {p:26250,d:"Романтичный блок"},
-  "Свадебное шоу (30 мин)":          {p:32500,d:"Расширенный свадебный"},
-  "Корпоратив (20 мин)":             {p:26250,d:"Юмор + участие сотрудников"},
-  "Корпоратив (30 мин)":             {p:32500,d:"Расширенный корпоратив"},
-  "Юбилей (20 мин)":                 {p:23750,d:"Фокус-подарок юбиляру"},
-  "Юбилей (30 мин)":                 {p:30000,d:"Расширенный юбилей"},
-  "Выпускной (20 мин)":              {p:23750,d:"Современный блок"},
-  "Выпускной (30 мин)":              {p:30000,d:"Расширенный выпускной"}
+  "Свадебное шоу (20 мин)":          {p:21000,d:"Романтичный блок"},
+  "Свадебное шоу (30 мин)":          {p:26000,d:"Расширенный свадебный"},
+  "Корпоратив (20 мин)":             {p:21000,d:"Юмор + участие сотрудников"},
+  "Корпоратив (30 мин)":             {p:26000,d:"Расширенный корпоратив"},
+  "Юбилей (20 мин)":                 {p:19000,d:"Фокус-подарок юбиляру"},
+  "Юбилей (30 мин)":                 {p:24000,d:"Расширенный юбилей"},
+  "Выпускной (20 мин)":              {p:19000,d:"Современный блок"},
+  "Выпускной (30 мин)":              {p:24000,d:"Расширенный выпускной"}
  },
  conc:{
   "Мини-шоу «СЕКРЕТ» (1 ч)":         {p:150000,d:"Атмосферный моно-спектакль"},
@@ -763,7 +746,6 @@ function fillSel(sel,obj){ sel.innerHTML='<option disabled selected hidden>Пр�
 
 const fmt=n=>Number(n).toLocaleString('ru-RU');
 
-/* коеф. праздников — как раньше */
 const hol = (d)=>{
   if(!d) return 1;
   const dt=new Date(d), m=dt.getMonth()+1, day=dt.getDate();
@@ -771,8 +753,6 @@ const hol = (d)=>{
   if (m===12 && day>=8 && day<=30) return 1.5;
   return 1;
 };
-
-/* коеф. только для дороги */
 const roadHol = (d)=>{
   if(!d) return 1;
   const dt=new Date(d), m=dt.getMonth()+1, day=dt.getDate();
@@ -783,11 +763,7 @@ const roadHol = (d)=>{
   return 1;
 };
 
-area.onchange=()=>{ 
-  city.disabled=false; 
-  city.innerHTML='<option disabled selected hidden>Город</option>'; 
-  Object.keys(travel[area.value].cities).forEach(c=>city.add(new Option(c,c))); 
-};
+area.onchange=()=>{ city.disabled=false; city.innerHTML='<option disabled selected hidden>Город</option>'; Object.keys(travel[area.value].cities).forEach(c=>city.add(new Option(c,c))); };
 [city,when].forEach(el=>el.onchange=()=>el.style.borderColor='');
 guests.onchange=()=>{ slider.style.display=guests.value==='custom'?'flex':'none'; };
 gRange.oninput=()=> gNum.textContent=gRange.value;
@@ -797,20 +773,14 @@ svc.onchange=()=>{ desc.textContent= services[cat.value][svc.value].d || ''; };
 function isFilled(){ return area.value && city.value && when.value && guests.value && cat.value && svc.value; }
 
 function calc(){
-  const base0=services[cat.value][svc.value].p;
+  const base=services[cat.value][svc.value].p;
 
-  // Ярославль: дорога «бесплатно» (0), но +1000 к самой услуге
-  const inYaroslavl = (area.value==='Ярославская' && city.value==='Ярославль');
-  const base = inYaroslavl ? (base0 + 1000) : base0;
-
-  const roadBaseRaw = (travel[area.value].cities[city.value]!==undefined
+  const roadBase = (travel[area.value].cities[city.value]!==undefined
                     ? travel[area.value].cities[city.value]
                     : travel[area.value].fee);
 
-  const roadBase = inYaroslavl ? 0 : roadBaseRaw;
-
   const rCoef = roadHol(when.value);
-  const roadExtra = inYaroslavl ? 0 : Math.round(roadBase * (rCoef - 1));
+  const roadExtra = Math.round(roadBase * (rCoef - 1));
 
   const guest=(guests.value==='custom'?(gRange.value-200)*80:+guests.value);
 
@@ -826,17 +796,17 @@ function calc(){
 
   const fmtCoef = c => (c===1? '' : ` (×${c})`);
 
+  // Для Ярославля показываем слово «бесплатно»
+  const roadText = (area.value==='Ярославская' && city.value==='Ярославль') ? 'бесплатно' : fmt(roadBase) + ' ₽';
+
   total.textContent='Итого — '+fmt(sum)+' ₽';
   total.style.display='block';
   total.classList.add('flash'); setTimeout(()=>total.classList.remove('flash'),900);
 
-  // «Бесплатно» для Ярославля
-  const roadLine = inYaroslavl ? '— Дорога: бесплатно' : `— Дорога: ${fmt(roadBase)} ₽`;
-
   breakdown.innerHTML=
     `База: ${fmt(base + roadBase + guest)} ₽`+
     `<br>— Услуга: ${fmt(base)} ₽`+
-    `<br>${roadLine}`+
+    `<br>— Дорога: ${roadText}`+
     (roadExtra>0? `<br>— Надбавка за дорогу: +${fmt(roadExtra)} ₽${fmtCoef(rCoef)}` : '')+
     `<br>— Гости: ${fmt(guest)} ₽`+
     (holUp? `<br>Праздничная надбавка: +${fmt(holUp)} ₽${fmtCoef(hCoef)}` : '')+
@@ -869,7 +839,10 @@ calcBtn.addEventListener('click', ()=>{
 window.recalcIfReady = ()=>{ if(isFilled()) calc(); };
 })();
 
-/* Телеграм-отправка */
+/* Клик промо — событие */
+document.getElementById('promoBtn')?.addEventListener('click',()=>track('promo_click'));
+
+/* Телеграм-отправка через serverless */
 (function(){
 const form = document.getElementById('orderForm'); if(!form) return;
 form.addEventListener('submit', async (e)=>{
@@ -891,7 +864,7 @@ form.addEventListener('submit', async (e)=>{
 });
 })();
 
-/* Галерея + лайтбокс */
+/* Галерея + лайтбокс (event-01.webp … event-10.webp) */
 (function(){
   const GALLERY_FILES = [
     'images/gallery/event-01.webp','images/gallery/event-02.webp','images/gallery/event-03.webp','images/gallery/event-04.webp',
@@ -947,12 +920,8 @@ form.addEventListener('submit', async (e)=>{
 (function(){
   try{
     const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
-    const headerPhone = document.querySelector('.header .iconBtn[href^="https://wa.me"]');
-    const footerPhone = document.querySelector('.footer-contacts .iconBtn[href^="https://wa.me"]');
-    if(isMobile){
-      headerPhone?.setAttribute('href','tel:+79092763386');
-      footerPhone?.setAttribute('href','tel:+79092763386');
-    }
+    const wa = document.getElementById('waLink');
+    if(isMobile && wa) wa.setAttribute('href','tel:+79092763386');
   }catch(e){}
 })();
 </script>
