@@ -217,11 +217,35 @@ input[type="date"]{appearance:none; -webkit-appearance:none; background:#15171e;
 .lightbox img{ max-width:92vw; max-height:90dvh; border-radius:10px; border:1px solid #333; position:relative; z-index:2; }
 
 /* Круглые иконки контактов */
-.contact-grid{ display:flex; justify-content:center; gap:.7rem; flex-wrap:wrap }
-.contact-btn{ width:64px; height:64px; display:grid; place-items:center; border-radius:50%; background:#15171e; border:1.6px solid #2f3138; transition:.25s }
-.contact-btn:hover{ transform:translateY(-2px); border-color:var(--gold) }
-.contact-btn svg{ width:28px; height:28px; display:block; fill:#e7c776 }
+.contact-grid {
+  display: flex;
+  justify-content: center;
+  gap: .7rem;
+  flex-wrap: wrap;
+}
 
+.contact-btn {
+  width: 64px;
+  height: 64px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: #15171e;
+  border: 1.6px solid #2f3138;
+  transition: .25s;
+}
+
+.contact-btn:hover {
+  transform: translateY(-2px);
+  border-color: var(--gold);
+}
+
+.contact-btn img {
+  width: 28px;
+  height: 28px;
+  display: block;
+  border-radius: 50%; /* чтобы сами картинки тоже были круглыми */
+}
 /* FAB */
 .fab{ position:fixed; right:18px; bottom: calc(16px + env(safe-area-inset-bottom)); width:54px; height:54px; border-radius:50%; display:grid; place-items:center; z-index:97;
   background:radial-gradient(180% 180% at 40% 30%, var(--gold2), var(--gold) 60%); color:#111; cursor:pointer; box-shadow:0 14px 28px rgba(203,161,53,.26), inset 0 0 0 2px rgba(255,255,255,.22) }
@@ -406,18 +430,16 @@ footer{ padding:2rem 1rem; text-align:center; font-size:.9rem; color:#888; borde
     <div class="modal__close"><button data-close aria-label="Закрыть">✕</button></div>
     <div class="modal__body">
       <h2 class="sectionTitle">Контакты</h2>
+
       <div class="contact-grid" style="margin-top:.6rem">
         <a class="contact-btn" href="https://t.me/Dmitrokko" target="_blank" rel="noopener" aria-label="Telegram">
-          <!-- inline Telegram -->
-          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9.6 15.3 9.4 19c.4 0 .6-.2.8-.4l2-1.9 4.1 3c.8.5 1.3.2 1.5-.8l2.7-12.8c.2-1-.3-1.4-1.1-1.1L3.2 10c-1 .4-1 1 0 1.3l4.5 1.4 10.4-6.5c.5-.3.9-.1.5.2L9.6 15.3z"/></svg>
+          <img src="images/icons/telegram.jpeg" alt="Telegram" width="28" height="28">
         </a>
         <a class="contact-btn" href="tel:89092763386" aria-label="Позвонить">
-          <!-- inline Phone -->
-          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.6 10.8c1.5 3 3.6 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1.1-.3 1.2.4 2.5.6 3.8.6.6 0 1 .4 1 .9V20c0 .6-.4 1-1 1C10.6 21 3 13.4 3 4c0-.6.4-1 1-1h3.5c.5 0 .9.4 .9 1 0 1.3.2 2.6.6 3.8.1.4 0 .8-.3 1.1L6.6 10.8z"/></svg>
+          <img src="images/icons/phone.jpeg" alt="Позвонить" width="28" height="28">
         </a>
         <a class="contact-btn" href="https://vk.com/dmitrokko" target="_blank" rel="noopener" aria-label="VK">
-          <!-- inline VK -->
-          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7c.1 5 2.7 8.6 7.3 9h.3v-3c1.7.2 3-.6 3.6-2.4h2.5c-.5 2.7-2.6 4.2-6.1 4.5V18h-1C6.6 18 4 15 4 10V7h0zM14.4 8.7c0 .9-.7 1.6-1.6 1.6S11.2 9.6 11.2 8.7s.7-1.6 1.6-1.6 1.6.7 1.6 1.6z"/></svg>
+          <img src="images/icons/vk.jpeg" alt="VK" width="28" height="28">
         </a>
       </div>
     </div>
@@ -505,26 +527,64 @@ function track(event, params){
   }, {capture:true});
 })();
 
-/* ===== Открытие/закрытие модалок + Esc ===== */
+// ===== Открытие/закрытие модалок + Esc (с автозакрытием бургера) =====
 (function(){
+  const menu   = document.getElementById('mainMenu');
+  const burger = document.getElementById('burger');
+
+  function closeBurger(){
+    if(menu && menu.classList.contains('open')){
+      menu.classList.remove('open');
+      burger?.setAttribute('aria-expanded','false');
+      menu.setAttribute('aria-hidden','true');
+    }
+  }
+
   function openModal(id){
     const m=document.getElementById('modal-'+id); if(!m) return;
+    // Закрываем бургер перед открытием любой модалки
+    closeBurger();
+
     m.classList.add('open');
     if(id==='discount') track('discount_open');
     if(id==='promo') ensurePromo();
   }
-  function closeModal(m){ if(m){ if(m.id==='modal-promo') teardownPromo(); m.classList.remove('open'); m.dispatchEvent(new CustomEvent('modal:closed')); } }
 
-  addEventListener('click',e=>{
-    const op=e.target.closest && e.target.closest('[data-open]');
-    if(op){ e.preventDefault(); openModal(op.getAttribute('data-open')); }
-    if(e.target.hasAttribute && e.target.hasAttribute('data-close')) closeModal(e.target.closest('.modal'));
-    if(e.target.classList && e.target.classList.contains('modal__bg')) closeModal(e.target.closest('.modal'));
+  function closeModal(m){
+    if(!m) return;
+    if(m.id==='modal-promo') teardownPromo();
+    m.classList.remove('open');
+    m.dispatchEvent(new CustomEvent('modal:closed'));
+  }
+
+  // Открытие по любому [data-open]
+  addEventListener('click', e=>{
+    const op = e.target.closest && e.target.closest('[data-open]');
+    if(op){
+      e.preventDefault();
+      openModal(op.getAttribute('data-open'));
+    }
+    if(e.target.hasAttribute && e.target.hasAttribute('data-close')){
+      closeModal(e.target.closest('.modal'));
+    }
+    if(e.target.classList && e.target.classList.contains('modal__bg')){
+      closeModal(e.target.closest('.modal'));
+    }
   });
-  addEventListener('keydown',e=>{
-    if(e.key==='Escape'){ document.querySelectorAll('.modal.open').forEach(closeModal); }
+
+  // На всякий случай: клик по пункту меню всегда закрывает бургер
+  document.querySelectorAll('#mainMenu .menu__item').forEach(a=>{
+    a.addEventListener('click', closeBurger);
+  });
+
+  // Esc — закрыть все открытые модалки
+  addEventListener('keydown', e=>{
+    if(e.key==='Escape'){
+      document.querySelectorAll('.modal.open').forEach(closeModal);
+    }
   });
 })();
+
 
 /* FAB вверх/вниз */
 (function(){
