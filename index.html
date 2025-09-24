@@ -83,7 +83,9 @@ input[type="date"]{appearance:none; -webkit-appearance:none; background:#15171e;
   border-bottom:1px solid rgba(200,200,220,.12);
 }
 .header__logo{display:flex; align-items:center; gap:.5rem}
-.header__logo img{height:36px; width:auto; border-radius:6px; display:block}
+.header__logo img{
+  height:36px; width:auto; border-radius:0; display:block; object-fit:contain; /* квадратный логотип */
+}
 .burger{
   width:44px;height:44px;border-radius:10px;border:none;cursor:pointer;
   background:linear-gradient(160deg,var(--gold),var(--gold2)); color:#111;
@@ -216,37 +218,23 @@ input[type="date"]{appearance:none; -webkit-appearance:none; background:#15171e;
 .lightbox.open{ display:flex }
 .lightbox img{ max-width:92vw; max-height:90dvh; border-radius:10px; border:1px solid #333; position:relative; z-index:2; }
 
-/* Круглые иконки контактов */
-.contact-grid {
-  display: flex;
-  justify-content: center;
-  gap: .7rem;
-  flex-wrap: wrap;
+/* Контакты — чёрный фон внутри иконок, сами иконки квадратные */
+.contact-grid{
+  display:flex; justify-content:center; gap:.7rem; flex-wrap:wrap;
+}
+.contact-btn{
+  width:64px; height:64px; display:grid; place-items:center;
+  border-radius:50%;
+  background:#000;                 /* чёрный фон кружка */
+  border:1.6px solid #2f3138; transition:.25s;
+}
+.contact-btn:hover{ transform:translateY(-2px); border-color:var(--gold); }
+.contact-btn img{
+  width:28px; height:28px; display:block;
+  border-radius:0;                 /* квадратная пиктограмма */
+  background:#000;                 /* подложка на случай jpeg */
 }
 
-.contact-btn {
-  width: 64px;
-  height: 64px;
-  display: grid;
-  place-items: center;
-  border-radius: 50%;
-  background: #000; /* ← фон внутри черный */
-  border: 1.6px solid #2f3138;
-  transition: .25s;
-}
-
-.contact-btn:hover {
-  transform: translateY(-2px);
-  border-color: var(--gold);
-}
-
-.contact-btn img {
-  width: 28px;
-  height: 28px;
-  display: block;
-  border-radius: 0; /* ← убрали скругление, теперь квадрат */
-  background: #000; /* подложка на случай jpeg */
-}
 /* FAB */
 .fab{ position:fixed; right:18px; bottom: calc(16px + env(safe-area-inset-bottom)); width:54px; height:54px; border-radius:50%; display:grid; place-items:center; z-index:97;
   background:radial-gradient(180% 180% at 40% 30%, var(--gold2), var(--gold) 60%); color:#111; cursor:pointer; box-shadow:0 14px 28px rgba(203,161,53,.26), inset 0 0 0 2px rgba(255,255,255,.22) }
@@ -254,7 +242,7 @@ input[type="date"]{appearance:none; -webkit-appearance:none; background:#15171e;
 
 /* Подвал */
 footer{ padding:2rem 1rem; text-align:center; font-size:.9rem; color:#888; border-top:1px solid #222; margin-top:2rem }
-.footer-logo{ width:160px; height:auto; border-radius:10px; display:block; margin:.2rem auto 0 }
+.footer-logo{ width:160px; height:auto; border-radius:0; display:block; margin:.2rem auto 0 } /* квадратный логотип */
 
 /* Планшет/десктоп */
 @media (min-width:900px){
@@ -270,13 +258,13 @@ footer{ padding:2rem 1rem; text-align:center; font-size:.9rem; color:#888; borde
 </head>
 <body>
 
-.header__logo img {
-  height: 36px;
-  width: auto;
-  border-radius: 0;   /* убираем круглый эффект */
-  object-fit: contain;
-  display: block;
-}
+<!-- ===== Header: logo + burger ===== -->
+<header class="header" role="navigation" aria-label="Верхняя панель">
+  <div class="header__logo">
+    <img src="images/logo.jpg" alt="Костюк — иллюзионист" loading="eager">
+  </div>
+  <button class="burger" id="burger" aria-expanded="false" aria-controls="mainMenu" aria-label="Меню"><span></span></button>
+</header>
 
 <!-- ===== Menu panel ===== -->
 <nav id="mainMenu" class="menu" aria-hidden="true">
@@ -342,7 +330,7 @@ footer{ padding:2rem 1rem; text-align:center; font-size:.9rem; color:#888; borde
   </div>
 </section>
 
-<!-- ===== Калькулятор (как раньше, но плашки ровные) ===== -->
+<!-- ===== Калькулятор ===== -->
 <section id="calc" class="sectionBox">
   <h2 class="sectionTitle">Узнать стоимость</h2>
   <form id="calcForm" novalidate>
@@ -501,7 +489,7 @@ footer{ padding:2rem 1rem; text-align:center; font-size:.9rem; color:#888; borde
 
 <!-- ===== JS ===== -->
 <script>
-/* аналитика (как было) */
+/* аналитика */
 function track(event, params){
   try{ if(window.gtag) gtag('event', event, params||{}); }catch(e){}
   try{ if(window.ym && window.YA_METRICA_ID) ym(window.YA_METRICA_ID,'reachGoal',event, params||{}); }catch(e){}
@@ -513,9 +501,12 @@ function track(event, params){
 /* iOS 100vh фикса */
 (function(){ function setVH(){ document.documentElement.style.setProperty('--vh', window.innerHeight + 'px'); } setVH(); addEventListener('resize', setVH); addEventListener('orientationchange', setVH); })();
 
-/* ===== Burger ===== */
+/* ===== Burger (с защитой) ===== */
 (function(){
-  const btn=document.getElementById('burger'), menu=document.getElementById('mainMenu');
+  const btn=document.getElementById('burger');
+  const menu=document.getElementById('mainMenu');
+  if(!btn || !menu) return;
+
   function toggle(force){
     const isOpen = force ?? !menu.classList.contains('open');
     menu.classList.toggle('open', isOpen);
@@ -528,7 +519,7 @@ function track(event, params){
   }, {capture:true});
 })();
 
-// ===== Открытие/закрытие модалок + Esc (с автозакрытием бургера) =====
+/* ===== Открытие/закрытие модалок + Esc (с автозакрытием бургера) ===== */
 (function(){
   const menu   = document.getElementById('mainMenu');
   const burger = document.getElementById('burger');
@@ -543,9 +534,7 @@ function track(event, params){
 
   function openModal(id){
     const m=document.getElementById('modal-'+id); if(!m) return;
-    // Закрываем бургер перед открытием любой модалки
-    closeBurger();
-
+    closeBurger(); // перед открытием модалки прячем бургер
     m.classList.add('open');
     if(id==='discount') track('discount_open');
     if(id==='promo') ensurePromo();
@@ -558,7 +547,6 @@ function track(event, params){
     m.dispatchEvent(new CustomEvent('modal:closed'));
   }
 
-  // Открытие по любому [data-open]
   addEventListener('click', e=>{
     const op = e.target.closest && e.target.closest('[data-open]');
     if(op){
@@ -573,19 +561,16 @@ function track(event, params){
     }
   });
 
-  // На всякий случай: клик по пункту меню всегда закрывает бургер
   document.querySelectorAll('#mainMenu .menu__item').forEach(a=>{
     a.addEventListener('click', closeBurger);
   });
 
-  // Esc — закрыть все открытые модалки
   addEventListener('keydown', e=>{
     if(e.key==='Escape'){
       document.querySelectorAll('.modal.open').forEach(closeModal);
     }
   });
 })();
-
 
 /* FAB вверх/вниз */
 (function(){
@@ -661,7 +646,7 @@ btn.onclick=()=>{
 };
 })();
 
-/* ===== Калькулятор (актуальные цены + «Ярославль бесплатно») ===== */
+/* ===== Калькулятор ===== */
 (()=>{
 const travel={
  "Вологодская":{fee:9000,cities:{Вологда:9000,Череповец:15000,Сокол:12000}},
@@ -789,7 +774,7 @@ calcBtn.addEventListener('click', ()=>{
 window.recalcIfReady = ()=>{ if(isFilled()) calc(); };
 })();
 
-/* FAQ (как было) */
+/* FAQ */
 (function(){
   const FAQ = [
     { q: "За сколько бронировать дату?", a: "Обычно за 1–2 недели; популярные даты — за месяц и раньше." },
@@ -838,7 +823,7 @@ window.recalcIfReady = ()=>{ if(isFilled()) calc(); };
   document.addEventListener('keydown',e=>{ if(e.key==='Escape' && lb?.classList.contains('open')) lb.classList.remove('open'); });
 })();
 
-/* Отправка заявки (как было) */
+/* Отправка заявки */
 (function(){
 const form = document.getElementById('orderForm'); if(!form) return;
 form.addEventListener('submit', async (e)=>{
@@ -853,7 +838,6 @@ form.addEventListener('submit', async (e)=>{
   }catch(err){ alert('Не удалось отправить заявку. Сообщите, пожалуйста, по телефону или в Telegram.'); }
 });
 })();
-
 </script>
 </body>
 </html>
