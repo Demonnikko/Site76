@@ -524,7 +524,8 @@ function track(event, params){
   fab.onclick=()=>{
     const atTop=scrollY<=10;
     scrollTo({top: atTop ? document.documentElement.scrollHeight : 0, behavior:'smooth'});
-    iconPath.setAttribute('d', atTop ? 'М12 8 6 14h12z' : 'M12 16 18 10H6z');
+    // ← здесь была кириллическая «М», теперь латинская
+    iconPath.setAttribute('d', atTop ? 'M12 8 6 14h12z' : 'M12 16 18 10H6z');
   };
 })();
 
