@@ -230,7 +230,7 @@ input[type="date"]{appearance:none; -webkit-appearance:none; background:#15171e;
   display: grid;
   place-items: center;
   border-radius: 50%;
-  background: #15171e;
+  background: #000; /* ← фон внутри черный */
   border: 1.6px solid #2f3138;
   transition: .25s;
 }
@@ -244,7 +244,8 @@ input[type="date"]{appearance:none; -webkit-appearance:none; background:#15171e;
   width: 28px;
   height: 28px;
   display: block;
-  border-radius: 50%; /* чтобы сами картинки тоже были круглыми */
+  border-radius: 0; /* ← убрали скругление, теперь квадрат */
+  background: #000; /* подложка на случай jpeg */
 }
 /* FAB */
 .fab{ position:fixed; right:18px; bottom: calc(16px + env(safe-area-inset-bottom)); width:54px; height:54px; border-radius:50%; display:grid; place-items:center; z-index:97;
@@ -269,13 +270,13 @@ footer{ padding:2rem 1rem; text-align:center; font-size:.9rem; color:#888; borde
 </head>
 <body>
 
-<!-- ===== Header: logo + burger ===== -->
-<header class="header" role="navigation" aria-label="Верхняя панель">
-  <div class="header__logo">
-    <img src="images/logo.jpg" alt="Костюк — иллюзионист" loading="eager">
-  </div>
-  <button class="burger" id="burger" aria-expanded="false" aria-controls="mainMenu" aria-label="Меню"><span></span></button>
-</header>
+.header__logo img {
+  height: 36px;
+  width: auto;
+  border-radius: 0;   /* убираем круглый эффект */
+  object-fit: contain;
+  display: block;
+}
 
 <!-- ===== Menu panel ===== -->
 <nav id="mainMenu" class="menu" aria-hidden="true">
