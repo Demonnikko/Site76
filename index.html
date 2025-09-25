@@ -93,51 +93,35 @@ input[type="date"]{appearance:none; -webkit-appearance:none; background:#15171e;
 .burger span::before,.burger span::after{content:""; position:absolute; left:0; right:0; height:2px; background:#111}
 .burger span::before{top:-6px}.burger span::after{top:6px}
 
-/* ===== Menu panel ===== */
-.menu{
-  position:fixed; left:0; right:0; top:56px; z-index:97;
-  background:rgba(8,9,13,.96); backdrop-filter:blur(10px);
-  border-bottom:1px solid rgba(255,255,255,.08);
-  transform:translateY(-120%); transition:transform .35s ease;
-}
-.menu.open{transform:translateY(0)}
-.menu__wrap{padding:12px; display:grid; gap:10px}
-.menu__item{
-  display:block; text-align:center; font:600 1rem var(--ff-text); padding:14px 16px; border-radius:12px;
-  color:#111; background:linear-gradient(160deg,var(--gold),var(--gold2));
-  box-shadow:0 10px 24px rgba(203,161,53,.22), inset 0 0 0 1px rgba(255,255,255,.14);
-}
-.menu__item:active{transform:translateY(1px)}
+<!-- ===== Menu panel ===== -->
+<nav id="mainMenu" class="menu" aria-hidden="true">
+  <div class="menu__wrap">
+    <a href="#" class="menu__item" data-open="promo">Смотреть промо</a>
+    <a href="#" class="menu__item" data-open="discount">Скидка</a>
+    <a href="#" class="menu__item" data-open="faq">Вопросы</a>
+    <a href="#" class="menu__item" data-open="gallery">Галерея</a>
+    <!-- Контакты убрали -->
+  </div>
+</nav>
 
-/* ===== Hero ===== */
-.hero{
-  min-height: var(--vh, 100dvh);
-  display:flex; flex-direction:column; align-items:center; justify-content:center;
-  text-align:center; gap:1rem;
-  padding: calc(56px + 28px + env(safe-area-inset-top)) 12px 28px;
-  position:relative;
-}
-.hero::before{
-  content:""; position:absolute; inset:0; z-index:-1;
-  background: var(--hero-photo) no-repeat; background-size:cover; background-position: var(--face-pos);
-}
-.hero::after{
-  content:""; position:absolute; inset:0; pointer-events:none; z-index:0;
-  background:linear-gradient(to bottom, rgba(0,0,0,0) 48%, #000 82%),
-             linear-gradient(90deg, #000 0 3%, rgba(0,0,0,0) 14% 86%, #000 97% 100%);
-}
-.title{position:relative; color:var(--gold); font:900 var(--fs-h1) var(--ff-head); letter-spacing:.06em}
-.title::before{
-  content:attr(data-txt); position:absolute; inset:0;
-  background:linear-gradient(120deg,transparent 30%,rgba(255,255,255,.9)50%,transparent 70%);
-  background-size:200% 100%; -webkit-background-clip:text; background-clip:text; color:transparent;
-  animation:sweep 7s linear infinite;
-}
-@keyframes sweep{from{background-position:-200% 0}to{background-position:200% 0}}
-.subtitle-float{font:900 clamp(18px,4.6vw,32px) var(--ff-head); color:var(--gold); letter-spacing:.14em; animation:float 6s ease-in-out infinite}
-@keyframes float{0%,100%{transform:translateY(-8px)}50%{transform:translateY(8px)}}
-.hero-cta{display:flex; width:100%; justify-content:center}
-.hero-cta .btn--primary{ width:min(92vw, 480px); }
+<!-- ===== HERO ===== -->
+<section id="hero" class="hero" role="banner">
+  <h1 class="title" data-txt="Дмитрий Костюк">Дмитрий&nbsp;Костюк</h1>
+  <p class="subtitle-float">Иллюзионист</p>
+
+  <div class="hero-cta">
+    <!-- тут тоже переводим на data-open -->
+    <button class="btn btn--primary" type="button" aria-label="Смотреть промо" data-open="promo">
+      Смотреть промо
+    </button>
+  </div>
+
+  <div class="metrics" aria-live="polite">
+    <span><b id="shows">0</b> довольных клиентов</span>
+    <span class="dot" aria-hidden="true"></span>
+    <span id="exp"></span>
+  </div>
+</section>
 
 /* Метрики */
 .metrics{display:flex; flex-wrap:wrap; gap:.6rem .9rem; align-items:center; justify-content:center; opacity:.95}
