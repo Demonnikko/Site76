@@ -83,9 +83,7 @@ input[type="date"]{appearance:none; -webkit-appearance:none; background:#15171e;
   border-bottom:1px solid rgba(200,200,220,.12);
 }
 .header__logo{display:flex; align-items:center; gap:.5rem}
-.header__logo img{
-  height:36px; width:auto; border-radius:0; display:block; object-fit:contain; /* квадратный логотип */
-}
+.header__logo img{height:36px; width:auto; border-radius:0; display:block; object-fit:contain}
 .burger{
   width:44px;height:44px;border-radius:10px;border:none;cursor:pointer;
   background:linear-gradient(160deg,var(--gold),var(--gold2)); color:#111;
@@ -218,31 +216,26 @@ input[type="date"]{appearance:none; -webkit-appearance:none; background:#15171e;
 .lightbox.open{ display:flex }
 .lightbox img{ max-width:92vw; max-height:90dvh; border-radius:10px; border:1px solid #333; position:relative; z-index:2; }
 
-/* Контакты — чёрный фон внутри иконок, сами иконки квадратные */
-.contact-grid{
-  display:flex; justify-content:center; gap:.7rem; flex-wrap:wrap;
-}
+/* Кнопки контактов (круглые оболочки, чёрная подложка внутри, квадратные иконки) */
+.contact-grid{ display:flex; justify-content:center; gap:.7rem; flex-wrap:wrap }
 .contact-btn{
-  width:64px; height:64px; display:grid; place-items:center;
-  border-radius:50%;
-  background:#000;                 /* чёрный фон кружка */
-  border:1.6px solid #2f3138; transition:.25s;
+  width:64px;height:64px;display:grid;place-items:center;border-radius:50%;
+  background:#000;border:1.6px solid #2f3138;transition:.25s
 }
-.contact-btn:hover{ transform:translateY(-2px); border-color:var(--gold); }
-.contact-btn img{
-  width:28px; height:28px; display:block;
-  border-radius:0;                 /* квадратная пиктограмма */
-  background:#000;                 /* подложка на случай jpeg */
-}
+.contact-btn:hover{ transform:translateY(-2px); border-color:var(--gold) }
+.contact-btn img{ width:28px; height:28px; display:block; border-radius:0; background:#000 }
 
 /* FAB */
 .fab{ position:fixed; right:18px; bottom: calc(16px + env(safe-area-inset-bottom)); width:54px; height:54px; border-radius:50%; display:grid; place-items:center; z-index:97;
   background:radial-gradient(180% 180% at 40% 30%, var(--gold2), var(--gold) 60%); color:#111; cursor:pointer; box-shadow:0 14px 28px rgba(203,161,53,.26), inset 0 0 0 2px rgba(255,255,255,.22) }
 .fab svg{ width:26px; height:26px }
 
-/* Подвал */
-footer{ padding:2rem 1rem; text-align:center; font-size:.9rem; color:#888; border-top:1px solid #222; margin-top:2rem }
-.footer-logo{ width:160px; height:auto; border-radius:0; display:block; margin:.2rem auto 0 } /* квадратный логотип */
+/* Футер */
+footer{ padding:1.2rem 1rem 2rem; border-top:1px solid #222; margin-top:2rem }
+.footer-bar{ display:flex; align-items:center; justify-content:space-between; gap:1rem; max-width:980px; margin:0 auto }
+.footer-logo{ width:160px; height:auto; border-radius:10px; display:block }
+.footer-contacts{ display:flex; gap:.6rem }
+.copy{ text-align:center; color:#888; font-size:.9rem; margin-top:.8rem }
 
 /* Планшет/десктоп */
 @media (min-width:900px){
@@ -261,7 +254,7 @@ footer{ padding:2rem 1rem; text-align:center; font-size:.9rem; color:#888; borde
 <!-- ===== Header: logo + burger ===== -->
 <header class="header" role="navigation" aria-label="Верхняя панель">
   <div class="header__logo">
-    <img src="images/logo.jpg" alt="Костюк — иллюзионист" loading="eager">
+    <img src="images/logo.jpeg" alt="Костюк — иллюзионист" loading="eager">
   </div>
   <button class="burger" id="burger" aria-expanded="false" aria-controls="mainMenu" aria-label="Меню"><span></span></button>
 </header>
@@ -393,13 +386,28 @@ footer{ padding:2rem 1rem; text-align:center; font-size:.9rem; color:#888; borde
   <svg id="fabIcon" viewBox="0 0 24 24" aria-hidden="true"><path id="fabPath" d="M12 16 18 10H6z"/></svg>
 </button>
 
+<!-- ===== Футер ===== -->
 <footer>
-  <img class="footer-logo" src="images/logo.jpg" alt="Логотип" loading="eager">
-  © 2025 · <span>ИП Дмитрий Костюк</span> · Работаем официально
+  <div class="footer-bar">
+    <!-- Логотип слева -->
+    <img class="footer-logo" src="images/logo.jpeg" alt="Логотип" loading="eager">
+    <!-- Контакты справа -->
+    <div class="footer-contacts">
+      <a class="contact-btn" href="https://vk.com/dmitrokko" target="_blank" rel="noopener" aria-label="VK">
+        <img src="images/icons/vk.jpeg" alt="VK" width="28" height="28">
+      </a>
+      <a class="contact-btn" href="https://t.me/Dmitrokko" target="_blank" rel="noopener" aria-label="Telegram">
+        <img src="images/icons/telegram.jpeg" alt="Telegram" width="28" height="28">
+      </a>
+      <a class="contact-btn" href="tel:89092763386" aria-label="Позвонить">
+        <img src="images/icons/phone.jpeg" alt="Позвонить" width="28" height="28">
+      </a>
+    </div>
+  </div>
+  <div class="copy">© 2025 · <span>ИП Дмитрий Костюк</span> · Работаем официально</div>
 </footer>
 
 <!-- ===== МОДАЛКИ ===== -->
-
 <!-- ПРОМО (RuTube) -->
 <div class="modal" id="modal-promo" aria-hidden="true" role="dialog" aria-label="Промо-видео">
   <div class="modal__bg" data-close></div>
@@ -419,7 +427,6 @@ footer{ padding:2rem 1rem; text-align:center; font-size:.9rem; color:#888; borde
     <div class="modal__close"><button data-close aria-label="Закрыть">✕</button></div>
     <div class="modal__body">
       <h2 class="sectionTitle">Контакты</h2>
-
       <div class="contact-grid" style="margin-top:.6rem">
         <a class="contact-btn" href="https://t.me/Dmitrokko" target="_blank" rel="noopener" aria-label="Telegram">
           <img src="images/icons/telegram.jpeg" alt="Telegram" width="28" height="28">
@@ -442,7 +449,7 @@ footer{ padding:2rem 1rem; text-align:center; font-size:.9rem; color:#888; borde
     <div class="modal__close"><button data-close aria-label="Закрыть">✕</button></div>
     <div class="modal__body">
       <h2 class="sectionTitle">Угадай карту и получи скидку</h2>
-      <p class="rules">1 совпадение — 10 %, 2 — 15 %, 3 — 20 %. Колода обновляется каждые 10 с.</p>
+      <p class="rules">1 совпадение — 10 %, 2 — 15 %, 3 — 20 %. Колода обновляется каждые 20 с.</p>
       <div class="gameWrap">
         <div class="deck">
           <div class="card"><div class="face"></div></div>
@@ -453,7 +460,7 @@ footer{ padding:2rem 1rem; text-align:center; font-size:.9rem; color:#888; borde
       </div>
       <button id="guessBtn" class="btn" style="margin-top:.6rem" aria-label="Угадать карты">Угадать</button>
       <div id="result"></div>
-      <div id="timer">10</div><div id="progress"><div id="fill"></div></div>
+      <div id="timer">20</div><div id="progress"><div id="fill"></div></div>
     </div>
   </div>
 </div>
@@ -482,11 +489,6 @@ footer{ padding:2rem 1rem; text-align:center; font-size:.9rem; color:#888; borde
   </div>
 </div>
 
-<!-- Лайтбокс -->
-<div class="lightbox" id="lightbox" aria-hidden="true">
-  <img alt=""><div class="modal__bg" data-close></div>
-</div>
-
 <!-- ===== JS ===== -->
 <script>
 /* аналитика */
@@ -501,19 +503,16 @@ function track(event, params){
 /* iOS 100vh фикса */
 (function(){ function setVH(){ document.documentElement.style.setProperty('--vh', window.innerHeight + 'px'); } setVH(); addEventListener('resize', setVH); addEventListener('orientationchange', setVH); })();
 
-/* ===== Burger (с защитой) ===== */
+/* ===== Burger ===== */
 (function(){
-  const btn=document.getElementById('burger');
-  const menu=document.getElementById('mainMenu');
-  if(!btn || !menu) return;
-
+  const btn=document.getElementById('burger'), menu=document.getElementById('mainMenu');
   function toggle(force){
     const isOpen = force ?? !menu.classList.contains('open');
     menu.classList.toggle('open', isOpen);
     btn.setAttribute('aria-expanded', isOpen? 'true':'false');
     menu.setAttribute('aria-hidden', isOpen? 'false':'true');
   }
-  btn.addEventListener('click',()=>toggle());
+  btn.addEventListener('click',(e)=>{ e.stopPropagation(); toggle(); }, {passive:false});
   document.addEventListener('click',e=>{
     if(menu.classList.contains('open') && !e.target.closest('.menu') && !e.target.closest('#burger')) toggle(false);
   }, {capture:true});
@@ -534,7 +533,7 @@ function track(event, params){
 
   function openModal(id){
     const m=document.getElementById('modal-'+id); if(!m) return;
-    closeBurger(); // перед открытием модалки прячем бургер
+    closeBurger(); // закрываем бургер перед открытием модалки
     m.classList.add('open');
     if(id==='discount') track('discount_open');
     if(id==='promo') ensurePromo();
@@ -547,24 +546,26 @@ function track(event, params){
     m.dispatchEvent(new CustomEvent('modal:closed'));
   }
 
-  addEventListener('click', e=>{
-    const op = e.target.closest && e.target.closest('[data-open]');
-    if(op){
+  // единый делегат на клики по [data-open] и data-close
+  document.addEventListener('click', e=>{
+    const opener = e.target.closest?.('[data-open]');
+    if(opener){
       e.preventDefault();
-      openModal(op.getAttribute('data-open'));
+      e.stopPropagation();
+      openModal(opener.getAttribute('data-open'));
+      return;
     }
-    if(e.target.hasAttribute && e.target.hasAttribute('data-close')){
+    if(e.target.hasAttribute?.('data-close')){
       closeModal(e.target.closest('.modal'));
+      return;
     }
-    if(e.target.classList && e.target.classList.contains('modal__bg')){
+    if(e.target.classList?.contains('modal__bg')){
       closeModal(e.target.closest('.modal'));
+      return;
     }
-  });
+  }, {capture:true});
 
-  document.querySelectorAll('#mainMenu .menu__item').forEach(a=>{
-    a.addEventListener('click', closeBurger);
-  });
-
+  // Esc — закрыть все открытые модалки
   addEventListener('keydown', e=>{
     if(e.key==='Escape'){
       document.querySelectorAll('.modal.open').forEach(closeModal);
@@ -600,41 +601,64 @@ function ensurePromo(){
 function teardownPromo(){ const box=document.getElementById('promoPlayer'); if(box){ box.innerHTML=''; delete box.dataset.ready; } }
 document.getElementById('promoBtn')?.addEventListener('click', ()=>{ document.getElementById('modal-promo').classList.add('open'); ensurePromo(); track('promo_click'); });
 
-/* ===== Игра ===== */
+/* ===== Игра (20 секунд на выбор) ===== */
 (()=>{
 const modal=document.getElementById('modal-discount'); if(!modal) return;
 const ranks=["A","2","3","4","5","6","7","8","9","10","J","Q","K"];
 const suits=[["S","♠"],["H","♥"],["D","♦"],["C","♣"]];
 const sym=s=>suits.find(v=>v[0]===s)[1];
 const img=c=>`https://deckofcardsapi.com/static/img/${c.replace('10','0')}.png`;
+
+// прелоад
 ranks.forEach(r=>suits.forEach(([c])=>{ const l=document.createElement('link'); l.rel='preload'; l.as='image'; l.href=img(r+c); document.head.appendChild(l); }));
-const selWrap=modal.querySelector('.selects'), cards=[...modal.querySelectorAll('.card')], faces=[...modal.querySelectorAll('.face')],
-      timer=modal.querySelector('#timer'), bar=modal.querySelector('#fill'), btn=modal.querySelector('#guessBtn'), result=modal.querySelector('#result');
+
+const selWrap=modal.querySelector('.selects'),
+      cards=[...modal.querySelectorAll('.card')],
+      faces=[...modal.querySelectorAll('.face')],
+      timer=modal.querySelector('#timer'),
+      bar=modal.querySelector('#fill'),
+      btn=modal.querySelector('#guessBtn'),
+      result=modal.querySelector('#result');
+
 if(cards.length!==3||faces.length!==3) return;
+
 let selects=[];
 function buildSelects(){
   selWrap.innerHTML=''; selects=[];
   for(let i=0;i<3;i++){
     const s=document.createElement('select'); s.className='cardSel'; s.required=true;
     s.innerHTML='<option value="" selected disabled hidden>Карта</option>';
-    ranks.forEach(r=>suits.forEach(([c])=>{ s.insertAdjacentHTML('beforeend',`<option value="${r+c}" style="color:${(c==='H'||c==='D')?'#c11':'#000'}">${r+sym(c)}</option>`); }));
+    ranks.forEach(r=>suits.forEach(([c])=>{
+      s.insertAdjacentHTML('beforeend',`<option value="${r+c}" style="color:${(c==='H'||c==='D')?'#c11':'#000'}">${r+sym(c)}</option>`);
+    }));
     selects.push(s); selWrap.appendChild(s);
   }
-  selects.forEach(sel=>sel.addEventListener('change',()=>{ const ch=selects.map(s=>s.value); selects.forEach(s2=>[...s2.options].forEach(o=>{ if(!o.value) return; o.disabled = ch.includes(o.value)&&s2!==sel; })); }));
+  // запрет повторов
+  selects.forEach(sel=>sel.addEventListener('change',()=>{
+    const chosen=selects.map(s=>s.value);
+    selects.forEach(s2=>[...s2.options].forEach(o=>{ if(!o.value) return; o.disabled = chosen.includes(o.value)&&s2!==sel; }));
+  }));
 }
+
 const rand=a=>a[(Math.random()*a.length)|0];
 const uniq=a=>{ let c; do{ c=rand(ranks)+rand(suits)[0]; }while(a.includes(c)); return c; };
 const smoke=c=>{ for(let i=0;i<3;i++){ const s=document.createElement('span'); s.style.cssText='position:absolute;left:50%;bottom:50%;width:14px;height:14px;border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,.9)0,rgba(255,255,255,0)70%);pointer-events:none;animation:puff .9s ease-out forwards'; s.style.left=`calc(50% + ${(Math.random()-.5)*20}px)`; s.style.animationDelay=`${i*0.12}s`; c.appendChild(s); s.onanimationend=()=>s.remove(); } };
-let secret=[],t=10,int,tried=false;
+
+let secret=[],t=20,int,tried=false;
 function nextRound(){
   tried=false; secret=[]; while(secret.length<3) secret.push(uniq(secret));
   faces.forEach(f=>f.innerHTML=''); cards.forEach(c=>c.classList.remove('flipped'));
   result.textContent=''; selects.forEach(s=>{ s.selectedIndex=0; [...s.options].forEach(o=>o.disabled=false); });
-  t=10; timer.textContent=t; if(bar) bar.style.transform='scaleX(1)'; clearInterval(int);
-  int=setInterval(()=>{t--; timer.textContent=t; if(bar) bar.style.transform=`scaleX(${t/10})`; if(!t) nextRound();},1000);
+  t=20; timer.textContent=t; if(bar) bar.style.transform='scaleX(1)'; clearInterval(int);
+  int=setInterval(()=>{ t--; timer.textContent=t; if(bar) bar.style.transform=`scaleX(${t/20})`; if(!t) nextRound(); },1000);
 }
-document.querySelectorAll('[data-open="discount"]').forEach(b=>b.addEventListener('click',()=>{ buildSelects(); nextRound(); }));
+
+document.querySelectorAll('[data-open="discount"]').forEach(b=>b.addEventListener('click',()=>{
+  buildSelects(); nextRound();
+}));
+
 modal.addEventListener('modal:closed', ()=>{ clearInterval(int); result.textContent=''; });
+
 btn.onclick=()=>{
   if(tried) return;
   if(!selects.every(s=>s.value)){ alert('Выберите три разные карты'); return; }
