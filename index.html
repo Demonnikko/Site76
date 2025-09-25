@@ -230,13 +230,44 @@ input[type="date"]{appearance:none; -webkit-appearance:none; background:#15171e;
   background:radial-gradient(180% 180% at 40% 30%, var(--gold2), var(--gold) 60%); color:#111; cursor:pointer; box-shadow:0 14px 28px rgba(203,161,53,.26), inset 0 0 0 2px rgba(255,255,255,.22) }
 .fab svg{ width:26px; height:26px }
 
-/* Футер */
-footer{ padding:1.2rem 1rem 2rem; border-top:1px solid #222; margin-top:2rem }
-.footer-bar{ display:flex; align-items:center; justify-content:space-between; gap:1rem; max-width:980px; margin:0 auto }
-.footer-logo{ width:160px; height:auto; border-radius:10px; display:block }
-.footer-contacts{ display:flex; gap:.6rem }
-.copy{ text-align:center; color:#888; font-size:.9rem; margin-top:.8rem }
+/* ===== Футер ===== */
+footer {
+  padding: 2rem 1rem;
+  text-align: center;
+  font-size: .9rem;
+  color: #888;
+  border-top: 1px solid #222;
+  margin-top: 2rem;
+}
 
+.footer-contacts {
+  display: flex;
+  justify-content: center; /* выравнивание по центру */
+  gap: .7rem;
+  margin-bottom: 1rem;
+}
+
+.footer-contacts .contact-btn {
+  width: 48px;
+  height: 48px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: #000;
+  border: 1.6px solid #2f3138;
+  transition: .25s;
+}
+
+.footer-contacts .contact-btn:hover {
+  transform: translateY(-2px);
+  border-color: var(--gold);
+}
+
+.footer-contacts .contact-btn img {
+  width: 24px;
+  height: 24px;
+  display: block;
+}
 /* Планшет/десктоп */
 @media (min-width:900px){
   .hero-cta .btn--primary{ width:auto; min-width:360px }
@@ -388,59 +419,19 @@ footer{ padding:1.2rem 1rem 2rem; border-top:1px solid #222; margin-top:2rem }
 
 <!-- ===== Футер ===== -->
 <footer>
-  <div class="footer-bar">
-    <!-- Логотип слева -->
-    <img class="footer-logo" src="images/logo.jpg" alt="Логотип" loading="eager">
-    <!-- Контакты справа -->
-    <div class="footer-contacts">
-      <a class="contact-btn" href="https://vk.com/dmitrokko" target="_blank" rel="noopener" aria-label="VK">
-        <img src="images/icons/vk.jpeg" alt="VK" width="28" height="28">
-      </a>
-      <a class="contact-btn" href="https://t.me/Dmitrokko" target="_blank" rel="noopener" aria-label="Telegram">
-        <img src="images/icons/telegram.jpeg" alt="Telegram" width="28" height="28">
-      </a>
-      <a class="contact-btn" href="tel:89092763386" aria-label="Позвонить">
-        <img src="images/icons/phone.jpeg" alt="Позвонить" width="28" height="28">
-      </a>
-    </div>
+  <div class="footer-contacts">
+    <a class="contact-btn" href="https://vk.com/dmitrokko" target="_blank" rel="noopener" aria-label="VK">
+      <img src="images/icons/vk.jpeg" alt="VK" width="28" height="28">
+    </a>
+    <a class="contact-btn" href="https://t.me/Dmitrokko" target="_blank" rel="noopener" aria-label="Telegram">
+      <img src="images/icons/telegram.jpeg" alt="Telegram" width="28" height="28">
+    </a>
+    <a class="contact-btn" href="tel:89092763386" aria-label="Позвонить">
+      <img src="images/icons/phone.jpeg" alt="Позвонить" width="28" height="28">
+    </a>
   </div>
   <div class="copy">© 2025 · <span>ИП Дмитрий Костюк</span> · Работаем официально</div>
 </footer>
-
-<!-- ===== МОДАЛКИ ===== -->
-<!-- ПРОМО (RuTube) -->
-<div class="modal" id="modal-promo" aria-hidden="true" role="dialog" aria-label="Промо-видео">
-  <div class="modal__bg" data-close></div>
-  <div class="modal__panel">
-    <div class="modal__close"><button data-close aria-label="Закрыть">✕</button></div>
-    <div class="modal__body">
-      <h2 class="sectionTitle">Промо</h2>
-      <div class="player" id="promoPlayer"></div>
-    </div>
-  </div>
-</div>
-
-<!-- Контакты -->
-<div class="modal" id="modal-contacts" aria-hidden="true" role="dialog" aria-label="Контакты">
-  <div class="modal__bg" data-close></div>
-  <div class="modal__panel">
-    <div class="modal__close"><button data-close aria-label="Закрыть">✕</button></div>
-    <div class="modal__body">
-      <h2 class="sectionTitle">Контакты</h2>
-      <div class="contact-grid" style="margin-top:.6rem">
-        <a class="contact-btn" href="https://t.me/Dmitrokko" target="_blank" rel="noopener" aria-label="Telegram">
-          <img src="images/icons/telegram.jpeg" alt="Telegram" width="28" height="28">
-        </a>
-        <a class="contact-btn" href="tel:89092763386" aria-label="Позвонить">
-          <img src="images/icons/phone.jpeg" alt="Позвонить" width="28" height="28">
-        </a>
-        <a class="contact-btn" href="https://vk.com/dmitrokko" target="_blank" rel="noopener" aria-label="VK">
-          <img src="images/icons/vk.jpeg" alt="VK" width="28" height="28">
-        </a>
-      </div>
-    </div>
-  </div>
-</div>
 
 <!-- Игра -->
 <div class="modal" id="modal-discount" aria-hidden="true" role="dialog" aria-label="Игра: угадай карту">
