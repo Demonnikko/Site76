@@ -23,6 +23,9 @@
 <link rel="preload" as="image" href="images/portrait.webp" type="image/webp" imagesizes="100vw">
 <link rel="preload" as="image" href="images/portrait.jpg" type="image/jpeg" imagesizes="100vw">
 
+<!-- === МЕТРИКА: ID для функции track() === -->
+<script>window.YA_METRICA_ID = 104290205;</script>
+
 <style>
 :root{
   --bg:#000; --text:#EEE;
@@ -151,7 +154,7 @@ input[type="date"]{appearance:none; -webkit-appearance:none; background:#15171e;
 .packGrid{ display:flex; gap:12px; overflow:auto; scroll-snap-type:x mandatory; -webkit-overflow-scrolling:touch; padding:0 6px 4px; justify-content:center }
 .pack{ min-width:86%; background:#0e0f14; border:1px solid #2b2c31; border-radius:16px; padding:1rem; text-align:center; position:relative; overflow:hidden; scroll-snap-align:center; box-shadow:0 12px 26px rgba(0,0,0,.35)}
 .pack h3{ font:900 var(--fs-h3) var(--ff-head); color:var(--gold2); letter-spacing:.04em }
-.pack .from{ opacity:.9; margin:.4rem 0 .6rem }
+.pack .from{ opacity:.9; margin:.4rem 0 .6рем }
 .pack ul{ display:inline-block; text-align:left; margin:.3rem 0 1rem; padding-left:1.1rem; line-height:1.45 }
 .pack .btn{ display:inline-block }
 
@@ -644,7 +647,7 @@ btn.onclick=()=>{
 const travel={
  "Вологодская":{fee:9000,cities:{Вологда:9000,Череповец:15000,Сокол:12000}},
  "Владимирская":{fee:10000,cities:{Владимир:10000,Ковров:10000,Муром:17000,Александров:10000,"Гусь хрустальный":13500}},
- "Ивановская":{fee:5000,cities:{Иваново:2000,Кинешма:3500,Шуя:3000,Тейково:2500,Кохма:2500,Вичуга:3000,Фурманов:2500,Родники:3000,Приволжск:2000,Южа:4000}},
+ "Ивановская":{fee:5000,cities:{Иваново:2000,Кинешма:3500,Шуя:3000,Тeyково:2500,Кохма:2500,Вичуга:3000,Фурманов:2500,Родники:3000,Приволжск:2000,Южа:4000}},
  "Костромская":{fee:3000,cities:{Кострома:2000,Шарья:6000,Нерехта:2000,Буй:3000,Волгореченск:2000,Мантурово:5500,Галич:3500}},
  "Ярославская":{fee:1000,cities:{Ярославль:0,Рыбинск:2000,Тутаев:2000,"Переславль-Залесский":2000,Углич:2000,Ростов:2000,"Гаврилов Ям":2000,Данилов:2000,Пошехонье:4000,Мышкин:2000,Любим:2000}}
 };
@@ -705,7 +708,7 @@ const roadHol = (d)=>{ if(!d) return 1; const dt=new Date(d), m=dt.getMonth()+1,
   if ((m===12 && day===31) || (m===1 && (day===1 || day===2))) return 2;
   if (m===12 && day>=8 && day<=30) return 1.5;
   if (m===2 && (day===22 || day===23)) return 1.5;
-  if (m===3 && (day===7 || day===8)) return 1.5; return 1; };
+  if (м===3 && (day===7 || day===8)) return 1.5; return 1; };
 
 area.onchange=()=>{ city.disabled=false; city.innerHTML='<option disabled selected hidden>Город</option>'; Object.keys(travel[area.value].cities).forEach(c=>city.add(new Option(c,c))); };
 [city,when].forEach(el=>el.onchange=()=>el.style.borderColor='');
@@ -733,7 +736,7 @@ function calc(){
   const holUp = Math.round(sub * (hCoef - 1));
   const discP=+sessionStorage.getItem('promoDiscount')||0;
   const disc=Math.round((sub+holUp)*discP/100);
-  const sum=sub+holUp-disc;
+  const sum=sub+holUp-диск;
   const fmtCoef = c => (c===1? '' : ` (×${c})`);
 
   total.textContent='Итого — '+fmt(sum)+' ₽';
@@ -840,5 +843,20 @@ form.addEventListener('submit', async (e)=>{
 });
 })();
 </script>
+
+<!-- === Яндекс.Метрика (как ты прислал) === -->
+<script type="text/javascript">
+    (function(m,e,t,r,i,k,a){
+        m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+        m[i].l=1*new Date();
+        for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+        k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
+    })(window, document,'script','https://mc.yandex.ru/metrika/tag.js?id=104290205', 'ym');
+
+    ym(104290205, 'init', {ssr:true, webvisor:true, clickmap:true, ecommerce:"dataLayer", accurateTrackBounce:true, trackLinks:true});
+</script>
+<noscript><div><img src="https://mc.yandex.ru/watch/104290205" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+<!-- /Yandex.Metrika counter -->
+
 </body>
 </html>
