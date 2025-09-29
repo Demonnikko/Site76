@@ -4,6 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Дмитрий Костюк — иллюзионист</title>
+<link rel="canonical" href="https://example.com/">
 
 <!-- SEO -->
 <meta name="description" content="Премиальное шоу иллюзиониста Дмитрия Костюка. Узнайте стоимость и забронируйте дату.">
@@ -13,6 +14,23 @@
 <meta property="og:description" content="Кинематографичное шоу, персонализация, вау-эффект.">
 <meta property="og:image" content="images/portrait.jpg">
 <meta property="og:locale" content="ru_RU">
+
+<!-- Безопасность -->
+<meta http-equiv="Content-Security-Policy"
+      content="default-src 'self';
+               base-uri 'self';
+               frame-ancestors 'self';
+               object-src 'none';
+               img-src 'self' data: https:;
+               style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
+               font-src https://fonts.gstatic.com;
+               script-src 'self' 'unsafe-inline' https://mc.yandex.ru;
+               connect-src 'self' https://site76-azure.vercel.app;
+               frame-src https://rutube.ru https://mc.yandex.ru;
+               upgrade-insecure-requests;">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<meta name="color-scheme" content="dark light">
+<meta http-equiv="Permissions-Policy" content="geolocation=(), camera=(), microphone=(), interest-cohort=()">
 
 <!-- iOS Web App -->
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -29,13 +47,15 @@
 <!-- Шрифты -->
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://rutube.ru" crossorigin>
+<link rel="preconnect" href="https://mc.yandex.ru" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@900&family=Inter:wght@400;600&display=swap" rel="stylesheet">
 
 <!-- Preload главного фона -->
 <link rel="preload" as="image" href="images/portrait.webp" type="image/webp" imagesizes="100vw">
 <link rel="preload" as="image" href="images/portrait.jpg" type="image/jpeg" imagesizes="100vw">
 
-<!-- Внутренний ID для track() -->
+<!-- ID для track() -->
 <script>window.YA_METRICA_ID = 104290205;</script>
 
 <style>
@@ -61,6 +81,7 @@
 html{scroll-behavior:smooth}
 body{font:400 var(--fs-body) var(--ff-text); color:var(--text); background:#000; overflow-x:hidden}
 a{color:inherit;text-decoration:none}
+img{max-width:100%; height:auto}
 @media (prefers-reduced-motion: reduce){ *{animation:none !important; transition:none !important} }
 
 /* Buttons */
@@ -77,6 +98,7 @@ a{color:inherit;text-decoration:none}
   box-shadow:0 12px 26px rgba(203,161,53,.22), inset 0 0 0 1px rgba(255,255,255,.18);
 }
 .btn--primary:is(:hover,:focus-visible){filter:brightness(1.06)}
+.btn[disabled]{opacity:.6; cursor:not-allowed}
 .btn svg{width:1.2em;height:1.2em}
 
 /* Inputs */
@@ -89,7 +111,7 @@ input:focus-visible,select:focus-visible,textarea:focus-visible{
 }
 input[type="date"]{appearance:none; -webkit-appearance:none; background:#15171e; padding:.78rem .95rem; line-height:1.2}
 
-/* ===== Header (logo + burger) ===== */
+/* ===== Header ===== */
 .header{
   position:fixed; inset:0 0 auto 0; height:56px; z-index:98;
   display:flex; align-items:center; justify-content:space-between; gap:.8rem;
@@ -178,7 +200,7 @@ input[type="date"]{appearance:none; -webkit-appearance:none; background:#15171e;
 .total.flash{ box-shadow:0 0 0 9999px rgba(203,161,53,.05) inset; color:var(--gold2) }
 .breakdown{ color:#cfcfcf; font-size:.95rem; line-height:1.45; margin-top:.3rem }
 #calcBtn{ display:inline-block; margin:.6rem auto 0; }
-.afterCalc{ display:flex; gap:.6rem; justify-content:center; margin-top:1rem; flex-wrap:wrap }
+.afterCalc{ display:flex; gap:.6rem; justify-content:center; margin-top:1rem; flex-wrap:wrap } /* фикс: rem */
 
 /* ===== Модальные окна ===== */
 .modal{ position:fixed; inset:0; z-index:99; display:none; place-items:center; padding:18px }
@@ -194,7 +216,7 @@ input[type="date"]{appearance:none; -webkit-appearance:none; background:#15171e;
 .modal__close button{ border:none; background:#1a1b22; color:#fff; padding:.5rem; border-radius:10px; cursor:pointer }
 .modal__body{ text-align:center }
 
-/* Премиальный плеер */
+/* Плеер */
 .player{ position:relative; width:min(92vw, 940px); aspect-ratio:16/9; border-radius:14px; overflow:hidden;
   border:1px solid rgba(231,199,118,.22); box-shadow:0 20px 60px rgba(0,0,0,.6), 0 6px 24px rgba(203,161,53,.15) }
 .player iframe{ position:absolute; inset:0; width:100%; height:100%; border:0 }
@@ -255,7 +277,7 @@ footer{ padding:1.2rem 1rem 2rem; border-top:1px solid #222; margin-top:2rem }
   .sectionBox{ width:clamp(300px, 88vw, 980px) }
 }
 
-/* Мобильные — чуть поднять лицо при желании */
+/* Мобильные — чуть поднять лицо */
 @media (max-width: 480px){ :root{ --face-pos: 50% 22%; } }
 </style>
 </head>
@@ -381,7 +403,7 @@ footer{ padding:1.2rem 1rem 2rem; border-top:1px solid #222; margin-top:2rem }
              pattern="[0-9]{10}" minlength="10" maxlength="10" required
              style="border-left:0;border-radius:0 var(--r) var(--r) 0" aria-label="Телефон 10 цифр без кода">
     </div>
-    <input name="tg" placeholder="Telegram @username" aria-label="Ник в Telegram">
+    <input name="tg" placeholder="Telegram @username" aria-label="Ник в Telegram" maxlength="64">
     <textarea name="note" placeholder="Комментарий (необязательно)" rows="4" aria-label="Комментарий" maxlength="800"></textarea>
 
     <!-- Anti-spam: honeypot + время заполнения -->
@@ -389,7 +411,7 @@ footer{ padding:1.2rem 1rem 2rem; border-top:1px solid #222; margin-top:2rem }
     <input type="hidden" name="ts" id="form_ts">
     <input type="hidden" name="sig" id="form_sig">
 
-    <button class="btn btn--primary" type="submit">Отправить заявку</button>
+    <button class="btn btn--primary" type="submit" id="submitBtn">Отправить заявку</button>
   </form>
   <div id="thanks" style="display:none;color:var(--gold2);font-size:1.05rem;font-weight:600;margin-top:.8rem">
     Спасибо! Я свяжусь с вами в ближайшее время.
@@ -487,6 +509,13 @@ footer{ padding:1.2rem 1rem 2rem; border-top:1px solid #222; margin-top:2rem }
 
 <!-- ===== JS ===== -->
 <script>
+/* Регистрация SW (PWA) */
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', ()=> {
+    navigator.serviceWorker.register('/sw.js').catch(()=>{});
+  });
+}
+
 /* аналитика */
 function track(event, params){
   try{ if(window.gtag) gtag('event', event, params||{}); }catch(e){}
@@ -531,7 +560,7 @@ function track(event, params){
     const box=document.getElementById('promoPlayer'); if(!box||box.dataset.ready) return;
     const PROMO_ID='a692a6ad3b922abc4cfad5be5898431b';
     const PROMO_TOKEN='fYkka8t4Y185Rseslz6CRg';
-    box.innerHTML = '<iframe src="https://rutube.ru/play/embed/'+PROMO_ID+'?autoplay=1&p='+PROMO_TOKEN+'" allow="autoplay; fullscreen" allowfullscreen title="Промо"></iframe>';
+    box.innerHTML = '<iframe src="https://rutube.ru/play/embed/'+PROMO_ID+'?autoplay=1&p='+PROMO_TOKEN+'" allow="autoplay; fullscreen; picture-in-picture; encrypted-media" allowfullscreen title="Промо"></iframe>';
     box.dataset.ready='1';
   }
   function teardownPromo(){ const box=document.getElementById('promoPlayer'); if(box){ box.innerHTML=''; delete box.dataset.ready; } }
@@ -820,6 +849,7 @@ const form = document.getElementById('orderForm'); if(!form) return;
 const tsEl = document.getElementById('form_ts');
 const sigEl = document.getElementById('form_sig');
 const hpEl = document.getElementById('hp_website');
+const submitBtn = document.getElementById('submitBtn');
 
 // отметка времени рендера формы
 const ts0 = Date.now();
@@ -827,6 +857,9 @@ tsEl.value = ts0;
 
 // простая подпись на клиенте (для сервера — необязательна, но добавим)
 sigEl.value = btoa(String(ts0).split('').reverse().join(''));
+
+// ленивая нормализация телефона перед отправкой
+function normalizePhone(v){ return (v||'').replace(/\D+/g,'').replace(/^7/,''); }
 
 form.addEventListener('submit', async (e)=>{
   e.preventDefault();
@@ -838,8 +871,20 @@ form.addEventListener('submit', async (e)=>{
     return;
   }
 
-  const fd=new FormData(form), data={}; fd.forEach((v,k)=>data[k]=v);
-  data.ts = tsEl.value; data.sig = sigEl.value; // просто передаём для возможной серверной проверки
+  // валидация телефона
+  const phoneInput = form.querySelector('input[name="phone"]');
+  phoneInput.value = normalizePhone(phoneInput.value);
+  if (!/^\d{10}$/.test(phoneInput.value)) {
+    alert('Введите телефон: 10 цифр без кода +7');
+    phoneInput.focus();
+    return;
+  }
+
+  // защита от повторной отправки
+  submitBtn.disabled = true;
+
+  const fd=new FormData(form), data={}; fd.forEach((v,k)=>data[k]=typeof v==='string'?v.trim():v);
+  data.ts = tsEl.value; data.sig = sigEl.value;
   data.order = window.orderData||{};
 
   try{
@@ -858,6 +903,7 @@ form.addEventListener('submit', async (e)=>{
     track('order_submit');
   }catch(err){
     alert('Не удалось отправить заявку. Сообщите, пожалуйста, по телефону или в Telegram.');
+    submitBtn.disabled = false;
   }
 });
 })();
