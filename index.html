@@ -154,7 +154,7 @@ input[type="date"]{appearance:none; -webkit-appearance:none; background:#15171e;
 .packGrid{ display:flex; gap:12px; overflow:auto; scroll-snap-type:x mandatory; -webkit-overflow-scrolling:touch; padding:0 6px 4px; justify-content:center }
 .pack{ min-width:86%; background:#0e0f14; border:1px solid #2b2c31; border-radius:16px; padding:1rem; text-align:center; position:relative; overflow:hidden; scroll-snap-align:center; box-shadow:0 12px 26px rgba(0,0,0,.35)}
 .pack h3{ font:900 var(--fs-h3) var(--ff-head); color:var(--gold2); letter-spacing:.04em }
-.pack .from{ opacity:.9; margin:.4rem 0 .6рем }
+.pack .from{ opacity:.9; margin:.4rem 0 .6rem }
 .pack ul{ display:inline-block; text-align:left; margin:.3rem 0 1rem; padding-left:1.1rem; line-height:1.45 }
 .pack .btn{ display:inline-block }
 
@@ -232,14 +232,14 @@ input[type="date"]{appearance:none; -webkit-appearance:none; background:#15171e;
   display: grid;
   place-items: center;
   border-radius: 50%;
-  background: #000;       /* чёрный фон внутри */
+  background: #000;
   border: 1.6px solid #2f3138;
   transition: .25s;
 }
 .contact-btn:hover { transform: translateY(-2px); border-color: var(--gold); }
 .contact-btn img {
   width: 28px; height: 28px; display: block;
-  border-radius: 0;       /* квадратные пиктограммы */
+  border-radius: 0;
   background: #000;
 }
 
@@ -283,7 +283,6 @@ footer{ padding:1.2rem 1rem 2rem; border-top:1px solid #222; margin-top:2rem }
     <a href="#" class="menu__item" data-open="discount">Скидка</a>
     <a href="#" class="menu__item" data-open="faq">Вопросы</a>
     <a href="#" class="menu__item" data-open="gallery">Галерея</a>
-    <!-- Контакты из меню УДАЛЕНЫ -->
   </div>
 </nav>
 
@@ -293,7 +292,6 @@ footer{ padding:1.2rem 1rem 2rem; border-top:1px solid #222; margin-top:2rem }
   <p class="subtitle-float">Иллюзионист</p>
 
   <div class="hero-cta">
-    <!-- активируем модалку без доп. JS -->
     <button class="btn btn--primary" type="button" aria-label="Смотреть промо" data-open="promo">Смотреть промо</button>
   </div>
 
@@ -382,8 +380,14 @@ footer{ padding:1.2rem 1rem 2rem; border-top:1px solid #222; margin-top:2rem }
 <!-- ===== Бронь ===== -->
 <section id="order" class="sectionBox">
   <h2 class="sectionTitle">Оставьте контакты для брони</h2>
-  <form id="orderForm">
-    <input name="name" placeholder="Ваше имя" aria-label="Ваше имя">
+  <form id="orderForm" novalidate>
+    <!-- honeypot -->
+    <input type="text" name="website" id="website" autocomplete="off" tabindex="-1"
+           style="position:absolute; left:-9999px; height:0; width:0; opacity:0" aria-hidden="true">
+    <!-- time-trap -->
+    <input type="hidden" name="ts" id="ts">
+
+    <input name="name" placeholder="Ваше имя" aria-label="Ваше имя" required>
     <div style="display:flex;gap:0">
       <span style="display:flex;align-items:center;padding:.78rem 1rem;background:#15171e;border:1.8px solid var(--gold);border-right:0;border-radius:var(--r) 0 0 var(--r);color:#aaa">+7</span>
       <input name="phone" type="tel" inputmode="numeric" placeholder="9001234567"
@@ -404,7 +408,7 @@ footer{ padding:1.2rem 1rem 2rem; border-top:1px solid #222; margin-top:2rem }
   <svg id="fabIcon" viewBox="0 0 24 24" aria-hidden="true"><path id="fabPath" d="M12 16 18 10H6z"/></svg>
 </button>
 
-<!-- ===== Футер (без логотипа, иконки по центру) ===== -->
+<!-- ===== Футер ===== -->
 <footer>
   <div class="footer-bar">
     <div class="footer-contacts">
@@ -647,7 +651,7 @@ btn.onclick=()=>{
 const travel={
  "Вологодская":{fee:9000,cities:{Вологда:9000,Череповец:15000,Сокол:12000}},
  "Владимирская":{fee:10000,cities:{Владимир:10000,Ковров:10000,Муром:17000,Александров:10000,"Гусь хрустальный":13500}},
- "Ивановская":{fee:5000,cities:{Иваново:2000,Кинешма:3500,Шуя:3000,Тeyково:2500,Кохма:2500,Вичуга:3000,Фурманов:2500,Родники:3000,Приволжск:2000,Южа:4000}},
+ "Ивановская":{fee:5000,cities:{Иваново:2000,Кинешма:3500,Шуя:3000,Тейково:2500,Кохма:2500,Вичуга:3000,Фурманов:2500,Родники:3000,Приволжск:2000,Южа:4000}},
  "Костромская":{fee:3000,cities:{Кострома:2000,Шарья:6000,Нерехта:2000,Буй:3000,Волгореченск:2000,Мантурово:5500,Галич:3500}},
  "Ярославская":{fee:1000,cities:{Ярославль:0,Рыбинск:2000,Тутаев:2000,"Переславль-Залесский":2000,Углич:2000,Ростов:2000,"Гаврилов Ям":2000,Данилов:2000,Пошехонье:4000,Мышкин:2000,Любим:2000}}
 };
@@ -708,7 +712,7 @@ const roadHol = (d)=>{ if(!d) return 1; const dt=new Date(d), m=dt.getMonth()+1,
   if ((m===12 && day===31) || (m===1 && (day===1 || day===2))) return 2;
   if (m===12 && day>=8 && day<=30) return 1.5;
   if (m===2 && (day===22 || day===23)) return 1.5;
-  if (м===3 && (day===7 || day===8)) return 1.5; return 1; };
+  if (m===3 && (day===7 || day===8)) return 1.5; return 1; };
 
 area.onchange=()=>{ city.disabled=false; city.innerHTML='<option disabled selected hidden>Город</option>'; Object.keys(travel[area.value].cities).forEach(c=>city.add(new Option(c,c))); };
 [city,when].forEach(el=>el.onchange=()=>el.style.borderColor='');
@@ -736,7 +740,7 @@ function calc(){
   const holUp = Math.round(sub * (hCoef - 1));
   const discP=+sessionStorage.getItem('promoDiscount')||0;
   const disc=Math.round((sub+holUp)*discP/100);
-  const sum=sub+holUp-диск;
+  const sum=sub+holUp-disc;
   const fmtCoef = c => (c===1? '' : ` (×${c})`);
 
   total.textContent='Итого — '+fmt(sum)+' ₽';
@@ -819,13 +823,39 @@ window.recalcIfReady = ()=>{ if(isFilled()) calc(); };
   document.addEventListener('keydown',e=>{ if(e.key==='Escape' && lb?.classList.contains('open')) lb.classList.remove('open'); });
 })();
 
-/* Отправка заявки */
+/* Отправка заявки (c антиспамом) */
 (function(){
 const form = document.getElementById('orderForm'); if(!form) return;
+
+// time-trap — фиксируем момент готовности формы
+const tsEl = document.getElementById('ts'); if (tsEl) tsEl.value = String(Date.now());
+
 form.addEventListener('submit', async (e)=>{
   e.preventDefault();
+
+  // 1) honeypot: если заполнено — бот
+  const honey = (document.getElementById('website')?.value || '').trim();
+  if (honey) { return; } // тихо игнорируем
+
+  // 2) time-trap: слишком быстро — бот/скрипт
+  const ts = Number(tsEl?.value || 0);
+  const sec = (Date.now() - ts) / 1000;
+  if (!isFinite(sec) || sec < 4) {
+    alert('Похоже на ошибку. Попробуйте ещё раз.');
+    return;
+  }
+
+  // 3) простая валидация
+  const name = (form.querySelector('input[name="name"]')?.value || '').trim();
+  const phone = (form.querySelector('input[name="phone"]')?.value || '').replace(/\D/g,'');
+  if (name.length < 2) { alert('Укажите имя.'); return; }
+  if (!/^\d{10}$/.test(phone)) { alert('Телефон: 10 цифр без кода страны.'); return; }
+
+  // 4) отправка (как было)
   const fd=new FormData(form), data={}; fd.forEach((v,k)=>data[k]=v);
   data.order = window.orderData||{};
+  data._anti = { sec: Math.round(sec) };
+
   try{
     const ctl = new AbortController();
     const t = setTimeout(()=>ctl.abort(), 12000);
@@ -855,7 +885,7 @@ form.addEventListener('submit', async (e)=>{
 
     ym(104290205, 'init', {ssr:true, webvisor:true, clickmap:true, ecommerce:"dataLayer", accurateTrackBounce:true, trackLinks:true});
 </script>
-<noscript><div><img src="https://mc.yandex.ru/watch/104290205" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+<noscript><div><img src="https://mc.yandex.ru/watch/104290205" style="position:absolute; left:-9999px;" alt=""></div></noscript>
 <!-- /Yandex.Metrika counter -->
 
 </body>
