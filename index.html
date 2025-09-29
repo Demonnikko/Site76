@@ -14,6 +14,18 @@
 <meta property="og:image" content="images/portrait.jpg">
 <meta property="og:locale" content="ru_RU">
 
+<!-- iOS Web App -->
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Костюк">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<link rel="apple-touch-icon" sizes="152x152" href="icons/apple-touch-icon-152.png">
+<link rel="apple-touch-icon" sizes="167x167" href="icons/apple-touch-icon-167.png">
+<link rel="apple-touch-icon" sizes="180x180" href="icons/apple-touch-icon-180.png">
+
+<!-- Manifest -->
+<link rel="manifest" href="manifest.json">
+
 <!-- Шрифты -->
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -23,7 +35,7 @@
 <link rel="preload" as="image" href="images/portrait.webp" type="image/webp" imagesizes="100vw">
 <link rel="preload" as="image" href="images/portrait.jpg" type="image/jpeg" imagesizes="100vw">
 
-<!-- === МЕТРИКА: ID для функции track() === -->
+<!-- Внутренний ID для track() -->
 <script>window.YA_METRICA_ID = 104290205;</script>
 
 <style>
@@ -75,7 +87,6 @@ input,select,textarea{
 input:focus-visible,select:focus-visible,textarea:focus-visible{
   outline:0; border-color:var(--gold); box-shadow:0 0 0 3px #cba13566;
 }
-/* дата той же «ширины» и вида */
 input[type="date"]{appearance:none; -webkit-appearance:none; background:#15171e; padding:.78rem .95rem; line-height:1.2}
 
 /* ===== Header (logo + burger) ===== */
@@ -220,28 +231,10 @@ input[type="date"]{appearance:none; -webkit-appearance:none; background:#15171e;
 .lightbox img{ max-width:92vw; max-height:90dvh; border-radius:10px; border:1px solid #333; position:relative; z-index:2; }
 
 /* Контакты (кнопки-иконки) */
-.contact-grid {
-  display: flex;
-  justify-content: center;
-  gap: .7rem;
-  flex-wrap: wrap;
-}
-.contact-btn {
-  width: 64px;
-  height: 64px;
-  display: grid;
-  place-items: center;
-  border-radius: 50%;
-  background: #000;
-  border: 1.6px solid #2f3138;
-  transition: .25s;
-}
+.contact-grid { display:flex; justify-content:center; gap:.7rem; flex-wrap:wrap }
+.contact-btn { width:64px; height:64px; display:grid; place-items:center; border-radius:50%; background:#000; border:1.6px solid #2f3138; transition:.25s; }
 .contact-btn:hover { transform: translateY(-2px); border-color: var(--gold); }
-.contact-btn img {
-  width: 28px; height: 28px; display: block;
-  border-radius: 0;
-  background: #000;
-}
+.contact-btn img { width:28px; height:28px; display:block; border-radius:0; background:#000; }
 
 /* FAB */
 .fab{ position:fixed; right:18px; bottom: calc(16px + env(safe-area-inset-bottom)); width:54px; height:54px; border-radius:50%; display:grid; place-items:center; z-index:97;
@@ -271,7 +264,7 @@ footer{ padding:1.2rem 1rem 2rem; border-top:1px solid #222; margin-top:2rem }
 <!-- ===== Header: logo + burger ===== -->
 <header class="header" role="navigation" aria-label="Верхняя панель">
   <div class="header__logo">
-    <img src="images/logo.jpg" alt="Костюк — иллюзионист" loading="eager">
+    <img src="images/logo.jpg" alt="Костюк — иллюзионист" loading="eager" width="128" height="36">
   </div>
   <button class="burger" id="burger" aria-expanded="false" aria-controls="mainMenu" aria-label="Меню"><span></span></button>
 </header>
@@ -380,14 +373,8 @@ footer{ padding:1.2rem 1rem 2rem; border-top:1px solid #222; margin-top:2rem }
 <!-- ===== Бронь ===== -->
 <section id="order" class="sectionBox">
   <h2 class="sectionTitle">Оставьте контакты для брони</h2>
-  <form id="orderForm" novalidate>
-    <!-- honeypot -->
-    <input type="text" name="website" id="website" autocomplete="off" tabindex="-1"
-           style="position:absolute; left:-9999px; height:0; width:0; opacity:0" aria-hidden="true">
-    <!-- time-trap -->
-    <input type="hidden" name="ts" id="ts">
-
-    <input name="name" placeholder="Ваше имя" aria-label="Ваше имя" required>
+  <form id="orderForm" autocomplete="on" novalidate>
+    <input name="name" placeholder="Ваше имя" aria-label="Ваше имя" required maxlength="60">
     <div style="display:flex;gap:0">
       <span style="display:flex;align-items:center;padding:.78rem 1rem;background:#15171e;border:1.8px solid var(--gold);border-right:0;border-radius:var(--r) 0 0 var(--r);color:#aaa">+7</span>
       <input name="phone" type="tel" inputmode="numeric" placeholder="9001234567"
@@ -395,7 +382,13 @@ footer{ padding:1.2rem 1rem 2rem; border-top:1px solid #222; margin-top:2rem }
              style="border-left:0;border-radius:0 var(--r) var(--r) 0" aria-label="Телефон 10 цифр без кода">
     </div>
     <input name="tg" placeholder="Telegram @username" aria-label="Ник в Telegram">
-    <textarea name="note" placeholder="Комментарий (необязательно)" rows="4" aria-label="Комментарий"></textarea>
+    <textarea name="note" placeholder="Комментарий (необязательно)" rows="4" aria-label="Комментарий" maxlength="800"></textarea>
+
+    <!-- Anti-spam: honeypot + время заполнения -->
+    <input type="text" name="website" id="hp_website" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px;height:0;width:0;opacity:0" aria-hidden="true">
+    <input type="hidden" name="ts" id="form_ts">
+    <input type="hidden" name="sig" id="form_sig">
+
     <button class="btn btn--primary" type="submit">Отправить заявку</button>
   </form>
   <div id="thanks" style="display:none;color:var(--gold2);font-size:1.05rem;font-weight:600;margin-top:.8rem">
@@ -413,13 +406,13 @@ footer{ padding:1.2rem 1rem 2rem; border-top:1px solid #222; margin-top:2rem }
   <div class="footer-bar">
     <div class="footer-contacts">
       <a class="contact-btn" href="https://vk.com/dmitrokko" target="_blank" rel="noopener" aria-label="VK">
-        <img src="images/icons/vk.jpeg" alt="VK" width="28" height="28">
+        <img src="images/icons/vk.jpeg" alt="VK" width="28" height="28" loading="lazy" decoding="async">
       </a>
       <a class="contact-btn" href="https://t.me/Dmitrokko" target="_blank" rel="noopener" aria-label="Telegram">
-        <img src="images/icons/telegram.jpeg" alt="Telegram" width="28" height="28">
+        <img src="images/icons/telegram.jpeg" alt="Telegram" width="28" height="28" loading="lazy" decoding="async">
       </a>
       <a class="contact-btn" href="tel:89092763386" aria-label="Позвонить">
-        <img src="images/icons/phone.jpeg" alt="Позвонить" width="28" height="28">
+        <img src="images/icons/phone.jpeg" alt="Позвонить" width="28" height="28" loading="lazy" decoding="async">
       </a>
     </div>
   </div>
@@ -440,7 +433,7 @@ footer{ padding:1.2rem 1rem 2rem; border-top:1px solid #222; margin-top:2rem }
   </div>
 </div>
 
-<!-- Игра -->
+<!-- Игра (скидка) -->
 <div class="modal" id="modal-discount" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Игра: угадай карту">
   <div class="modal__bg" data-close></div>
   <div class="modal__panel">
@@ -494,7 +487,7 @@ footer{ padding:1.2rem 1rem 2rem; border-top:1px solid #222; margin-top:2rem }
 
 <!-- ===== JS ===== -->
 <script>
-/* аналитика (как было) */
+/* аналитика */
 function track(event, params){
   try{ if(window.gtag) gtag('event', event, params||{}); }catch(e){}
   try{ if(window.ym && window.YA_METRICA_ID) ym(window.YA_METRICA_ID,'reachGoal',event, params||{}); }catch(e){}
@@ -506,7 +499,7 @@ function track(event, params){
 /* iOS 100vh фикса */
 (function(){ function setVH(){ document.documentElement.style.setProperty('--vh', window.innerHeight + 'px'); } setVH(); addEventListener('resize', setVH); addEventListener('orientationchange', setVH); })();
 
-/* ===== Burger ===== */
+/* Burger */
 (function(){
   const btn=document.getElementById('burger'), menu=document.getElementById('mainMenu');
   function toggle(force){
@@ -521,7 +514,7 @@ function track(event, params){
   }, {capture:true});
 })();
 
-/* ===== Модалки (универсальный открыватель) ===== */
+/* Модалки */
 (function(){
   const menu   = document.getElementById('mainMenu');
   const burger = document.getElementById('burger');
@@ -557,7 +550,6 @@ function track(event, params){
     m.dispatchEvent(new CustomEvent('modal:closed'));
   }
 
-  // делегирование на все элементы [data-open]
   addEventListener('click', e=>{
     const op = e.target.closest && e.target.closest('[data-open]');
     if(op){
@@ -575,7 +567,6 @@ function track(event, params){
     }
   });
 
-  // Esc — закрыть все открытые модалки
   addEventListener('keydown', e=>{
     if(e.key==='Escape'){
       document.querySelectorAll('.modal.open').forEach(closeModal);
@@ -600,7 +591,7 @@ function track(event, params){
   if('IntersectionObserver' in window){ const io=new IntersectionObserver(([e],o)=>{ if(!e.isIntersecting) return; o.disconnect(); animate(); },{threshold:.6}); io.observe(span); } else animate();
 })();
 
-/* ===== Игра (как было — не трогаем логику) ===== */
+/* Игра */
 (()=>{
 const modal=document.getElementById('modal-discount'); if(!modal) return;
 const ranks=["A","2","3","4","5","6","7","8","9","10","J","Q","K"];
@@ -658,9 +649,9 @@ const travel={
 const p=v=>({p:v});
 const services={
  kids:{
-  "Детское шоу (30 минут)":          p(11250),
-  "Детское шоу (40 минут)":          p(13750),
-  "Индив. детское шоу (30 мин)":     {p:21250,d:"30 мин шоу + фокус имениннику + мастер-класс (11-й ребёнок +1000 ₽)"}
+  "Детское шоу (30 минут)":          p(9000*1.25),
+  "Детское шоу (40 минут)":          p(11000*1.25),
+  "Индив. детское шоу (30 мин)":     {p:17000*1.25,d:"30 мин шоу + фокус имениннику + мастер-класс (11-й ребёнок +1000 ₽)"}
  },
  std:{
   "Взрослое шоу (20 минут)":         {p:17500,d:"Сет из 3–4 трюков"},
@@ -823,45 +814,43 @@ window.recalcIfReady = ()=>{ if(isFilled()) calc(); };
   document.addEventListener('keydown',e=>{ if(e.key==='Escape' && lb?.classList.contains('open')) lb.classList.remove('open'); });
 })();
 
-/* Отправка заявки (c антиспамом) */
+/* Отправка заявки + антиспам */
 (function(){
 const form = document.getElementById('orderForm'); if(!form) return;
+const tsEl = document.getElementById('form_ts');
+const sigEl = document.getElementById('form_sig');
+const hpEl = document.getElementById('hp_website');
 
-// time-trap — фиксируем момент готовности формы
-const tsEl = document.getElementById('ts'); if (tsEl) tsEl.value = String(Date.now());
+// отметка времени рендера формы
+const ts0 = Date.now();
+tsEl.value = ts0;
+
+// простая подпись на клиенте (для сервера — необязательна, но добавим)
+sigEl.value = btoa(String(ts0).split('').reverse().join(''));
 
 form.addEventListener('submit', async (e)=>{
   e.preventDefault();
 
-  // 1) honeypot: если заполнено — бот
-  const honey = (document.getElementById('website')?.value || '').trim();
-  if (honey) { return; } // тихо игнорируем
-
-  // 2) time-trap: слишком быстро — бот/скрипт
-  const ts = Number(tsEl?.value || 0);
-  const sec = (Date.now() - ts) / 1000;
-  if (!isFinite(sec) || sec < 4) {
-    alert('Похоже на ошибку. Попробуйте ещё раз.');
+  // антиспам: honeypot пуст и прошло >= 5 секунд
+  const tooFast = (Date.now() - ts0) < 5000;
+  if (hpEl.value || tooFast) {
+    alert('Похоже на авто-отправку. Повторите, пожалуйста.');
     return;
   }
 
-  // 3) простая валидация
-  const name = (form.querySelector('input[name="name"]')?.value || '').trim();
-  const phone = (form.querySelector('input[name="phone"]')?.value || '').replace(/\D/g,'');
-  if (name.length < 2) { alert('Укажите имя.'); return; }
-  if (!/^\d{10}$/.test(phone)) { alert('Телефон: 10 цифр без кода страны.'); return; }
-
-  // 4) отправка (как было)
   const fd=new FormData(form), data={}; fd.forEach((v,k)=>data[k]=v);
+  data.ts = tsEl.value; data.sig = sigEl.value; // просто передаём для возможной серверной проверки
   data.order = window.orderData||{};
-  data._anti = { sec: Math.round(sec) };
 
   try{
     const ctl = new AbortController();
     const t = setTimeout(()=>ctl.abort(), 12000);
     const res = await fetch('https://site76-azure.vercel.app/api/lead', {
-      method:'POST', headers:{'Content-Type':'application/json'},
-      body: JSON.stringify(data), signal: ctl.signal
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify(data),
+      signal: ctl.signal,
+      credentials: 'omit'
     });
     clearTimeout(t);
     if(!res.ok) throw new Error('HTTP '+res.status);
@@ -874,19 +863,19 @@ form.addEventListener('submit', async (e)=>{
 })();
 </script>
 
-<!-- === Яндекс.Метрика (как ты прислал) === -->
+<!-- === Яндекс.Метрика === -->
 <script type="text/javascript">
-    (function(m,e,t,r,i,k,a){
-        m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
-        m[i].l=1*new Date();
-        for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
-        k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
-    })(window, document,'script','https://mc.yandex.ru/metrika/tag.js?id=104290205', 'ym');
+  (function(m,e,t,r,i,k,a){
+      m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+      m[i].l=1*new Date();
+      for (var j = 0; j < document.scripts.length; j++) { if (document.scripts[j].src === r) { return; } }
+      k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
+  })(window, document,'script','https://mc.yandex.ru/metrika/tag.js?id=104290205', 'ym');
 
-    ym(104290205, 'init', {ssr:true, webvisor:true, clickmap:true, ecommerce:"dataLayer", accurateTrackBounce:true, trackLinks:true});
+  ym(104290205, 'init', { ssr:true, webvisor:true, clickmap:true, ecommerce:"dataLayer", accurateTrackBounce:true, trackLinks:true });
 </script>
 <noscript><div><img src="https://mc.yandex.ru/watch/104290205" style="position:absolute; left:-9999px;" alt=""></div></noscript>
-<!-- /Yandex.Metrika counter -->
+<!-- /Яндекс.Метрика -->
 
 </body>
 </html>
