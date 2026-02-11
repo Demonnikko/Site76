@@ -1,927 +1,1985 @@
 <!DOCTYPE html>
 <html lang="ru">
+
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Дмитрий Костюк — иллюзионист</title>
-<link rel="canonical" href="https://example.com/">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+  <title>Дмитрий Костюк — Частные мероприятия</title>
+  <meta name="description"
+    content="Премиальное шоу иллюзиониста Дмитрия Костюка. Частные события, корпоративы, концерты.">
+  <meta name="theme-color" content="#000000">
+  <meta name="color-scheme" content="dark">
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Inter:wght@400;500;600;700&display=swap"
+    rel="stylesheet">
+  <link rel="preload" as="image" href="images/portrait.jpg">
+  <style>
+    /* ===== VARIABLES & RESET ===== */
+    :root {
+      --bg: #000;
+      --text: #eee;
+      --gold: #CBA135;
+      --gold2: #E7C776;
+      --gold3: #f5e6b8;
+      --panel: rgba(12, 12, 18, .75);
+      --card: rgba(18, 19, 26, .92);
+      --r: 14px;
+      --ff-head: 'Cinzel', serif;
+      --ff-text: 'Inter', sans-serif;
+      --fs-body: clamp(15px, 2.8vw, 16px);
+      --fs-btn: clamp(15px, 2.8vw, 16px);
+      --fs-h1: clamp(30px, 9vw, 64px);
+      --fs-h2: clamp(22px, 5vw, 34px);
+      --fs-h3: clamp(17px, 3.6vw, 20px)
+    }
 
-<!-- SEO -->
-<meta name="description" content="Премиальное шоу иллюзиониста Дмитрия Костюка. Узнайте стоимость и забронируйте дату.">
-<meta name="theme-color" content="#000000">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Дмитрий Костюк — иллюзионист">
-<meta property="og:description" content="Кинематографичное шоу, персонализация, вау-эффект.">
-<meta property="og:image" content="images/portrait.jpg">
-<meta property="og:locale" content="ru_RU">
+    * {
+      margin: 0;
+      box-sizing: border-box
+    }
 
-<!-- Безопасность -->
-<meta http-equiv="Content-Security-Policy"
-      content="default-src 'self';
-               base-uri 'self';
-               frame-ancestors 'self';
-               object-src 'none';
-               img-src 'self' data: https:;
-               style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
-               font-src https://fonts.gstatic.com;
-               script-src 'self' 'unsafe-inline' https://mc.yandex.ru;
-               connect-src 'self' https://site76-azure.vercel.app;
-               frame-src https://rutube.ru https://mc.yandex.ru;
-               upgrade-insecure-requests;">
-<meta name="referrer" content="strict-origin-when-cross-origin">
-<meta name="color-scheme" content="dark light">
-<meta http-equiv="Permissions-Policy" content="geolocation=(), camera=(), microphone=(), interest-cohort=()">
+    html {
+      scroll-behavior: smooth;
+      -webkit-tap-highlight-color: transparent
+    }
 
-<!-- iOS Web App -->
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="Костюк">
-<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
-<link rel="apple-touch-icon" sizes="152x152" href="icons/apple-touch-icon-152.png">
-<link rel="apple-touch-icon" sizes="167x167" href="icons/apple-touch-icon-167.png">
-<link rel="apple-touch-icon" sizes="180x180" href="icons/apple-touch-icon-180.png">
+    body {
+      font: 400 var(--fs-body) var(--ff-text);
+      color: var(--text);
+      background: #000;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased
+    }
 
-<!-- Manifest -->
-<link rel="manifest" href="manifest.json">
+    a {
+      color: inherit;
+      text-decoration: none
+    }
 
-<!-- Шрифты -->
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://rutube.ru" crossorigin>
-<link rel="preconnect" href="https://mc.yandex.ru" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@900&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    img {
+      max-width: 100%;
+      height: auto;
+      display: block
+    }
 
-<!-- Preload главного фона -->
-<link rel="preload" as="image" href="images/portrait.webp" type="image/webp" imagesizes="100vw">
-<link rel="preload" as="image" href="images/portrait.jpg" type="image/jpeg" imagesizes="100vw">
+    button {
+      font-family: var(--ff-text)
+    }
 
-<!-- ID для track() -->
-<script>window.YA_METRICA_ID = 104290205;</script>
+    @media(prefers-reduced-motion:reduce) {
+      * {
+        animation: none !important;
+        transition: none !important
+      }
+    }
 
-<style>
-:root{
-  --bg:#000; --text:#EEE;
-  --gold:#CBA135; --gold2:#E7C776;
-  --panel:rgba(0,0,0,.55);
-  --r:12px;
-  --ff-head:'Cinzel',serif; --ff-text:'Inter',sans-serif;
+    /* ===== PRELOADER ===== */
+    .preloader {
+      position: fixed;
+      inset: 0;
+      z-index: 10000;
+      background: #000;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 1.2rem;
+      transition: opacity .8s ease, visibility .8s ease
+    }
 
-  --fs-body:clamp(15px, 2.8vw, 16px);
-  --fs-btn:clamp(15px, 2.8vw, 16px);
-  --fs-h1:clamp(28px, 8.2vw, 64px);
-  --fs-h2:clamp(22px, 4.6vw, 32px);
-  --fs-h3:clamp(18px, 3.8vw, 20px);
+    .preloader.hidden {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none
+    }
 
-  --face-pos:50% 28%;
-  --hero-photo: url('images/portrait.jpg');
-}
+    .preloader__spinner {
+      width: 48px;
+      height: 48px;
+      border: 3px solid rgba(203, 161, 53, .15);
+      border-top-color: var(--gold);
+      border-radius: 50%;
+      animation: spin .8s linear infinite
+    }
 
-/* ===== Base ===== */
-*{margin:0;box-sizing:border-box}
-html{scroll-behavior:smooth}
-body{font:400 var(--fs-body) var(--ff-text); color:var(--text); background:#000; overflow-x:hidden}
-a{color:inherit;text-decoration:none}
-img{max-width:100%; height:auto}
-@media (prefers-reduced-motion: reduce){ *{animation:none !important; transition:none !important} }
+    .preloader__text {
+      font: 700 clamp(18px, 5vw, 24px) var(--ff-head);
+      color: var(--gold);
+      letter-spacing: .1em;
+      opacity: 0;
+      animation: fadeUp .8s ease .3s forwards
+    }
 
-/* Buttons */
-.btn{
-  display:inline-flex; align-items:center; justify-content:center; gap:.55rem;
-  padding:1rem 1.2rem; border-radius:var(--r);
-  border:1.6px solid #2f3138; background:#15171e; color:#fff;
-  font:600 var(--fs-btn) var(--ff-text); cursor:pointer; transition:.25s; line-height:1;
-}
-.btn:is(:hover,:focus-visible){background:rgba(255,255,255,.10)}
-.btn--primary{
-  border-color:transparent; color:#111;
-  background:linear-gradient(160deg,var(--gold),var(--gold2));
-  box-shadow:0 12px 26px rgba(203,161,53,.22), inset 0 0 0 1px rgba(255,255,255,.18);
-}
-.btn--primary:is(:hover,:focus-visible){filter:brightness(1.06)}
-.btn[disabled]{opacity:.6; cursor:not-allowed}
-.btn svg{width:1.2em;height:1.2em}
+    @keyframes spin {
+      to {
+        transform: rotate(360deg)
+      }
+    }
 
-/* Inputs */
-input,select,textarea{
-  width:100%; padding:.78rem .95rem; border-radius:var(--r);
-  background:#15171e; border:1.8px solid #2f3138; color:#fff; font:400 var(--fs-body) var(--ff-text);
-}
-input:focus-visible,select:focus-visible,textarea:focus-visible{
-  outline:0; border-color:var(--gold); box-shadow:0 0 0 3px #cba13566;
-}
-input[type="date"]{appearance:none; -webkit-appearance:none; background:#15171e; padding:.78rem .95rem; line-height:1.2}
+    @keyframes fadeUp {
+      to {
+        opacity: 1;
+        transform: translateY(0)
+      }
 
-/* ===== Header ===== */
-.header{
-  position:fixed; inset:0 0 auto 0; height:56px; z-index:98;
-  display:flex; align-items:center; justify-content:space-between; gap:.8rem;
-  padding:.4rem .6rem; background:rgba(5,5,9,.86); backdrop-filter:blur(8px);
-  border-bottom:1px solid rgba(200,200,220,.12);
-}
-.header__logo{display:flex; align-items:center; gap:.5rem}
-.header__logo img{height:36px; width:auto; border-radius:0; object-fit:contain; display:block}
-.burger{
-  width:44px;height:44px;border-radius:10px;border:none;cursor:pointer;
-  background:linear-gradient(160deg,var(--gold),var(--gold2)); color:#111;
-  display:grid; place-items:center; box-shadow:0 8px 20px rgba(203,161,53,.22);
-}
-.burger span{display:block; width:22px; height:2px; background:#111; position:relative}
-.burger span::before,.burger span::after{content:""; position:absolute; left:0; right:0; height:2px; background:#111}
-.burger span::before{top:-6px}.burger span::after{top:6px}
+      from {
+        opacity: 0;
+        transform: translateY(10px)
+      }
+    }
 
-/* ===== Menu panel ===== */
-.menu{
-  position:fixed; left:0; right:0; top:56px; z-index:97;
-  background:rgba(8,9,13,.96); backdrop-filter:blur(10px);
-  border-bottom:1px solid rgba(255,255,255,.08);
-  transform:translateY(-120%); transition:transform .35s ease;
-}
-.menu.open{transform:translateY(0)}
-.menu__wrap{padding:12px; display:grid; gap:10px}
-.menu__item{
-  display:block; text-align:center; font:600 1rem var(--ff-text); padding:14px 16px; border-radius:12px;
-  color:#111; background:linear-gradient(160deg,var(--gold),var(--gold2));
-  box-shadow:0 10px 24px rgba(203,161,53,.22), inset 0 0 0 1px rgba(255,255,255,.14);
-}
-.menu__item:active{transform:translateY(1px)}
+    /* ===== SCROLL PROGRESS ===== */
+    .scroll-progress {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--gold), var(--gold2), var(--gold3));
+      z-index: 9998;
+      width: 0%;
+      border-radius: 0 2px 2px 0;
+      box-shadow: 0 0 8px rgba(203, 161, 53, .4)
+    }
 
-/* ===== Hero ===== */
-.hero{
-  min-height: var(--vh, 100dvh);
-  display:flex; flex-direction:column; align-items:center; justify-content:center;
-  text-align:center; gap:1rem;
-  padding: calc(56px + 28px + env(safe-area-inset-top)) 12px 28px;
-  position:relative;
-}
-.hero::before{
-  content:""; position:absolute; inset:0; z-index:-1;
-  background: var(--hero-photo) no-repeat; background-size:cover; background-position: var(--face-pos);
-}
-.hero::after{
-  content:""; position:absolute; inset:0; pointer-events:none; z-index:0;
-  background:linear-gradient(to bottom, rgba(0,0,0,0) 48%, #000 82%),
-             linear-gradient(90deg, #000 0 3%, rgba(0,0,0,0) 14% 86%, #000 97% 100%);
-}
-.title{position:relative; color:var(--gold); font:900 var(--fs-h1) var(--ff-head); letter-spacing:.06em}
-.title::before{
-  content:attr(data-txt); position:absolute; inset:0;
-  background:linear-gradient(120deg,transparent 30%,rgba(255,255,255,.9)50%,transparent 70%);
-  background-size:200% 100%; -webkit-background-clip:text; background-clip:text; color:transparent;
-  animation:sweep 7s linear infinite;
-}
-@keyframes sweep{from{background-position:-200% 0}to{background-position:200% 0}}
-.subtitle-float{font:900 clamp(18px,4.6vw,32px) var(--ff-head); color:var(--gold); letter-spacing:.14em; animation:float 6s ease-in-out infinite}
-@keyframes float{0%,100%{transform:translateY(-8px)}50%{transform:translateY(8px)}}
-.hero-cta{display:flex; width:100%; justify-content:center}
-.hero-cta .btn--primary{ width:min(92vw, 480px); }
+    /* ===== NOISE OVERLAY ===== */
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      z-index: 9997;
+      pointer-events: none;
+      opacity: .035;
+      background: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      background-size: 200px 200px
+    }
 
-/* Метрики */
-.metrics{display:flex; flex-wrap:wrap; gap:.6rem .9rem; align-items:center; justify-content:center; opacity:.95}
-.metrics .dot{width:6px;height:6px;border-radius:50%;background:#9a9aa0;display:inline-block}
+    /* ===== SCROLL REVEAL ===== */
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity .8s ease, transform .8s ease
+    }
 
-/* Секции */
-.sectionBox{width:clamp(300px, 94vw, 940px); margin: 0 auto 1.2rem auto; padding:1.6rem 1rem; text-align:center; background:var(--panel); border:1.5px solid rgba(255,255,255,.14); border-radius:var(--r); box-shadow:0 10px 24px rgba(0,0,0,.5)}
-.sectionTitle{ font:900 var(--fs-h2) var(--ff-head); color:var(--gold); margin-bottom:1rem }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0)
+    }
 
-/* Форматы */
-.packGrid{ display:flex; gap:12px; overflow:auto; scroll-snap-type:x mandatory; -webkit-overflow-scrolling:touch; padding:0 6px 4px; justify-content:center }
-.pack{ min-width:86%; background:#0e0f14; border:1px solid #2b2c31; border-radius:16px; padding:1rem; text-align:center; position:relative; overflow:hidden; scroll-snap-align:center; box-shadow:0 12px 26px rgba(0,0,0,.35)}
-.pack h3{ font:900 var(--fs-h3) var(--ff-head); color:var(--gold2); letter-spacing:.04em }
-.pack .from{ opacity:.9; margin:.4rem 0 .6rem }
-.pack ul{ display:inline-block; text-align:left; margin:.3rem 0 1rem; padding-left:1.1rem; line-height:1.45 }
-.pack .btn{ display:inline-block }
+    .reveal-d1 {
+      transition-delay: .1s
+    }
 
-/* Калькулятор */
-#calc form{ display:flex; flex-direction:column; gap:.9rem }
-#slider{ display:none; flex-direction:column; gap:.35rem; align-items:center }
-#gNum{ color:var(--gold2) }
-.total,.breakdown,.afterCalc{ display:none }
-.total{ font:600 1.5rem var(--ff-text); color:var(--gold); margin-top:.9rem; transition:box-shadow .6s, color .6s }
-.total.flash{ box-shadow:0 0 0 9999px rgba(203,161,53,.05) inset; color:var(--gold2) }
-.breakdown{ color:#cfcfcf; font-size:.95rem; line-height:1.45; margin-top:.3rem }
-#calcBtn{ display:inline-block; margin:.6rem auto 0; }
-.afterCalc{ display:flex; gap:.6rem; justify-content:center; margin-top:1rem; flex-wrap:wrap } /* фикс: rem */
+    .reveal-d2 {
+      transition-delay: .2s
+    }
 
-/* ===== Модальные окна ===== */
-.modal{ position:fixed; inset:0; z-index:99; display:none; place-items:center; padding:18px }
-.modal.open{ display:grid }
-.modal__bg{ position:absolute; inset:0; background:rgba(0,0,0,.6); backdrop-filter:blur(8px) }
-.modal__panel{
-  position:relative; width:min(94vw, 980px); max-height:min(92dvh,900px);
-  overflow:auto; border-radius:18px; background:radial-gradient(120% 120% at 10% 0%, #101116, #0b0c10);
-  border:1px solid rgba(231,199,118,.18);
-  box-shadow:0 40px 120px rgba(203,161,53,.18), inset 0 0 0 1px rgba(255,255,255,.04); padding:1rem 1rem 1.2rem;
-}
-.modal__close{ position:sticky; top:0; display:flex; justify-content:flex-end; margin:-.4rem -.4rem .3rem 0 }
-.modal__close button{ border:none; background:#1a1b22; color:#fff; padding:.5rem; border-radius:10px; cursor:pointer }
-.modal__body{ text-align:center }
+    .reveal-d3 {
+      transition-delay: .3s
+    }
 
-/* Плеер */
-.player{ position:relative; width:min(92vw, 940px); aspect-ratio:16/9; border-radius:14px; overflow:hidden;
-  border:1px solid rgba(231,199,118,.22); box-shadow:0 20px 60px rgba(0,0,0,.6), 0 6px 24px rgba(203,161,53,.15) }
-.player iframe{ position:absolute; inset:0; width:100%; height:100%; border:0 }
+    .reveal-d4 {
+      transition-delay: .35s
+    }
 
-/* Игра */
-.rules{ font-size:clamp(.9rem, 2.8vw, 1.05rem); color:#ddd; margin-bottom:.8rem }
-.gameWrap{ display:grid; grid-template-rows:auto auto auto; row-gap:.8rem; justify-items:center }
-.deck{ display:flex; justify-content:center; gap:.9rem; }
-.card{ --w: clamp(100px, 28vw, 140px); width:var(--w); aspect-ratio:62/88; border-radius:12px;
-  background:linear-gradient(150deg,var(--gold) 0%,var(--gold2) 60%,var(--gold) 100%); border:3px solid #fff; box-shadow:0 3px 10px rgba(0,0,0,.35); position:relative; transform-style:preserve-3d; transition:transform .6s}
-.card.flipped{ transform:rotateY(180deg) }
-.face{ position:absolute; inset:0; border-radius:12px; background:#fff; display:flex; align-items:center; justify-content:center; backface-visibility:hidden; transform:rotateY(180deg) }
-.face img{ width:92%; height:auto }
-.selects{ display:grid; grid-template-columns: repeat(3, clamp(100px,28vw,140px)); justify-content:center; gap:.9rem }
-.cardSel{ width: clamp(100px,28vw,140px) }
-#result{ margin-top:.9rem; min-height:2.1em; color:var(--gold); font-weight:600 }
-#timer,#progress{opacity:0;pointer-events:none;position:fixed;height:0}
+    /* ===== BUTTONS ===== */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: .5rem;
+      padding: .9rem 1.4rem;
+      border-radius: var(--r);
+      border: 1.5px solid rgba(255, 255, 255, .12);
+      background: rgba(255, 255, 255, .06);
+      color: #fff;
+      font: 600 var(--fs-btn) var(--ff-text);
+      cursor: pointer;
+      transition: all .25s ease;
+      line-height: 1;
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px)
+    }
 
-/* FAQ */
-.qaList{ display:flex; flex-direction:column; gap:.6rem; align-items:center }
-.qaList details{ width:100%; max-width:860px; background:#0f1014; border:1px solid #2e2f36; border-radius:12px; overflow:hidden }
-.qaList summary{ list-style:none; padding:.9rem 2.6rem; font-weight:700; cursor:pointer; position:relative; background:linear-gradient(160deg,var(--gold),var(--gold2)); color:#111; text-align:center }
-.qaList summary::before{content:'＋'; position:absolute; right:1rem; top:50%; transform:translateY(-50%); font-size:1.4rem; color:#222}
-.qaList details[open] summary::before{content:'－'}
-.qaList div{ padding:1rem; color:#ddd; text-align:center }
+    .btn:active {
+      transform: scale(.96)
+    }
 
-/* Галерея */
-.gallery{ display:grid; grid-template-columns: repeat(auto-fit, minmax(140px,1fr)); gap:.6rem }
-.gallery img{ width:100%; height:160px; object-fit:cover; border-radius:10px; border:1px solid #2e2f36; cursor:pointer }
+    .btn--primary {
+      border: none;
+      color: #111;
+      background: linear-gradient(135deg, var(--gold), var(--gold2), var(--gold3));
+      box-shadow: 0 6px 24px rgba(203, 161, 53, .35), inset 0 1px 0 rgba(255, 255, 255, .3);
+      font-weight: 700;
+      letter-spacing: .02em
+    }
 
-/* Лайтбокс */
-.lightbox{ position:fixed; inset:0; background:rgba(0,0,0,.85); display:none; align-items:center; justify-content:center; z-index:100 }
-.lightbox.open{ display:flex }
-.lightbox img{ max-width:92vw; max-height:90dvh; border-radius:10px; border:1px solid #333; position:relative; z-index:2; }
+    .btn--primary:active {
+      filter: brightness(.92);
+      transform: scale(.96)
+    }
 
-/* Контакты (кнопки-иконки) */
-.contact-grid { display:flex; justify-content:center; gap:.7rem; flex-wrap:wrap }
-.contact-btn { width:64px; height:64px; display:grid; place-items:center; border-radius:50%; background:#000; border:1.6px solid #2f3138; transition:.25s; }
-.contact-btn:hover { transform: translateY(-2px); border-color: var(--gold); }
-.contact-btn img { width:28px; height:28px; display:block; border-radius:0; background:#000; }
+    .btn--outline {
+      border: 1.5px solid var(--gold);
+      color: var(--gold);
+      background: transparent
+    }
 
-/* FAB */
-.fab{ position:fixed; right:18px; bottom: calc(16px + env(safe-area-inset-bottom)); width:54px; height:54px; border-radius:50%; display:grid; place-items:center; z-index:97;
-  background:radial-gradient(180% 180% at 40% 30%, var(--gold2), var(--gold) 60%); color:#111; cursor:pointer; box-shadow:0 14px 28px rgba(203,161,53,.26), inset 0 0 0 2px rgba(255,255,255,.22) }
-.fab svg{ width:26px; height:26px }
+    .btn--outline:active {
+      background: rgba(203, 161, 53, .1)
+    }
 
-/* Футер */
-footer{ padding:1.2rem 1rem 2rem; border-top:1px solid #222; margin-top:2rem }
-.footer-bar{ display:flex; align-items:center; justify-content:center; }
-.footer-contacts{ display:flex; gap:.6rem; justify-content:center }
-.copy{ text-align:center; color:#888; font-size:.9rem; margin-top:.8rem }
+    /* ===== PARTICLES ===== */
+    #particles {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      opacity: .5
+    }
 
-/* Планшет/десктоп */
-@media (min-width:900px){
-  .hero-cta .btn--primary{ width:auto; min-width:360px }
-  .packGrid{ display:grid; grid-template-columns: repeat(3, minmax(260px,1fr)); overflow:visible; padding:0 }
-  .pack{ min-width:unset }
-  .sectionBox{ width:clamp(300px, 88vw, 980px) }
-}
+    /* ===== HERO ===== */
+    .hero {
+      min-height: 100dvh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-end;
+      text-align: center;
+      gap: .7rem;
+      padding: 0 16px 28px;
+      position: relative;
+      overflow: hidden
+    }
 
-/* Мобильные — чуть поднять лицо */
-@media (max-width: 480px){ :root{ --face-pos: 50% 22%; } }
-</style>
+    .hero__bg {
+      position: absolute;
+      inset: 0;
+      z-index: -2
+    }
+
+    .hero__bg video,
+    .hero__bg img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: top center;
+      /* Fix face cropping */
+    }
+
+    .hero__overlay {
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      background: linear-gradient(to bottom, rgba(0, 0, 0, 0) 20%, rgba(0, 0, 0, .45) 55%, #000 88%), linear-gradient(90deg, rgba(0, 0, 0, .4) 0%, transparent 25%, transparent 75%, rgba(0, 0, 0, .4) 100%)
+    }
+
+    .hero__content {
+      position: relative;
+      z-index: 1;
+      animation: heroIn 1.2s ease-out both
+    }
+
+    @keyframes heroIn {
+      from {
+        opacity: 0;
+        transform: translateY(24px)
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0)
+      }
+    }
+
+    .title {
+      color: var(--gold);
+      font: 900 var(--fs-h1) var(--ff-head);
+      letter-spacing: .06em;
+      position: relative;
+      text-shadow: 0 2px 30px rgba(203, 161, 53, .3)
+    }
+
+    .title::before {
+      content: attr(data-txt);
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(120deg, transparent 30%, rgba(255, 255, 255, .8) 50%, transparent 70%);
+      background-size: 200% 100%;
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      animation: sweep 6s linear infinite
+    }
+
+    @keyframes sweep {
+      from {
+        background-position: -200% 0
+      }
+
+      to {
+        background-position: 200% 0
+      }
+    }
+
+    .subtitle {
+      font: 700 clamp(16px, 4vw, 26px) var(--ff-head);
+      color: var(--gold2);
+      letter-spacing: .16em;
+      opacity: .9
+    }
+
+    .hero-cta {
+      display: flex;
+      width: 100%;
+      justify-content: center;
+      margin-top: .5rem
+    }
+
+    .hero-cta .btn--primary {
+      width: min(92vw, 420px);
+      padding: 1rem 1.5rem;
+      font-size: clamp(16px, 3.2vw, 18px)
+    }
+
+    .metrics {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: .4rem .8rem;
+      margin-top: .6rem;
+      text-align: center
+    }
+
+    .metric {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: .1rem
+    }
+
+    .metric__num {
+      color: var(--gold2);
+      font: 700 clamp(22px, 6vw, 32px) var(--ff-head);
+      line-height: 1
+    }
+
+    .metric__label {
+      font-size: .75rem;
+      color: rgba(255, 255, 255, .6);
+      letter-spacing: .03em
+    }
+
+    .scroll-hint {
+      margin-top: .8rem;
+      animation: bounce 2s ease-in-out infinite;
+      opacity: .4;
+      font-size: 1.3rem
+    }
+
+    @keyframes bounce {
+
+      0%,
+      100% {
+        transform: translateY(0)
+      }
+
+      50% {
+        transform: translateY(8px)
+      }
+    }
+
+    /* ===== WAVE DIVIDERS ===== */
+    .wave {
+      width: 100%;
+      overflow: hidden;
+      line-height: 0;
+      margin: -1px 0;
+      position: relative;
+      z-index: 1
+    }
+
+    .wave svg {
+      display: block;
+      width: 100%;
+      height: clamp(28px, 5vw, 48px)
+    }
+
+    .wave--flip svg {
+      transform: scaleY(-1)
+    }
+
+    /* ===== SECTIONS ===== */
+    .section {
+      width: 100%;
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 2.5rem 16px
+    }
+
+    .sectionTitle {
+      font: 900 var(--fs-h2) var(--ff-head);
+      color: var(--gold);
+      text-align: center;
+      margin-bottom: 1.2rem;
+      letter-spacing: .03em
+    }
+
+    /* ===== BRANDS ===== */
+    .brands {
+      padding: 1.5rem 0;
+      overflow: hidden;
+      position: relative
+    }
+
+    .brands::before,
+    .brands::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 40px;
+      z-index: 2
+    }
+
+    .brands::before {
+      left: 0;
+      background: linear-gradient(90deg, #000, transparent)
+    }
+
+    .brands::after {
+      right: 0;
+      background: linear-gradient(-90deg, #000, transparent)
+    }
+
+    .brands__label {
+      text-align: center;
+      color: #555;
+      font-size: .7rem;
+      text-transform: uppercase;
+      letter-spacing: .14em;
+      margin-bottom: .8rem
+    }
+
+    .brands__track {
+      display: flex;
+      gap: 2.5rem;
+      align-items: center;
+      animation: marquee 20s linear infinite;
+      width: max-content
+    }
+
+    .brand-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      color: #9fb0d0;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .brand-logo {
+      height: 40px;
+      width: auto;
+      max-width: 100px;
+      padding: 0;
+      filter: invert(1) grayscale(1) brightness(2) contrast(1.2);
+      mix-blend-mode: screen;
+      opacity: 0.8;
+      display: block;
+      object-fit: contain;
+      background: none;
+      box-shadow: none;
+      border-radius: 0;
+    }
+
+    @keyframes marquee {
+      0% {
+        transform: translateX(0)
+      }
+
+      100% {
+        transform: translateX(-33.333%)
+          /* Move exactly 1/3 since we have 3 sets */
+      }
+    }
+
+    /* ===== URGENCY BANNER ===== */
+    .urgency {
+      text-align: center;
+      padding: 1rem 16px;
+      max-width: 960px;
+      margin: 0 auto
+    }
+
+    .urgency__inner {
+      display: inline-flex;
+      align-items: center;
+      gap: .6rem;
+      padding: .6rem 1.2rem;
+      border-radius: 40px;
+      background: rgba(203, 161, 53, .08);
+      border: 1px solid rgba(203, 161, 53, .15);
+      font-size: .88rem;
+      color: var(--gold2)
+    }
+
+    .urgency__dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--gold);
+      flex-shrink: 0;
+      animation: urgPulse 1.5s ease-in-out infinite
+    }
+
+    @keyframes urgPulse {
+
+      0%,
+      100% {
+        opacity: 1;
+        transform: scale(1)
+      }
+
+      50% {
+        opacity: .4;
+        transform: scale(.7)
+      }
+    }
+
+    .urgency__text b {
+      color: var(--gold)
+    }
+
+    /* ===== PACK CARDS ===== */
+    .packGrid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 14px
+    }
+
+    .pack {
+      background: var(--card);
+      border: 1px solid rgba(255, 255, 255, .07);
+      border-radius: 18px;
+      padding: 1.4rem 1.2rem;
+      position: relative;
+      overflow: hidden;
+      transition: all .35s ease
+    }
+
+    .pack::before {
+      content: '';
+      position: absolute;
+      inset: -1px;
+      border-radius: 18px;
+      padding: 1px;
+      background: linear-gradient(135deg, rgba(203, 161, 53, .35), transparent 60%);
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity .35s
+    }
+
+    .pack:active {
+      box-shadow: 0 0 30px rgba(203, 161, 53, .18), 0 0 60px rgba(203, 161, 53, .06)
+    }
+
+    .pack:active::before {
+      opacity: 1
+    }
+
+    .pack__icon {
+      font-size: 2rem;
+      margin-bottom: .5rem
+    }
+
+    .pack__badge {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      background: linear-gradient(135deg, var(--gold), var(--gold2));
+      color: #111;
+      font-size: .7rem;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 20px;
+      letter-spacing: .04em
+    }
+
+    .pack h3 {
+      font: 900 var(--fs-h3) var(--ff-head);
+      color: var(--gold2);
+      letter-spacing: .03em
+    }
+
+    .pack .from {
+      opacity: .75;
+      margin: .35rem 0 .5rem;
+      font-size: .95rem
+    }
+
+    .pack ul {
+      text-align: left;
+      margin: .3rem 0 1rem;
+      padding-left: 1.2rem;
+      line-height: 1.55;
+      font-size: .92rem;
+      opacity: .8
+    }
+
+    .pack ul li::marker {
+      color: var(--gold)
+    }
+
+    .pack .btn {
+      width: 100%
+    }
+
+    /* ===== HOW IT WORKS ===== */
+    .process {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      position: relative;
+      padding-left: 32px
+    }
+
+    .process::before {
+      content: '';
+      position: absolute;
+      left: 15px;
+      top: 8px;
+      bottom: 8px;
+      width: 2px;
+      background: linear-gradient(to bottom, var(--gold), rgba(203, 161, 53, .1))
+    }
+
+    .process__step {
+      position: relative;
+      padding: .8rem 0
+    }
+
+    .process__dot {
+      position: absolute;
+      left: -25px;
+      top: 1rem;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: var(--gold);
+      box-shadow: 0 0 12px rgba(203, 161, 53, .4)
+    }
+
+    .process__num {
+      font: 700 .7rem var(--ff-text);
+      color: var(--gold);
+      text-transform: uppercase;
+      letter-spacing: .1em;
+      margin-bottom: .2rem
+    }
+
+    .process__title {
+      font: 700 1rem var(--ff-text);
+      color: #fff;
+      margin-bottom: .15rem
+    }
+
+    .process__desc {
+      font-size: .88rem;
+      color: #888;
+      line-height: 1.5
+    }
+
+    /* ===== VIDEO ===== */
+    .video-wrap {
+      position: relative;
+      padding-bottom: 56.25%;
+      height: 0;
+      overflow: hidden;
+      border-radius: 14px;
+      border: 1px solid rgba(255, 255, 255, .08);
+      box-shadow: 0 10px 40px rgba(0, 0, 0, .5)
+    }
+
+    .video-wrap iframe,
+    .video-wrap video {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      border: 0;
+      object-fit: cover
+    }
+
+    /* ===== ABOUT ===== */
+    .about-text {
+      text-align: center;
+      max-width: 600px;
+      margin: 0 auto;
+      line-height: 1.75;
+      font-size: 1rem;
+      color: #aaa
+    }
+
+    .about-text strong {
+      color: var(--gold2)
+    }
+
+    /* ===== MAGIC CARD TRICK ===== */
+    .magic {
+      text-align: center
+    }
+
+    .magic__hint {
+      color: #777;
+      font-size: .9rem;
+      margin-bottom: 1rem
+    }
+
+    .deck {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      margin: 0 auto;
+      perspective: 800px
+    }
+
+    .mcard {
+      --w: clamp(90px, 26vw, 120px);
+      width: var(--w);
+      aspect-ratio: 62/88;
+      cursor: pointer;
+      perspective: 600px
+    }
+
+    .mcard__inner {
+      width: 100%;
+      height: 100%;
+      position: relative;
+      transform-style: preserve-3d;
+      transition: transform .7s cubic-bezier(.4, .2, .2, 1)
+    }
+
+    .mcard.flipped .mcard__inner {
+      transform: rotateY(180deg)
+    }
+
+    .mcard__front,
+    .mcard__back {
+      position: absolute;
+      inset: 0;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden
+    }
+
+    .mcard__front {
+      background: linear-gradient(150deg, var(--gold), var(--gold2));
+      border: 2px solid rgba(255, 255, 255, .25);
+      box-shadow: 0 4px 20px rgba(203, 161, 53, .25);
+      font-size: 2rem;
+      color: #111
+    }
+
+    .mcard__back {
+      transform: rotateY(180deg);
+      background: var(--card);
+      border: 2px solid rgba(255, 255, 255, .1);
+      flex-direction: column;
+      padding: .6rem;
+      gap: .3rem
+    }
+
+    .mcard.winner .mcard__back {
+      border-color: var(--gold);
+      box-shadow: 0 0 20px rgba(203, 161, 53, .3)
+    }
+
+    .mcard__back .prize-icon {
+      font-size: 1.8rem
+    }
+
+    .mcard__back .prize-text {
+      font-size: clamp(.6rem, 2.2vw, .75rem);
+      color: #ccc;
+      line-height: 1.3;
+      font-weight: 600
+    }
+
+    #magicResult {
+      margin-top: 1rem;
+      min-height: 2.4rem;
+      font-size: .95rem;
+      color: var(--gold2);
+      font-weight: 600;
+      opacity: 0;
+      transition: opacity .5s ease
+    }
+
+    #magicResult.show {
+      opacity: 1
+    }
+
+    /* ===== REVIEWS ===== */
+    .reviews-carousel {
+      position: relative;
+      overflow: hidden
+    }
+
+    .reviews-track {
+      display: flex;
+      transition: transform .5s cubic-bezier(.4, .2, .2, 1)
+    }
+
+    .review-card {
+      min-width: 100%;
+      padding: 0 4px;
+      box-sizing: border-box
+    }
+
+    .review-card__inner {
+      background: var(--card);
+      border: 1px solid rgba(255, 255, 255, .07);
+      border-radius: 16px;
+      padding: 1.4rem
+    }
+
+    .review-card__header {
+      display: flex;
+      align-items: center;
+      gap: .7rem;
+      margin-bottom: .7rem
+    }
+
+    .review-card__avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--gold), var(--gold2));
+      display: grid;
+      place-items: center;
+      font: 700 .85rem var(--ff-head);
+      color: #111;
+      flex-shrink: 0
+    }
+
+    .review-card__info {
+      display: flex;
+      flex-direction: column;
+      gap: .1rem
+    }
+
+    .review-card__name {
+      font-weight: 600;
+      font-size: .85rem;
+      color: var(--gold2)
+    }
+
+    .review-card__meta {
+      font-size: .72rem;
+      color: #666
+    }
+
+    .review-card__stars {
+      color: var(--gold);
+      font-size: .9rem;
+      margin-bottom: .4rem;
+      letter-spacing: 2px
+    }
+
+    .review-card__text {
+      font-size: .91rem;
+      line-height: 1.65;
+      color: #bbb;
+      font-style: italic
+    }
+
+    .reviews-dots {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 1rem
+    }
+
+    .reviews-dots span {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, .15);
+      transition: all .3s
+    }
+
+    .reviews-dots span.active {
+      background: var(--gold);
+      transform: scale(1.3)
+    }
+
+    /* ===== GALLERY ===== */
+    .gallery {
+      columns: 2;
+      column-gap: 8px
+    }
+
+    .gallery img {
+      width: 100%;
+      border-radius: 10px;
+      margin-bottom: 8px;
+      border: 1px solid rgba(255, 255, 255, .05);
+      cursor: pointer;
+      transition: transform .25s, opacity .25s;
+      break-inside: avoid
+    }
+
+    .gallery img:active {
+      transform: scale(.97);
+      opacity: .85
+    }
+
+    /* ===== LIGHTBOX ===== */
+    .lightbox {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, .94);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 200;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px)
+    }
+
+    .lightbox.open {
+      display: flex
+    }
+
+    .lightbox__img {
+      max-width: 94vw;
+      max-height: 85dvh;
+      border-radius: 10px;
+      object-fit: contain;
+      z-index: 2
+    }
+
+    .lightbox__close {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      z-index: 3;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, .12);
+      border: none;
+      color: #fff;
+      font-size: 1.2rem;
+      cursor: pointer;
+      display: grid;
+      place-items: center
+    }
+
+    .lightbox__nav {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 3;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, .08);
+      border: none;
+      color: #fff;
+      font-size: 1.3rem;
+      cursor: pointer;
+      display: grid;
+      place-items: center
+    }
+
+    .lightbox__nav--prev {
+      left: 8px
+    }
+
+    .lightbox__nav--next {
+      right: 8px
+    }
+
+    /* ===== FAQ ===== */
+    .qaList {
+      display: flex;
+      flex-direction: column;
+      gap: 8px
+    }
+
+    .qaList details {
+      background: var(--card);
+      border: 1px solid rgba(255, 255, 255, .07);
+      border-radius: 14px;
+      overflow: hidden;
+      transition: border-color .3s
+    }
+
+    .qaList details[open] {
+      border-color: rgba(203, 161, 53, .15)
+    }
+
+    .qaList summary {
+      list-style: none;
+      padding: .9rem 1.2rem;
+      font-weight: 600;
+      cursor: pointer;
+      color: var(--gold2);
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .95rem
+    }
+
+    .qaList summary::-webkit-details-marker {
+      display: none
+    }
+
+    .qaList summary::after {
+      content: '+';
+      margin-left: auto;
+      font-size: 1.2rem;
+      transition: transform .3s;
+      color: var(--gold)
+    }
+
+    .qaList details[open] summary::after {
+      transform: rotate(45deg)
+    }
+
+    .qaList details div {
+      padding: 0 1.2rem 1rem;
+      color: #999;
+      line-height: 1.65;
+      font-size: .9rem
+    }
+
+    /* ===== FLOATING BUTTON ===== */
+    .fab {
+      position: fixed;
+      bottom: 16px;
+      right: 16px;
+      z-index: 99;
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--gold), var(--gold2));
+      border: none;
+      color: #111;
+      font-size: 1.5rem;
+      cursor: pointer;
+      box-shadow: 0 4px 24px rgba(203, 161, 53, .4);
+      transition: transform .25s, box-shadow .25s;
+      display: grid;
+      place-items: center
+    }
+
+    .fab:active {
+      transform: scale(.92)
+    }
+
+    .fab::after {
+      content: '';
+      position: absolute;
+      inset: -4px;
+      border-radius: 50%;
+      border: 2px solid var(--gold);
+      opacity: 0;
+      animation: fabPulse 2.5s ease-in-out infinite
+    }
+
+    @keyframes fabPulse {
+
+      0%,
+      100% {
+        opacity: 0;
+        transform: scale(1)
+      }
+
+      50% {
+        opacity: .4;
+        transform: scale(1.15)
+      }
+    }
+
+    /* ===== MODAL ===== */
+    .modal {
+      position: fixed;
+      inset: 0;
+      z-index: 150;
+      display: none;
+      place-items: center;
+      padding: 16px
+    }
+
+    .modal.open {
+      display: grid
+    }
+
+    .modal__bg {
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 0, 0, .75);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px)
+    }
+
+    .modal__panel {
+      position: relative;
+      width: min(94vw, 440px);
+      border-radius: 20px;
+      background: rgba(14, 15, 20, .97);
+      border: 1px solid rgba(203, 161, 53, .15);
+      box-shadow: 0 30px 80px rgba(0, 0, 0, .6);
+      padding: 1.5rem 1.2rem;
+      max-height: 88dvh;
+      overflow-y: auto
+    }
+
+    .modal__panel h2 {
+      font: 900 var(--fs-h2) var(--ff-head);
+      color: var(--gold);
+      text-align: center;
+      margin-bottom: 1rem
+    }
+
+    .modal__close {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, .06);
+      border: none;
+      color: #fff;
+      font-size: 1rem;
+      cursor: pointer;
+      display: grid;
+      place-items: center;
+      z-index: 5
+    }
+
+    .form-group {
+      margin-bottom: .75rem
+    }
+
+    .form-group label {
+      display: block;
+      font-size: .82rem;
+      color: #888;
+      margin-bottom: .25rem;
+      font-weight: 500
+    }
+
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+      width: 100%;
+      padding: .75rem 1rem;
+      border-radius: var(--r);
+      background: rgba(255, 255, 255, .05);
+      border: 1.5px solid rgba(255, 255, 255, .08);
+      color: #fff;
+      font: 400 var(--fs-body) var(--ff-text);
+      transition: border-color .3s
+    }
+
+    .form-group input:focus,
+    .form-group textarea:focus,
+    .form-group select:focus {
+      outline: none;
+      border-color: var(--gold);
+      box-shadow: 0 0 0 3px rgba(203, 161, 53, .12)
+    }
+
+    .form-group textarea {
+      resize: vertical;
+      min-height: 60px
+    }
+
+    .form-group select {
+      appearance: none;
+      -webkit-appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%23888' viewBox='0 0 16 16'%3E%3Cpath d='M8 11L3 6h10z'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 12px center
+    }
+
+    #bookingSuccess {
+      display: none;
+      text-align: center;
+      padding: 2rem .5rem
+    }
+
+    #bookingSuccess .success-icon {
+      font-size: 3.5rem;
+      margin-bottom: .8rem;
+      animation: popIn .5s ease
+    }
+
+    @keyframes popIn {
+      from {
+        transform: scale(0);
+        opacity: 0
+      }
+
+      to {
+        transform: scale(1);
+        opacity: 1
+      }
+    }
+
+    /* ===== FOOTER ===== */
+    footer {
+      padding: 1.2rem 16px 24px;
+      text-align: center
+    }
+
+    .copy {
+      color: #444;
+      font-size: .75rem
+    }
+
+    /* ===== RESPONSIVE ===== */
+    @media(min-width:768px) {
+      .packGrid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 16px
+      }
+
+      .gallery {
+        columns: 3
+      }
+
+      .hero {
+        padding-bottom: 48px
+      }
+
+      .metrics {
+        grid-template-columns: repeat(4, 1fr)
+      }
+    }
+
+    @media(min-width:1024px) {
+      .gallery {
+        columns: 4
+      }
+    }
+
+    /* TAB BAR */
+    .tab-bar {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 92%;
+      max-width: 400px;
+      background: rgba(10, 10, 15, 0.85);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 24px;
+      display: flex;
+      justify-content: space-around;
+      padding: 10px 0;
+      z-index: 999;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+    }
+
+    .tab-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      color: #6e7688;
+      font-size: 10px;
+      flex: 1;
+      transition: color .3s;
+    }
+
+    .tab-item span {
+      font-size: 22px;
+      margin-bottom: 2px;
+      display: block;
+      transition: transform .2s;
+    }
+
+    .tab-item.active {
+      color: var(--gold);
+    }
+
+    .tab-item.active span {
+      transform: translateY(-2px);
+      text-shadow: 0 0 12px rgba(214, 180, 107, 0.3);
+    }
+  </style>
 </head>
+
 <body>
 
-<!-- ===== Header: logo + burger ===== -->
-<header class="header" role="navigation" aria-label="Верхняя панель">
-  <div class="header__logo">
-    <img src="images/logo.jpg" alt="Костюк — иллюзионист" loading="eager" width="128" height="36">
-  </div>
-  <button class="burger" id="burger" aria-expanded="false" aria-controls="mainMenu" aria-label="Меню"><span></span></button>
-</header>
-
-<!-- ===== Menu panel ===== -->
-<nav id="mainMenu" class="menu" aria-hidden="true">
-  <div class="menu__wrap">
-    <a href="#" class="menu__item" data-open="promo">Смотреть промо</a>
-    <a href="#" class="menu__item" data-open="discount">Скидка</a>
-    <a href="#" class="menu__item" data-open="faq">Вопросы</a>
-    <a href="#" class="menu__item" data-open="gallery">Галерея</a>
-  </div>
-</nav>
-
-<!-- ===== HERO ===== -->
-<section id="hero" class="hero" role="banner">
-  <h1 class="title" data-txt="Дмитрий Костюк">Дмитрий&nbsp;Костюк</h1>
-  <p class="subtitle-float">Иллюзионист</p>
-
-  <div class="hero-cta">
-    <button class="btn btn--primary" type="button" aria-label="Смотреть промо" data-open="promo">Смотреть промо</button>
+  <!-- ===== PRELOADER ===== -->
+  <div class="preloader" id="preloader">
+    <div class="preloader__spinner"></div>
+    <div class="preloader__text">Дмитрий Костюк</div>
   </div>
 
-  <div class="metrics" aria-live="polite">
-    <span><b id="shows">0</b> довольных клиентов</span>
-    <span class="dot" aria-hidden="true"></span>
-    <span id="exp"> </span>
-  </div>
-</section>
+  <!-- ===== SCROLL PROGRESS ===== -->
+  <div class="scroll-progress" id="scrollProgress"></div>
 
-<!-- ===== Форматы ===== -->
-<section class="sectionBox" id="formats">
-  <h2 class="sectionTitle">Форматы выступления</h2>
-  <div class="packGrid">
-    <article class="pack">
-      <h3>Частные события</h3>
-      <div class="from">от 18&nbsp;500&nbsp;₽</div>
-      <ul>
-        <li>20–40 минут</li>
-        <li>Персонализация под событие</li>
-        <li>Интерактив со зрителями</li>
-      </ul>
-      <a href="#calc" class="btn btn--primary" aria-label="Узнать точную стоимость — Частные события">Узнать точную стоимость</a>
-    </article>
-    <article class="pack">
-      <h3>Микромагия · Корпоратив</h3>
-      <div class="from">от 13&nbsp;000&nbsp;₽</div>
-      <ul>
-        <li>30–180 минут, welcome-зоны</li>
-        <li>Фокусы в руках гостей</li>
-        <li>Идеально для банкетов</li>
-      </ul>
-      <a href="#calc" class="btn btn--primary" aria-label="Узнать точную стоимость — Микромагия">Узнать точную стоимость</a>
-    </article>
-    <article class="pack">
-      <h3>Концерт / «СЕКРЕТ»</h3>
-      <div class="from">от 150&nbsp;000&nbsp;₽</div>
-      <ul>
-        <li>1–2 часа, атмосферный спектакль</li>
-        <li>Сценическое оформление</li>
-        <li>Для больших залов</li>
-      </ul>
-      <a href="#calc" class="btn btn--primary" aria-label="Узнать точную стоимость — Концерт">Узнать точную стоимость</a>
-    </article>
-  </div>
-</section>
+  <!-- ===== PARTICLES ===== -->
+  <canvas id="particles"></canvas>
 
-<!-- ===== Калькулятор ===== -->
-<section id="calc" class="sectionBox">
-  <h2 class="sectionTitle">Узнать стоимость</h2>
-  <form id="calcForm" novalidate>
-    <select id="area" required><option value="" disabled selected hidden>Область</option></select>
-    <select id="city" required disabled><option value="" disabled selected hidden>Город</option></select>
-    <input type="date" id="when" required aria-label="Дата проведения">
-    <select id="guests" required aria-label="Количество гостей">
-      <option value="" disabled selected hidden>Гости</option>
-      <option value="0">до 50</option>
-      <option value="5000">51–100</option>
-      <option value="10000">101–200</option>
-      <option value="custom">свыше 200</option>
-    </select>
-    <div id="slider">
-      <label>Гостей — <span id="gNum">250</span></label>
-      <input type="range" id="gRange" min="201" max="500" value="250" aria-label="Точный ввод гостей">
+  <!-- ===== HERO ===== -->
+  <section class="hero">
+    <div class="hero__bg">
+      <img src="video/зацикленое видео .gif" alt="" id="heroImg">
     </div>
-    <select id="cat" required aria-label="Категория">
-      <option value="" disabled selected hidden>Категория</option>
-      <option value="kids">Детские шоу</option>
-      <option value="std">Стандартные шоу</option>
-      <option value="close">Микромагия</option>
-      <option value="spec">Спец-шоу</option>
-      <option value="conc">Концертные шоу</option>
-    </select>
-    <select id="svc" required disabled aria-label="Программа"><option value="" disabled selected hidden>Программа</option></select>
-    <div id="desc" style="min-height:2.1em;color:#cfcfcf"></div>
-    <button type="button" id="calcBtn" class="btn btn--primary" aria-label="Рассчитать стоимость">Рассчитать</button>
-  </form>
-  <div class="total" id="total"></div>
-  <div class="breakdown" id="breakdown"></div>
-  <div class="afterCalc" id="afterCalc">
-    <button class="btn" data-open="discount" type="button">Получить скидку</button>
-    <a href="#order" class="btn">Перейти к брони</a>
-  </div>
-</section>
-
-<!-- ===== Бронь ===== -->
-<section id="order" class="sectionBox">
-  <h2 class="sectionTitle">Оставьте контакты для брони</h2>
-  <form id="orderForm" autocomplete="on" novalidate>
-    <input name="name" placeholder="Ваше имя" aria-label="Ваше имя" required maxlength="60">
-    <div style="display:flex;gap:0">
-      <span style="display:flex;align-items:center;padding:.78rem 1rem;background:#15171e;border:1.8px solid var(--gold);border-right:0;border-radius:var(--r) 0 0 var(--r);color:#aaa">+7</span>
-      <input name="phone" type="tel" inputmode="numeric" placeholder="9001234567"
-             pattern="[0-9]{10}" minlength="10" maxlength="10" required
-             style="border-left:0;border-radius:0 var(--r) var(--r) 0" aria-label="Телефон 10 цифр без кода">
-    </div>
-    <input name="tg" placeholder="Telegram @username" aria-label="Ник в Telegram" maxlength="64">
-    <textarea name="note" placeholder="Комментарий (необязательно)" rows="4" aria-label="Комментарий" maxlength="800"></textarea>
-
-    <!-- Anti-spam: honeypot + время заполнения -->
-    <input type="text" name="website" id="hp_website" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px;height:0;width:0;opacity:0" aria-hidden="true">
-    <input type="hidden" name="ts" id="form_ts">
-    <input type="hidden" name="sig" id="form_sig">
-
-    <button class="btn btn--primary" type="submit" id="submitBtn">Отправить заявку</button>
-  </form>
-  <div id="thanks" style="display:none;color:var(--gold2);font-size:1.05rem;font-weight:600;margin-top:.8rem">
-    Спасибо! Я свяжусь с вами в ближайшее время.
-  </div>
-</section>
-
-<!-- стрелка вверх/вниз -->
-<button class="fab" id="fab" aria-label="Прокрутка">
-  <svg id="fabIcon" viewBox="0 0 24 24" aria-hidden="true"><path id="fabPath" d="M12 16 18 10H6z"/></svg>
-</button>
-
-<!-- ===== Футер ===== -->
-<footer>
-  <div class="footer-bar">
-    <div class="footer-contacts">
-      <a class="contact-btn" href="https://vk.com/dmitrokko" target="_blank" rel="noopener" aria-label="VK">
-        <img src="images/icons/vk.jpeg" alt="VK" width="28" height="28" loading="lazy" decoding="async">
-      </a>
-      <a class="contact-btn" href="https://t.me/Dmitrokko" target="_blank" rel="noopener" aria-label="Telegram">
-        <img src="images/icons/telegram.jpeg" alt="Telegram" width="28" height="28" loading="lazy" decoding="async">
-      </a>
-      <a class="contact-btn" href="tel:89092763386" aria-label="Позвонить">
-        <img src="images/icons/phone.jpeg" alt="Позвонить" width="28" height="28" loading="lazy" decoding="async">
-      </a>
-    </div>
-  </div>
-  <div class="copy">© 2025 · <span>ИП Дмитрий Костюк</span> · Работаем официально</div>
-</footer>
-
-<!-- ===== МОДАЛКИ ===== -->
-
-<!-- ПРОМО (RuTube) -->
-<div class="modal" id="modal-promo" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Промо-видео">
-  <div class="modal__bg" data-close></div>
-  <div class="modal__panel">
-    <div class="modal__close"><button data-close aria-label="Закрыть">✕</button></div>
-    <div class="modal__body">
-      <h2 class="sectionTitle">Промо</h2>
-      <div class="player" id="promoPlayer"></div>
-    </div>
-  </div>
-</div>
-
-<!-- Игра (скидка) -->
-<div class="modal" id="modal-discount" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Игра: угадай карту">
-  <div class="modal__bg" data-close></div>
-  <div class="modal__panel">
-    <div class="modal__close"><button data-close aria-label="Закрыть">✕</button></div>
-    <div class="modal__body">
-      <h2 class="sectionTitle">Угадай карту и получи скидку</h2>
-      <p class="rules">1 совпадение — 10 %, 2 — 15 %, 3 — 20 %. Колода обновляется каждые 10 с.</p>
-      <div class="gameWrap">
-        <div class="deck">
-          <div class="card"><div class="face"></div></div>
-          <div class="card"><div class="face"></div></div>
-          <div class="card"><div class="face"></div></div>
+    <div class="hero__overlay"></div>
+    <div class="hero__content">
+      <h1 class="title" data-txt="Дмитрий Костюк">Дмитрий&nbsp;Костюк</h1>
+      <p class="subtitle">Иллюзионные шоу • Ментализм • Микромагия</p>
+      <div class="metrics">
+        <div class="metric"><span class="metric__num" id="cClients">0</span><span class="metric__label">клиентов</span>
         </div>
-        <div class="selects"></div>
+        <div class="metric"><span class="metric__num" id="cYears">0</span><span class="metric__label">лет на
+            сцене</span></div>
+        <div class="metric"><span class="metric__num" id="cCities">0</span><span class="metric__label">городов</span>
+        </div>
+        <div class="metric"><span class="metric__num" id="cRating">0</span><span class="metric__label">рейтинг <span
+              style="background:#fc3;color:#000;padding:1px 3px;border-radius:3px;font-weight:700">Яндекс</span></span>
+        </div>
       </div>
-      <button id="guessBtn" class="btn" style="margin-top:.6rem" aria-label="Угадать карты">Угадать</button>
-      <div id="result"></div>
-      <div id="timer">10</div><div id="progress"><div id="fill"></div></div>
+      <div class="hero-cta">
+        <button class="btn btn--primary" type="button" id="heroBookBtn">Забронировать шоу</button>
+      </div>
+      <div class="scroll-hint">↓</div>
+    </div>
+  </section>
+
+  <!-- wave -->
+  <div class="wave"><svg viewBox="0 0 1440 40" preserveAspectRatio="none">
+      <path fill="#000" d="M0,20 C360,45 1080,-5 1440,20 L1440,0 L0,0 Z" />
+    </svg></div>
+
+  <!-- ===== BRANDS ===== -->
+  <section class="brands reveal">
+    <p class="brands__label">Нам доверяют</p>
+    <div class="brands__track" id="brandsTrack">
+      <!-- Set 1 -->
+      <div class="brand-item"><img src="images/brands/images.png" alt="Газпром" class="brand-logo"></div>
+      <div class="brand-item"><img src="images/brands/png-klev-club-09pb-p-magnit-logotip-png-6.png" alt="Магнит"
+          class="brand-logo"></div>
+      <div class="brand-item"><img src="images/brands/images.jpeg" alt="Роснефть" class="brand-logo"></div>
+      <div class="brand-item"><img src="images/brands/images-2.png" alt="Лукойл" class="brand-logo"></div>
+      <div class="brand-item"><img src="images/brands/tenzor sbis.png" alt="Тензор" class="brand-logo"></div>
+
+      <!-- Set 2 (Duplicate) -->
+      <div class="brand-item"><img src="images/brands/images.png" alt="Газпром" class="brand-logo"></div>
+      <div class="brand-item"><img src="images/brands/png-klev-club-09pb-p-magnit-logotip-png-6.png" alt="Магнит"
+          class="brand-logo"></div>
+      <div class="brand-item"><img src="images/brands/images.jpeg" alt="Роснефть" class="brand-logo"></div>
+      <div class="brand-item"><img src="images/brands/images-2.png" alt="Лукойл" class="brand-logo"></div>
+      <div class="brand-item"><img src="images/brands/tenzor sbis.png" alt="Тензор" class="brand-logo"></div>
+
+      <!-- Set 3 (Duplicate for wide screens) -->
+      <div class="brand-item"><img src="images/brands/images.png" alt="Газпром" class="brand-logo"></div>
+      <div class="brand-item"><img src="images/brands/png-klev-club-09pb-p-magnit-logotip-png-6.png" alt="Магнит"
+          class="brand-logo"></div>
+      <div class="brand-item"><img src="images/brands/images.jpeg" alt="Роснефть" class="brand-logo"></div>
+      <div class="brand-item"><img src="images/brands/images-2.png" alt="Лукойл" class="brand-logo"></div>
+      <div class="brand-item"><img src="images/brands/tenzor sbis.png" alt="Тензор" class="brand-logo"></div>
+    </div>
+  </section>
+
+  <!-- ===== URGENCY BANNER ===== -->
+  <div class="urgency reveal">
+    <div class="urgency__inner">
+      <span class="urgency__dot"></span>
+      <span class="urgency__text">Осталось <b id="urgencySlots">3</b> свободные даты в <span
+          id="urgencyMonth">феврале</span></span>
     </div>
   </div>
-</div>
 
-<!-- FAQ -->
-<div class="modal" id="modal-faq" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Вопросы">
-  <div class="modal__bg" data-close></div>
-  <div class="modal__panel">
-    <div class="modal__close"><button data-close aria-label="Закрыть">✕</button></div>
-    <div class="modal__body">
-      <h2 class="sectionTitle">Вопросы</h2>
-      <div class="qaList" id="faqList" aria-live="polite"></div>
+  <!-- wave -->
+  <div class="wave wave--flip"><svg viewBox="0 0 1440 40" preserveAspectRatio="none">
+      <path fill="#000" d="M0,20 C480,45 960,-5 1440,20 L1440,40 L0,40 Z" />
+    </svg></div>
+
+  <!-- ===== FORMATS ===== -->
+  <section class="section" id="formats">
+    <h2 class="sectionTitle reveal">Форматы выступления</h2>
+    <div class="packGrid">
+      <article class="pack reveal reveal-d1">
+        <div class="pack__icon">🎪</div>
+        <div class="pack__badge">Популярное</div>
+        <h3>Частные события</h3>
+        <div class="from">от 18&nbsp;500&nbsp;₽</div>
+        <ul>
+          <li>20–40 минут</li>
+          <li>Персонализация под событие</li>
+          <li>Интерактив со зрителями</li>
+        </ul>
+        <button class="btn btn--primary" data-book="Частное событие">Забронировать</button>
+      </article>
+      <article class="pack reveal reveal-d2">
+        <div class="pack__icon">🍸</div>
+        <h3>Микромагия · Корпоратив</h3>
+        <div class="from">от 13&nbsp;000&nbsp;₽</div>
+        <ul>
+          <li>30–180 минут, welcome-зоны</li>
+          <li>Фокусы в руках гостей</li>
+          <li>Идеально для банкетов</li>
+        </ul>
+        <button class="btn btn--primary" data-book="Корпоратив">Забронировать</button>
+      </article>
+      <article class="pack reveal reveal-d3">
+        <div class="pack__icon">🎭</div>
+        <h3>Концерт / «СЕКРЕТ»</h3>
+        <div class="from">от 150&nbsp;000&nbsp;₽</div>
+        <ul>
+          <li>1–2 часа, атмосферный спектакль</li>
+          <li>Сценическое оформление</li>
+          <li>Для больших залов</li>
+        </ul>
+        <button class="btn btn--primary" data-book="Концерт">Забронировать</button>
+      </article>
+    </div>
+  </section>
+
+  <!-- wave -->
+  <div class="wave"><svg viewBox="0 0 1440 40" preserveAspectRatio="none">
+      <path fill="#000" d="M0,15 C320,40 720,0 1080,30 C1260,40 1380,15 1440,20 L1440,0 L0,0 Z" />
+    </svg></div>
+
+  <!-- ===== HOW IT WORKS ===== -->
+  <section class="section" id="howItWorks">
+    <h2 class="sectionTitle reveal">Как это работает</h2>
+    <div class="process">
+      <div class="process__step reveal reveal-d1">
+        <div class="process__dot"></div>
+        <div class="process__num">Шаг 1</div>
+        <div class="process__title">Оставьте заявку</div>
+        <div class="process__desc">Нажмите «Забронировать» и заполните короткую форму — это займёт 30 секунд</div>
+      </div>
+      <div class="process__step reveal reveal-d2">
+        <div class="process__dot"></div>
+        <div class="process__num">Шаг 2</div>
+        <div class="process__title">Обсуждаем детали</div>
+        <div class="process__desc">Свяжусь с вами прямо в Telegram для уточнения формата и пожеланий</div>
+      </div>
+      <div class="process__step reveal reveal-d3">
+        <div class="process__dot"></div>
+        <div class="process__num">Шаг 3</div>
+        <div class="process__title">Готовлю шоу</div>
+        <div class="process__desc">Создаю уникальную программу, персонализированную под ваше событие</div>
+      </div>
+      <div class="process__step reveal reveal-d4">
+        <div class="process__dot"></div>
+        <div class="process__num">Шаг 4</div>
+        <div class="process__title">Магия на событии</div>
+        <div class="process__desc">Незабываемое шоу, эмоции гостей и воспоминания на всю жизнь</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== VIDEO ===== -->
+  <section class="section reveal" id="video">
+    <h2 class="sectionTitle">Шоурил</h2>
+    <div class="video-wrap">
+      <video controls playsinline preload="metadata" poster="images/портрет.jpg" style="object-position: 50% 40%;">
+        <source src="video/промо.MOV" type="video/quicktime">
+        <source src="video/промо.MOV" type="video/mp4">
+      </video>
+    </div>
+  </section>
+
+  <!-- wave -->
+  <div class="wave wave--flip"><svg viewBox="0 0 1440 40" preserveAspectRatio="none">
+      <path fill="#000" d="M0,20 C360,45 1080,-5 1440,20 L1440,40 L0,40 Z" />
+    </svg></div>
+
+  <!-- ===== ABOUT ===== -->
+  <section class="section reveal" id="about">
+    <h2 class="sectionTitle">Обо мне</h2>
+    <div class="about-text">
+      <p>Меня зовут <strong>Дмитрий Костюк</strong> — я профессиональный иллюзионист с многолетним опытом. Создаю
+        <strong>иллюзионные шоу</strong>, в которых каждый зритель становится соучастником волшебства.
+      </p>
+      <br>
+      <p>Работал с крупнейшими компаниями России, выступал на сотнях частных мероприятий. Каждое шоу —
+        <strong>уникальная история</strong>, созданная специально для вашего события.
+      </p>
+    </div>
+  </section>
+
+  <!-- ===== MAGIC CARD TRICK ===== -->
+  <section class="section magic reveal" id="magic">
+    <h2 class="sectionTitle">Испытайте магию</h2>
+    <p class="magic__hint" id="magicHint">Выберите одну карту</p>
+    <div class="deck" id="deck">
+      <div class="mcard" data-prize="0">
+        <div class="mcard__inner">
+          <div class="mcard__front">🂠</div>
+          <div class="mcard__back"><span class="prize-icon">🎩</span><span class="prize-text">Скидка 5%<br>на первое
+              шоу</span></div>
+        </div>
+      </div>
+      <div class="mcard" data-prize="1">
+        <div class="mcard__inner">
+          <div class="mcard__front">🂠</div>
+          <div class="mcard__back"><span class="prize-icon">✨</span><span class="prize-text">Секретный<br>БОНУС</span>
+          </div>
+        </div>
+      </div>
+      <div class="mcard" data-prize="2">
+        <div class="mcard__inner">
+          <div class="mcard__front">🂠</div>
+          <div class="mcard__back"><span class="prize-icon">🎁</span><span class="prize-text">Сюрприз<br>на
+              мероприятии</span></div>
+        </div>
+      </div>
+    </div>
+    <div id="magicResult"></div>
+  </section>
+
+  <!-- ===== REVIEWS ===== -->
+  <section class="section reveal" id="reviews">
+    <h2 class="sectionTitle">Отзывы</h2>
+    <div class="reviews-carousel" id="reviewsCarousel">
+      <div class="reviews-track" id="reviewsTrack">
+        <div class="review-card">
+          <div class="review-card__inner">
+            <div class="review-card__header">
+              <div class="review-card__avatar">А</div>
+              <div class="review-card__info"><span class="review-card__name">Анна</span><span
+                  class="review-card__meta">Свадьба · 2025</span></div>
+            </div>
+            <div class="review-card__stars">★★★★★</div>
+            <p class="review-card__text">«Это было невероятно! Гости до сих пор обсуждают, как вы это сделали. Спасибо
+              за магию!»</p>
+          </div>
+        </div>
+        <div class="review-card">
+          <div class="review-card__inner">
+            <div class="review-card__header">
+              <div class="review-card__avatar">С</div>
+              <div class="review-card__info"><span class="review-card__name">Сергей</span><span
+                  class="review-card__meta">Корпоратив · Технопарк</span></div>
+            </div>
+            <div class="review-card__stars">★★★★★</div>
+            <p class="review-card__text">«Приглашали на корпоратив. Очень стильно, тактично и смешно. Идеальный баланс.»
+            </p>
+          </div>
+        </div>
+        <div class="review-card">
+          <div class="review-card__inner">
+            <div class="review-card__header">
+              <div class="review-card__avatar">Е</div>
+              <div class="review-card__info"><span class="review-card__name">Елена</span><span
+                  class="review-card__meta">День рождения · 2025</span></div>
+            </div>
+            <div class="review-card__stars">★★★★★</div>
+            <p class="review-card__text">«Дети в восторге, взрослые в шоке. Лучший артист, которого мы видели.»</p>
+          </div>
+        </div>
+        <div class="review-card">
+          <div class="review-card__inner">
+            <div class="review-card__header">
+              <div class="review-card__avatar">М</div>
+              <div class="review-card__info"><span class="review-card__name">Максим</span><span
+                  class="review-card__meta">Корпоратив · 2024</span></div>
+            </div>
+            <div class="review-card__stars">★★★★★</div>
+            <p class="review-card__text">«Заказывали шоу на юбилей компании. Эффект превзошёл все ожидания. Рекомендую!»
+            </p>
+          </div>
+        </div>
+        <div class="review-card">
+          <div class="review-card__inner">
+            <div class="review-card__header">
+              <div class="review-card__avatar">И</div>
+              <div class="review-card__info"><span class="review-card__name">Ирина</span><span
+                  class="review-card__meta">Свадьба · 2024</span></div>
+            </div>
+            <div class="review-card__stars">★★★★★</div>
+            <p class="review-card__text">«Дмитрий создал настоящую атмосферу чуда. Каждый гость чувствовал себя
+              особенным.»</p>
+          </div>
+        </div>
+        <div class="review-card">
+          <div class="review-card__inner">
+            <div class="review-card__header">
+              <div class="review-card__avatar">О</div>
+              <div class="review-card__info"><span class="review-card__name">Олег</span><span
+                  class="review-card__meta">Юбилей · 2025</span></div>
+            </div>
+            <div class="review-card__stars">★★★★★</div>
+            <p class="review-card__text">«На юбилей мамы пригласили Дмитрия — это был лучший подарок. 80 гостей
+              аплодировали стоя!»</p>
+          </div>
+        </div>
+        <div class="review-card">
+          <div class="review-card__inner">
+            <div class="review-card__header">
+              <div class="review-card__avatar">Д</div>
+              <div class="review-card__info"><span class="review-card__name">Дарья</span><span
+                  class="review-card__meta">Выпускной · 2025</span></div>
+            </div>
+            <div class="review-card__stars">★★★★★</div>
+            <p class="review-card__text">«Заказали шоу на выпускной. Ребята были в шоке, учителя смеялись. Лучшее
+              завершение вечера!»</p>
+          </div>
+        </div>
+        <div class="review-card">
+          <div class="review-card__inner">
+            <div class="review-card__header">
+              <div class="review-card__avatar">А</div>
+              <div class="review-card__info"><span class="review-card__name">Алексей</span><span
+                  class="review-card__meta">Новогодний корпоратив</span></div>
+            </div>
+            <div class="review-card__stars">★★★★★</div>
+            <p class="review-card__text">«Третий год подряд приглашаем Дмитрия на новогодний корпоратив. Коллеги каждый
+              раз ждут с нетерпением.»</p>
+          </div>
+        </div>
+      </div>
+      <div class="reviews-dots" id="reviewsDots"></div>
+    </div>
+  </section>
+
+  <!-- wave -->
+  <div class="wave"><svg viewBox="0 0 1440 40" preserveAspectRatio="none">
+      <path fill="#000" d="M0,20 C480,45 960,-5 1440,20 L1440,0 L0,0 Z" />
+    </svg></div>
+
+  <!-- ===== GALLERY ===== -->
+  <section class="section reveal" id="gallerySection">
+    <h2 class="sectionTitle">Галерея</h2>
+    <div class="gallery" id="gallery">
+      <img src="photos/IMG_2206.JPG" alt="Фото с мероприятия" loading="lazy">
+      <img src="images/gallery/event-01.webp" alt="Фото с мероприятия" loading="lazy">
+      <img src="photos/_p8x0i6xxpsxg99ra7qnh_40.png" alt="Фото с мероприятия" loading="lazy">
+      <img src="images/gallery/event-04.webp" alt="Фото с мероприятия" loading="lazy">
+      <img src="images/gallery/event-05.webp" alt="Фото с мероприятия" loading="lazy">
+      <img src="images/gallery/event-06.webp" alt="Фото с мероприятия" loading="lazy">
+      <img src="images/gallery/event-07.webp" alt="Фото с мероприятия" loading="lazy">
+      <img src="images/gallery/event-08.webp" alt="Фото с мероприятия" loading="lazy">
+      <img src="images/gallery/event-10.webp" alt="Фото с мероприятия" loading="lazy">
+    </div>
+  </section>
+
+  <!-- wave -->
+  <div class="wave wave--flip"><svg viewBox="0 0 1440 40" preserveAspectRatio="none">
+      <path fill="#000" d="M0,15 C320,40 720,0 1080,30 C1260,40 1380,15 1440,20 L1440,40 L0,40 Z" />
+    </svg></div>
+
+  <!-- ===== FAQ ===== -->
+  <section class="section reveal" id="faq">
+    <h2 class="sectionTitle">Частые вопросы</h2>
+    <div class="qaList">
+      <details>
+        <summary>Как забронировать шоу?</summary>
+        <div>Нажмите «Забронировать» — заполните короткую форму. Заявка придёт мне мгновенно, и я свяжусь с вами в
+          Telegram в течение пары часов.</div>
+      </details>
+      <details>
+        <summary>За сколько бронировать?</summary>
+        <div>Рекомендую минимум за 2 недели. Популярные даты (Новый год, выпускные) бронируют за 1–2 месяца.</div>
+      </details>
+      <details>
+        <summary>В каких городах выступаете?</summary>
+        <div>Основная база — Ярославль, но выступаю по всей России. Выезд обсуждается индивидуально.</div>
+      </details>
+      <details>
+        <summary>Можно персонализировать шоу?</summary>
+        <div>Обязательно! Каждое выступление адаптируется под ваше событие: тематика, реквизит, сценарий.</div>
+      </details>
+      <details>
+        <summary>Что входит в стоимость?</summary>
+        <div>Полное шоу, реквизит, подготовка сценария. Выезд за пределы города обсуждается отдельно.</div>
+      </details>
+    </div>
+  </section>
+
+  <footer>
+    <div class="copy">&copy; 2026 &middot; Дмитрий Костюк &middot; Иллюзионист</div>
+  </footer>
+
+  <!-- ===== FLOATING BOOK BUTTON ===== -->
+  <button class="fab" id="fabBtn" aria-label="Забронировать">🎩</button>
+
+  <!-- ===== BOOKING MODAL ===== -->
+  <div class="modal" id="bookingModal">
+    <div class="modal__bg" id="bookingBg"></div>
+    <div class="modal__panel">
+      <button class="modal__close" id="bookingClose">✕</button>
+      <div id="bookingForm">
+        <h2>Забронировать</h2>
+        <div class="form-group">
+          <label>Ваше имя</label>
+          <input type="text" id="bName" placeholder="Как вас зовут?" maxlength="60" autocomplete="name">
+        </div>
+        <div class="form-group">
+          <label>Телефон / Telegram</label>
+          <input type="tel" id="bPhone" placeholder="+7..." maxlength="20" autocomplete="tel">
+        </div>
+        <div class="form-group">
+          <label>Формат мероприятия</label>
+          <select id="bType">
+            <option value="Частное событие">🎪 Частное событие</option>
+            <option value="Корпоратив">🍸 Корпоратив</option>
+            <option value="Концерт">🎭 Концерт</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Желаемая дата</label>
+          <input type="date" id="bDate">
+        </div>
+        <div class="form-group">
+          <label>Пожелания (необязательно)</label>
+          <textarea id="bNote" placeholder="Расскажите о вашем событии..." maxlength="500" rows="2"></textarea>
+        </div>
+        <button class="btn btn--primary" style="width:100%;margin-top:.4rem" id="submitBooking">Отправить
+          заявку</button>
+      </div>
+      <div id="bookingSuccess">
+        <div class="success-icon">✅</div>
+        <h2 style="color:var(--gold);font-family:var(--ff-head);margin-bottom:.5rem">Заявка отправлена!</h2>
+        <p style="color:#999;line-height:1.5">Я свяжусь с вами в ближайшее время прямо в Telegram</p>
+      </div>
     </div>
   </div>
-</div>
 
-<!-- Галерея -->
-<div class="modal" id="modal-gallery" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Галерея">
-  <div class="modal__bg" data-close></div>
-  <div class="modal__panel">
-    <div class="modal__close"><button data-close aria-label="Закрыть">✕</button></div>
-    <div class="modal__body">
-      <h2 class="sectionTitle">Галерея</h2>
-      <div class="gallery" id="galleryGrid"></div>
-    </div>
+  <!-- ===== LIGHTBOX ===== -->
+  <div class="lightbox" id="lightbox">
+    <button class="lightbox__close" id="lbClose">✕</button>
+    <button class="lightbox__nav lightbox__nav--prev" id="lbPrev">‹</button>
+    <button class="lightbox__nav lightbox__nav--next" id="lbNext">›</button>
+    <img class="lightbox__img" id="lbImg" alt="">
   </div>
-</div>
 
-<!-- Лайтбокс -->
-<div class="lightbox" id="lightbox" aria-hidden="true">
-  <img alt=""><div class="modal__bg" data-close></div>
-</div>
-
-<!-- ===== JS ===== -->
-<script>
-/* Регистрация SW (PWA) */
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', ()=> {
-    navigator.serviceWorker.register('/sw.js').catch(()=>{});
-  });
-}
-
-/* аналитика */
-function track(event, params){
-  try{ if(window.gtag) gtag('event', event, params||{}); }catch(e){}
-  try{ if(window.ym && window.YA_METRICA_ID) ym(window.YA_METRICA_ID,'reachGoal',event, params||{}); }catch(e){}
-}
-
-/* WebP фон */
-(function(){ var img=new Image(); img.onload=function(){ if(img.width>0) document.documentElement.style.setProperty('--hero-photo',"url('images/portrait.webp')"); }; img.src='images/portrait.webp'; })();
-
-/* iOS 100vh фикса */
-(function(){ function setVH(){ document.documentElement.style.setProperty('--vh', window.innerHeight + 'px'); } setVH(); addEventListener('resize', setVH); addEventListener('orientationchange', setVH); })();
-
-/* Burger */
-(function(){
-  const btn=document.getElementById('burger'), menu=document.getElementById('mainMenu');
-  function toggle(force){
-    const isOpen = force ?? !menu.classList.contains('open');
-    menu.classList.toggle('open', isOpen);
-    btn.setAttribute('aria-expanded', isOpen? 'true':'false');
-    menu.setAttribute('aria-hidden', isOpen? 'false':'true');
-  }
-  btn.addEventListener('click',()=>toggle());
-  document.addEventListener('click',e=>{
-    if(menu.classList.contains('open') && !e.target.closest('.menu') && !e.target.closest('#burger')) toggle(false);
-  }, {capture:true});
-})();
-
-/* Модалки */
-(function(){
-  const menu   = document.getElementById('mainMenu');
-  const burger = document.getElementById('burger');
-
-  function closeBurger(){
-    if(menu && menu.classList.contains('open')){
-      menu.classList.remove('open');
-      burger?.setAttribute('aria-expanded','false');
-      menu.setAttribute('aria-hidden','true');
+  <script>
+    /* ===== TELEGRAM WEBAPP INIT ===== */
+    var tg = window.Telegram && window.Telegram.WebApp;
+    if (tg) {
+      tg.ready();
+      tg.expand();
+      tg.setHeaderColor('#000000');
+      tg.setBackgroundColor('#000000');
     }
-  }
+    function haptic(t) { try { tg && tg.HapticFeedback && tg.HapticFeedback.impactOccurred(t || 'light') } catch (e) { } }
 
-  function ensurePromo(){
-    const box=document.getElementById('promoPlayer'); if(!box||box.dataset.ready) return;
-    const PROMO_ID='a692a6ad3b922abc4cfad5be5898431b';
-    const PROMO_TOKEN='fYkka8t4Y185Rseslz6CRg';
-    box.innerHTML = '<iframe src="https://rutube.ru/play/embed/'+PROMO_ID+'?autoplay=1&p='+PROMO_TOKEN+'" allow="autoplay; fullscreen; picture-in-picture; encrypted-media" allowfullscreen title="Промо"></iframe>';
-    box.dataset.ready='1';
-  }
-  function teardownPromo(){ const box=document.getElementById('promoPlayer'); if(box){ box.innerHTML=''; delete box.dataset.ready; } }
-
-  function openModal(id){
-    const m=document.getElementById('modal-'+id); if(!m) return;
-    closeBurger();
-    m.classList.add('open');
-    if(id==='promo') ensurePromo();
-    if(id==='discount') track('discount_open');
-  }
-  function closeModal(m){
-    if(!m) return;
-    if(m.id==='modal-promo') teardownPromo();
-    m.classList.remove('open');
-    m.dispatchEvent(new CustomEvent('modal:closed'));
-  }
-
-  addEventListener('click', e=>{
-    const op = e.target.closest && e.target.closest('[data-open]');
-    if(op){
-      e.preventDefault();
-      openModal(op.getAttribute('data-open'));
-      return;
-    }
-    if(e.target.hasAttribute && e.target.hasAttribute('data-close')){
-      closeModal(e.target.closest('.modal'));
-      return;
-    }
-    if(e.target.classList && e.target.classList.contains('modal__bg')){
-      closeModal(e.target.closest('.modal'));
-      return;
-    }
-  });
-
-  addEventListener('keydown', e=>{
-    if(e.key==='Escape'){
-      document.querySelectorAll('.modal.open').forEach(closeModal);
-    }
-  });
-})();
-
-/* FAB вверх/вниз */
-(function(){
-  const fab=document.getElementById('fab'), iconPath=document.getElementById('fabPath');
-  function updateArrow(){ const atTop=scrollY<=10; iconPath.setAttribute('d', atTop ? 'M12 16 18 10H6z' : 'M12 8 6 14h12z'); fab.setAttribute('aria-label', atTop ? 'Вниз' : 'Вверх'); }
-  updateArrow(); addEventListener('scroll',updateArrow,{passive:true}); addEventListener('resize',updateArrow);
-  fab.onclick=()=>{ const atTop=scrollY<=10; scrollTo({top: atTop ? document.documentElement.scrollHeight : 0, behavior:'smooth'}); iconPath.setAttribute('d', atTop ? 'M12 8 6 14h12z' : 'M12 16 18 10H6z'); };
-})();
-
-/* Счётчик клиентов */
-(()=>{ 
-  const BASE_SHOWS=1838,BASE_YEARS=7,BASE_YEAR=2024,STEP=100;
-  const diff=new Date().getFullYear()-BASE_YEAR, targetShows=BASE_SHOWS+STEP*diff,targetYears=BASE_YEARS+diff;
-  const span=document.getElementById('shows'),exp=document.getElementById('exp'),dur=1800; if(!span||!exp) return;
-  function animate(){ const t0=performance.now(); (function tick(t){const p=Math.min(1,(t-t0)/dur); span.textContent=Math.floor(targetShows*p).toLocaleString('ru-RU'); if(p<1) requestAnimationFrame(tick); else exp.textContent=`${targetYears} лет опыта`; })(t0); }
-  if('IntersectionObserver' in window){ const io=new IntersectionObserver(([e],o)=>{ if(!e.isIntersecting) return; o.disconnect(); animate(); },{threshold:.6}); io.observe(span); } else animate();
-})();
-
-/* Игра */
-(()=>{
-const modal=document.getElementById('modal-discount'); if(!modal) return;
-const ranks=["A","2","3","4","5","6","7","8","9","10","J","Q","K"];
-const suits=[["S","♠"],["H","♥"],["D","♦"],["C","♣"]];
-const sym=s=>suits.find(v=>v[0]===s)[1];
-const img=c=>`https://deckofcardsapi.com/static/img/${c.replace('10','0')}.png`;
-ranks.forEach(r=>suits.forEach(([c])=>{ const l=document.createElement('link'); l.rel='preload'; l.as='image'; l.href=img(r+c); document.head.appendChild(l); }));
-const selWrap=modal.querySelector('.selects'), cards=[...modal.querySelectorAll('.card')], faces=[...modal.querySelectorAll('.face')],
-      timer=modal.querySelector('#timer'), bar=modal.querySelector('#fill'), btn=modal.querySelector('#guessBtn'), result=modal.querySelector('#result');
-if(cards.length!==3||faces.length!==3) return;
-let selects=[];
-function buildSelects(){
-  selWrap.innerHTML=''; selects=[];
-  for(let i=0;i<3;i++){
-    const s=document.createElement('select'); s.className='cardSel'; s.required=true;
-    s.innerHTML='<option value="" selected disabled hidden>Карта</option>';
-    ranks.forEach(r=>suits.forEach(([c])=>{ s.insertAdjacentHTML('beforeend',`<option value="${r+c}" style="color:${(c==='H'||c==='D')?'#c11':'#000'}">${r+sym(c)}</option>`); }));
-    selects.push(s); selWrap.appendChild(s);
-  }
-  selects.forEach(sel=>sel.addEventListener('change',()=>{ const ch=selects.map(s=>s.value); selects.forEach(s2=>[...s2.options].forEach(o=>{ if(!o.value) return; o.disabled = ch.includes(o.value)&&s2!==sel; })); }));
-}
-const rand=a=>a[(Math.random()*a.length)|0];
-const uniq=a=>{ let c; do{ c=rand(ranks)+rand(suits)[0]; }while(a.includes(c)); return c; };
-const smoke=c=>{ for(let i=0;i<3;i++){ const s=document.createElement('span'); s.style.cssText='position:absolute;left:50%;bottom:50%;width:14px;height:14px;border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,.9)0,rgba(255,255,255,0)70%);pointer-events:none;animation:puff .9s ease-out forwards'; s.style.left=`calc(50% + ${(Math.random()-.5)*20}px)`; s.style.animationDelay=`${i*0.12}s`; c.appendChild(s); s.onanimationend=()=>s.remove(); } };
-let secret=[],t=10,int,tried=false;
-function nextRound(){
-  tried=false; secret=[]; while(secret.length<3) secret.push(uniq(secret));
-  faces.forEach(f=>f.innerHTML=''); cards.forEach(c=>c.classList.remove('flipped'));
-  result.textContent=''; selects.forEach(s=>{ s.selectedIndex=0; [...s.options].forEach(o=>o.disabled=false); });
-  t=10; timer.textContent=t; if(bar) bar.style.transform='scaleX(1)'; clearInterval(int);
-  int=setInterval(()=>{t--; timer.textContent=t; if(bar) bar.style.transform=`scaleX(${t/10})`; if(!t) nextRound();},1000);
-}
-document.querySelectorAll('[data-open="discount"]').forEach(b=>b.addEventListener('click',()=>{ buildSelects(); nextRound(); }));
-modal.addEventListener('modal:closed', ()=>{ clearInterval(int); result.textContent=''; });
-btn.onclick=()=>{
-  if(tried) return;
-  if(!selects.every(s=>s.value)){ alert('Выберите три разные карты'); return; }
-  clearInterval(int); tried=true;
-  const picks=selects.map(s=>s.value), hits=picks.filter(c=>secret.includes(c)).length, disc=[0,10,15,20][hits];
-  secret.forEach((c,i)=>{ faces[i].innerHTML=`<img src="${img(c)}" alt="">`; cards[i].classList.add('flipped'); smoke(cards[i]); });
-  result.textContent = disc ? `Поздравляем! Скидка ${disc}%` : 'Увы, скидки нет.';
-  if(disc){ sessionStorage.setItem('promoDiscount',disc); track('discount_win',{value:disc}); if(window.recalcIfReady) window.recalcIfReady(); }
-};
-})();
-
-/* ===== Калькулятор ===== */
-(()=>{
-const travel={
- "Вологодская":{fee:9000,cities:{Вологда:9000,Череповец:15000,Сокол:12000}},
- "Владимирская":{fee:10000,cities:{Владимир:10000,Ковров:10000,Муром:17000,Александров:10000,"Гусь хрустальный":13500}},
- "Ивановская":{fee:5000,cities:{Иваново:2000,Кинешма:3500,Шуя:3000,Тейково:2500,Кохма:2500,Вичуга:3000,Фурманов:2500,Родники:3000,Приволжск:2000,Южа:4000}},
- "Костромская":{fee:3000,cities:{Кострома:2000,Шарья:6000,Нерехта:2000,Буй:3000,Волгореченск:2000,Мантурово:5500,Галич:3500}},
- "Ярославская":{fee:1000,cities:{Ярославль:0,Рыбинск:2000,Тутаев:2000,"Переславль-Залесский":2000,Углич:2000,Ростов:2000,"Гаврилов Ям":2000,Данилов:2000,Пошехонье:4000,Мышкин:2000,Любим:2000}}
-};
-const p=v=>({p:v});
-const services={
- kids:{
-  "Детское шоу (30 минут)":          p(9000*1.25),
-  "Детское шоу (40 минут)":          p(11000*1.25),
-  "Индив. детское шоу (30 мин)":     {p:17000*1.25,d:"30 мин шоу + фокус имениннику + мастер-класс (11-й ребёнок +1000 ₽)"}
- },
- std:{
-  "Взрослое шоу (20 минут)":         {p:17500,d:"Сет из 3–4 трюков"},
-  "Взрослое шоу (30 минут)":         {p:23750,d:"Универсальный вариант"},
-  "Взрослое шоу (40 минут)":         {p:30000,d:"Расширенный вариант"}
- },
- close:{
-  "Микромагия (30 мин)":             {p:13000,d:"Фокусы в руках гостей"},
-  "Микромагия (1 ч)":                {p:20000,d:"Обход всех гостей"},
-  "Микромагия (2 ч)":                {p:30000,d:"Welcome-зона 80–120 чел."},
-  "Микромагия (3 ч)":                {p:36000,d:"Максимальное покрытие"}
- },
- spec:{
-  "Свадебное шоу (20 мин)":          {p:26250,d:"Романтичный блок"},
-  "Свадебное шоу (30 мин)":          {p:32500,d:"Расширенный свадебный"},
-  "Корпоратив (20 мин)":             {p:26250,d:"Юмор + участие сотрудников"},
-  "Корпоратив (30 мин)":             {p:32500,d:"Расширенный корпоратив"},
-  "Юбилей (20 мин)":                 {p:23750,d:"Фокус-подарок юбиляру"},
-  "Юбилей (30 мин)":                 {p:30000,d:"Расширенный юбилей"},
-  "Выпускной (20 мин)":              {p:23750,d:"Современный блок"},
-  "Выпускной (30 мин)":              {p:30000,d:"Расширенный выпускной"}
- },
- conc:{
-  "Мини-шоу «СЕКРЕТ» (1 ч)":         {p:150000,d:"Атмосферный моно-спектакль"},
-  "Спектакль «СЕКРЕТ» (2 ч)":        {p:300000,d:"Полноценный концерт с антрактом"}
- }
-};
-
-const f=document.getElementById('calcForm'); if(!f) return;
-const area=f.area, city=f.city, when=f.when, guests=f.guests,
-      slider=document.getElementById('slider'), gRange=document.getElementById('gRange'), gNum=document.getElementById('gNum'),
-      cat=f.cat, svc=f.svc, desc=document.getElementById('desc'),
-      calcBtn=document.getElementById('calcBtn'),
-      total=document.getElementById('total'),
-      breakdown=document.getElementById('breakdown'),
-      afterCalc=document.getElementById('afterCalc');
-
-(function(){ const d=new Date(); d.setDate(d.getDate()+1); when.min = d.toISOString().split('T')[0]; })();
-
-Object.keys(travel).forEach(r=>area.add(new Option(r,r)));
-function fillSel(sel,obj){ sel.innerHTML='<option disabled selected hidden>Программа</option>'; Object.keys(obj).forEach(k=>sel.add(new Option(k,k))); }
-const fmt=n=>Number(n).toLocaleString('ru-RU');
-
-const hol = (d)=>{ if(!d) return 1; const dt=new Date(d), m=dt.getMonth()+1, day=dt.getDate();
-  if ((m===12 && day===31) || (m===1 && (day===1 || day===2))) return 2;
-  if (m===12 && day>=8 && day<=30) return 1.5; return 1; };
-
-const roadHol = (d)=>{ if(!d) return 1; const dt=new Date(d), m=dt.getMonth()+1, day=dt.getDate();
-  if ((m===12 && day===31) || (m===1 && (day===1 || day===2))) return 2;
-  if (m===12 && day>=8 && day<=30) return 1.5;
-  if (m===2 && (day===22 || day===23)) return 1.5;
-  if (m===3 && (day===7 || day===8)) return 1.5; return 1; };
-
-area.onchange=()=>{ city.disabled=false; city.innerHTML='<option disabled selected hidden>Город</option>'; Object.keys(travel[area.value].cities).forEach(c=>city.add(new Option(c,c))); };
-[city,when].forEach(el=>el.onchange=()=>el.style.borderColor='');
-guests.onchange=()=>{ slider.style.display=guests.value==='custom'?'flex':'none'; };
-gRange.oninput=()=> gNum.textContent=gRange.value;
-cat.onchange=()=>{ svc.disabled=false; fillSel(svc,services[cat.value]); desc.textContent=''; };
-svc.onchange=()=>{ desc.textContent= services[cat.value][svc.value].d || ''; };
-
-function isFilled(){ return area.value && city.value && when.value && guests.value && cat.value && svc.value; }
-
-function calc(){
-  let base=services[cat.value][svc.value].p;
-  const isYaroslavl = (area.value==='Ярославская' && city.value==='Ярославль');
-  if(isYaroslavl) base += 1000; // дорога «вшита»
-
-  const roadBase = (travel[area.value].cities[city.value]!==undefined
-                    ? travel[area.value].cities[city.value]
-                    : travel[area.value].fee);
-
-  const rCoef = roadHol(when.value);
-  const roadExtra = Math.round(roadBase * (rCoef - 1));
-  const guest=(guests.value==='custom'?(gRange.value-200)*80:+guests.value);
-  const sub = base + roadBase + roadExtra + guest;
-  const hCoef = hol(when.value);
-  const holUp = Math.round(sub * (hCoef - 1));
-  const discP=+sessionStorage.getItem('promoDiscount')||0;
-  const disc=Math.round((sub+holUp)*discP/100);
-  const sum=sub+holUp-disc;
-  const fmtCoef = c => (c===1? '' : ` (×${c})`);
-
-  total.textContent='Итого — '+fmt(sum)+' ₽';
-  total.style.display='block';
-  total.classList.add('flash'); setTimeout(()=>total.classList.remove('flash'),900);
-
-  const roadLine = isYaroslavl ? 'Бесплатно' : fmt(roadBase)+' ₽';
-  breakdown.innerHTML=
-    `База: ${fmt(base + guest)} ₽`+
-    `<br>— Услуга: ${fmt(base)} ₽`+
-    `<br>— Дорога: ${roadLine}`+
-    (roadExtra>0? `<br>— Надбавка за дорогу: +${fmt(roadExtra)} ₽${fmtCoef(rCoef)}` : '')+
-    `<br>— Гости: ${fmt(guest)} ₽`+
-    (holUp? `<br>Праздничная надбавка: +${fmt(holUp)} ₽${fmtCoef(hCoef)}` : '')+
-    (disc? `<br>Скидка ${discP}%: −${fmt(disc)} ₽` : '')+
-    `<br><b>К оплате: ${fmt(sum)} ₽</b>`;
-  breakdown.style.display='block';
-  afterCalc.style.display='flex';
-
-  window.orderData={ area:area.value, city:city.value, date:when.value,
-    guests:(guests.value==='custom'?gRange.value+'+':guests.options[guests.selectedIndex].text),
-    service:svc.value, price:fmt(sum)+' ₽', discount:discP?discP+'%':'нет', roadCoef:rCoef, holidayCoef:hCoef };
-
-  total.scrollIntoView({behavior:'smooth', block:'center'});
-  track('calc_calculated',{value:sum, road_coef:rCoef, holiday_coef:hCoef});
-}
-calcBtn.addEventListener('click', ()=>{
-  if(!isFilled()){ [area,city,when,guests,cat,svc].forEach(el=> el.style.borderColor = el.value ? '' : '#C64545'); return; }
-  [area,city,when,guests,cat,svc].forEach(el=> el.style.borderColor=''); calc();
-});
-window.recalcIfReady = ()=>{ if(isFilled()) calc(); };
-})();
-
-/* FAQ */
-(function(){
-  const FAQ = [
-    { q: "За сколько бронировать дату?", a: "Обычно за 1–2 недели; популярные даты — за месяц и раньше." },
-    { q: "Какой размер задатка?", a: "50 % от согласованной суммы. Остальное — в день мероприятия." },
-    { q: "Всё ли входит в стоимость?", a: "Да, цена «под ключ» без скрытых платежей." },
-    { q: "Сколько длится программа?", a: "Частные шоу — 20–40 мин, микромагия — до 3 ч, концерт — 1–2 ч." },
-    { q: "Можно персонализировать трюк?", a: "Да! Подготовим номер под вашего именинника/бренд/событие." },
-    { q: "Нужна ли сцена?", a: "Чаще нет. Для больших залов и концертной программы — по согласованию." },
-    { q: "Что по звуку и аппаратуре?", a: "С ведущим — всё готово. Без ведущего нужна активная колонка/микрофон. Для концерта — технический райдер." },
-    { q: "Сколько занимает подготовка?", a: "Около 30 мин; для концертной программы — до 1 ч." },
-    { q: "Выезжаете в другие регионы?", a: "Да, работаю в нескольких областях и выезжаю по стране." },
-    { q: "Способы оплаты?", a: "Безнал, СБП, наличные. Предусмотрен договор и чек." },
-    { q: "Какой возраст для детских шоу?", a: "Для детей 8+; для младших — по согласованию и с адаптацией интерактива." },
-    { q: "Можно снимать фото/видео?", a: "Да, съёмка приветствуется." },
-    { q: "Есть ли официальное оформление?", a: "Да, работаю по договору, предоставляю кассовый чек." },
-    { q: "Возможна площадка под открытым небом?", a: "Летом при безветренной погоде, с резервным планом на дождь." },
-    { q: "Безопасны ли спецэффекты?", a: "Используются только сертифицированные и безопасные эффекты." },
-    { q: "Можно ли интегрировать бренд компании?", a: "Да, интегрируем лого и смыслы бренда в интерактив и номера." },
-    { q: "Что если дата переносится?", a: "Перенос возможен при наличии свободного слота; условия фиксируем в договоре." },
-    { q: "Какой формат аудитории подходит?", a: "От камерных вечеринок 10–20 гостей до залов на 500+ человек." },
-    { q: "Проводите мастер-классы?", a: "Да: 60 мин обучения + реквизит, участники показывают фокус сразу." }
-  ];
-  const box = document.getElementById('faqList'); if(!box) return;
-  box.innerHTML = FAQ.map((item,i)=>`<details><summary>${i+1}. ${item.q}</summary><div>${item.a}</div></details>`).join('');
-})();
-
-/* Галерея + лайтбокс */
-(function(){
-  const GALLERY_FILES = [
-    'images/gallery/event-01.webp','images/gallery/event-02.webp','images/gallery/event-03.webp','images/gallery/event-04.webp',
-    'images/gallery/event-05.webp','images/gallery/event-06.webp','images/gallery/event-07.webp','images/gallery/event-08.webp',
-    'images/gallery/event-09.webp','images/gallery/event-10.webp'
-  ];
-  const grid=document.getElementById('galleryGrid');
-  const lb=document.getElementById('lightbox'), lbImg=lb?.querySelector('img');
-  if(grid){
-    grid.innerHTML='';
-    GALLERY_FILES.forEach(src=>{
-      const img=document.createElement('img');
-      img.src=src; img.loading='lazy'; img.decoding='async'; img.alt='';
-      img.addEventListener('click',()=>{ if(lb && lbImg){ lbImg.src=src; lb.classList.add('open'); }});
-      grid.appendChild(img);
+    /* ===== PRELOADER ===== */
+    window.addEventListener('load', function () {
+      setTimeout(function () { document.getElementById('preloader').classList.add('hidden') }, 800);
     });
-  }
-  lb?.addEventListener('click',e=>{ if(e.target===lb || e.target.classList.contains('modal__bg')) lb.classList.remove('open'); });
-  document.addEventListener('keydown',e=>{ if(e.key==='Escape' && lb?.classList.contains('open')) lb.classList.remove('open'); });
-})();
 
-/* Отправка заявки + антиспам */
-(function(){
-const form = document.getElementById('orderForm'); if(!form) return;
-const tsEl = document.getElementById('form_ts');
-const sigEl = document.getElementById('form_sig');
-const hpEl = document.getElementById('hp_website');
-const submitBtn = document.getElementById('submitBtn');
+    /* ===== SCROLL PROGRESS BAR ===== */
+    var progressBar = document.getElementById('scrollProgress');
+    window.addEventListener('scroll', function () {
+      var max = document.documentElement.scrollHeight - window.innerHeight;
+      if (max > 0) progressBar.style.width = (window.scrollY / max * 100) + '%';
+    }, { passive: true });
 
-// отметка времени рендера формы
-const ts0 = Date.now();
-tsEl.value = ts0;
+    /* ===== SCROLL REVEAL ===== */
+    var revealObs = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting) { e.target.classList.add('visible'); revealObs.unobserve(e.target) }
+      });
+    }, { threshold: .12, rootMargin: '0px 0px -30px 0px' });
+    document.querySelectorAll('.reveal').forEach(function (el) { revealObs.observe(el) });
 
-// простая подпись на клиенте (для сервера — необязательна, но добавим)
-sigEl.value = btoa(String(ts0).split('').reverse().join(''));
+    /* ===== COUNTER ANIMATION ===== */
+    function animNum(el, target, duration, decimal) {
+      var start = 0;
+      function step(ts) {
+        if (!start) start = ts;
+        var p = Math.min((ts - start) / duration, 1);
+        var val = p * target;
+        el.textContent = decimal ? val.toFixed(1) : Math.floor(val);
+        if (p < 1) requestAnimationFrame(step);
+      }
+      requestAnimationFrame(step);
+    }
+    var counterObs = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting) {
+          animNum(document.getElementById('cClients'), 1000, 2000);
+          animNum(document.getElementById('cYears'), 10, 1500);
+          animNum(document.getElementById('cCities'), 50, 1800);
+          animNum(document.getElementById('cRating'), 4.9, 1200, true);
+          counterObs.unobserve(e.target);
+        }
+      });
+    }, { threshold: .5 });
+    counterObs.observe(document.querySelector('.metrics'));
 
-// ленивая нормализация телефона перед отправкой
-function normalizePhone(v){ return (v||'').replace(/\D+/g,'').replace(/^7/,''); }
+    /* ===== PARTICLES ===== */
+    (function () {
+      var c = document.getElementById('particles'), ctx = c.getContext('2d'), w, h, ps = [];
+      function resize() { w = c.width = innerWidth; h = c.height = innerHeight }
+      resize(); addEventListener('resize', resize);
+      function P() { this.reset() }
+      P.prototype.reset = function () { this.x = Math.random() * w; this.y = Math.random() * h; this.s = Math.random() * 2 + .5; this.a = Math.random() * .4 + .1; this.vy = -(Math.random() * .3 + .1); this.vx = (Math.random() - .5) * .2; this.life = Math.random() * 200 + 100; this.t = 0 };
+      P.prototype.update = function () { this.x += this.vx; this.y += this.vy; this.t++; if (this.t > this.life || this.y < 0) this.reset() };
+      P.prototype.draw = function () { var fade = 1 - this.t / this.life; ctx.globalAlpha = this.a * fade; ctx.fillStyle = '#E7C776'; ctx.beginPath(); ctx.arc(this.x, this.y, this.s, 0, Math.PI * 2); ctx.fill() };
+      for (var i = 0; i < 35; i++)ps.push(new P());
+      function loop() { ctx.clearRect(0, 0, w, h); ps.forEach(function (p) { p.update(); p.draw() }); requestAnimationFrame(loop) }
+      loop();
+    })();
 
-form.addEventListener('submit', async (e)=>{
-  e.preventDefault();
+    /* ===== REVIEWS CAROUSEL ===== */
+    (function () {
+      var track = document.getElementById('reviewsTrack'), dots = document.getElementById('reviewsDots');
+      var cards = track.querySelectorAll('.review-card'), cur = 0, timer;
+      cards.forEach(function (_, i) { var d = document.createElement('span'); if (!i) d.classList.add('active'); dots.appendChild(d) });
+      function goTo(i) { cur = i; track.style.transform = 'translateX(-' + i * 100 + '%)'; dots.querySelectorAll('span').forEach(function (d, j) { d.classList.toggle('active', j === i) }) }
+      function next() { goTo((cur + 1) % cards.length) }
+      timer = setInterval(next, 4000);
+      var sx;
+      track.addEventListener('touchstart', function (e) { sx = e.touches[0].clientX; clearInterval(timer) }, { passive: true });
+      track.addEventListener('touchend', function (e) { var dx = e.changedTouches[0].clientX - sx; if (Math.abs(dx) > 40) { dx < 0 ? goTo(Math.min(cur + 1, cards.length - 1)) : goTo(Math.max(cur - 1, 0)) } timer = setInterval(next, 4000) }, { passive: true });
+      dots.addEventListener('click', function (e) { if (e.target.tagName === 'SPAN') { goTo([].indexOf.call(dots.children, e.target)); clearInterval(timer); timer = setInterval(next, 4000) } });
+    })();
 
-  // антиспам: honeypot пуст и прошло >= 5 секунд
-  const tooFast = (Date.now() - ts0) < 5000;
-  if (hpEl.value || tooFast) {
-    alert('Похоже на авто-отправку. Повторите, пожалуйста.');
-    return;
-  }
+    /* ===== GALLERY LIGHTBOX ===== */
+    (function () {
+      var lb = document.getElementById('lightbox'), img = document.getElementById('lbImg');
+      var imgs = [].slice.call(document.querySelectorAll('#gallery img')), ci = 0;
+      imgs.forEach(function (im, i) { im.addEventListener('click', function () { ci = i; img.src = im.src; lb.classList.add('open'); haptic('light') }) });
+      document.getElementById('lbClose').addEventListener('click', function () { lb.classList.remove('open') });
+      document.getElementById('lbPrev').addEventListener('click', function () { ci = (ci - 1 + imgs.length) % imgs.length; img.src = imgs[ci].src });
+      document.getElementById('lbNext').addEventListener('click', function () { ci = (ci + 1) % imgs.length; img.src = imgs[ci].src });
+      lb.addEventListener('click', function (e) { if (e.target === lb) lb.classList.remove('open') });
+      var tx;
+      lb.addEventListener('touchstart', function (e) { tx = e.touches[0].clientX }, { passive: true });
+      lb.addEventListener('touchend', function (e) { var d = e.changedTouches[0].clientX - tx; if (Math.abs(d) > 50) { d < 0 ? document.getElementById('lbNext').click() : document.getElementById('lbPrev').click() } }, { passive: true });
+    })();
 
-  // валидация телефона
-  const phoneInput = form.querySelector('input[name="phone"]');
-  phoneInput.value = normalizePhone(phoneInput.value);
-  if (!/^\d{10}$/.test(phoneInput.value)) {
-    alert('Введите телефон: 10 цифр без кода +7');
-    phoneInput.focus();
-    return;
-  }
+    /* ===== MAGIC CARD TRICK ===== */
+    (function () {
+      var cards = document.querySelectorAll('.mcard'), played = false;
+      var results = ['Скидка 5% — ваша! Упомяните при бронировании', 'Вы выиграли Секретный БОНУС к заказу!', 'Сюрприз ждёт вас на мероприятии!'];
+      var resultEl = document.getElementById('magicResult'), hintEl = document.getElementById('magicHint');
+      cards.forEach(function (card) {
+        card.addEventListener('click', function () {
+          if (played) return;
+          played = true;
+          haptic('medium');
+          var idx = parseInt(card.dataset.prize);
+          card.classList.add('winner');
+          cards.forEach(function (c) { c.classList.add('flipped') });
+          setTimeout(function () {
+            resultEl.textContent = results[idx];
+            resultEl.classList.add('show');
+            hintEl.textContent = 'Нажмите «Забронировать», чтобы активировать';
+            haptic('success');
+          }, 700);
+        });
+      });
+    })();
 
-  // защита от повторной отправки
-  submitBtn.disabled = true;
+    /* ===== BOOKING MODAL ===== */
+    (function () {
+      var modal = document.getElementById('bookingModal');
+      var form = document.getElementById('bookingForm');
+      var success = document.getElementById('bookingSuccess');
+      var nameInput = document.getElementById('bName');
 
-  const fd=new FormData(form), data={}; fd.forEach((v,k)=>data[k]=typeof v==='string'?v.trim():v);
-  data.ts = tsEl.value; data.sig = sigEl.value;
-  data.order = window.orderData||{};
+      function open(type) {
+        if (type) document.getElementById('bType').value = type;
+        if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user && !nameInput.value) {
+          var u = tg.initDataUnsafe.user;
+          nameInput.value = u.first_name + (u.last_name ? ' ' + u.last_name : '');
+        }
+        form.style.display = 'block';
+        success.style.display = 'none';
+        modal.classList.add('open');
+        haptic('medium');
+      }
+      function close() { modal.classList.remove('open') }
 
-  try{
-    const ctl = new AbortController();
-    const t = setTimeout(()=>ctl.abort(), 12000);
-    const res = await fetch('https://site76-azure.vercel.app/api/lead', {
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body: JSON.stringify(data),
-      signal: ctl.signal,
-      credentials: 'omit'
-    });
-    clearTimeout(t);
-    if(!res.ok) throw new Error('HTTP '+res.status);
-    form.style.display='none'; document.getElementById('thanks').style.display='block';
-    track('order_submit');
-  }catch(err){
-    alert('Не удалось отправить заявку. Сообщите, пожалуйста, по телефону или в Telegram.');
-    submitBtn.disabled = false;
-  }
-});
-})();
-</script>
+      document.getElementById('heroBookBtn').addEventListener('click', function () { open() });
+      document.getElementById('fabBtn').addEventListener('click', function () { open() });
+      document.querySelectorAll('[data-book]').forEach(function (b) {
+        b.addEventListener('click', function () { open(b.dataset.book) });
+      });
+      document.getElementById('bookingBg').addEventListener('click', close);
+      document.getElementById('bookingClose').addEventListener('click', close);
 
-<!-- === Яндекс.Метрика === -->
-<script type="text/javascript">
-  (function(m,e,t,r,i,k,a){
-      m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
-      m[i].l=1*new Date();
-      for (var j = 0; j < document.scripts.length; j++) { if (document.scripts[j].src === r) { return; } }
-      k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
-  })(window, document,'script','https://mc.yandex.ru/metrika/tag.js?id=104290205', 'ym');
+      document.getElementById('submitBooking').addEventListener('click', function () {
+        var name = nameInput.value.trim();
+        var phone = document.getElementById('bPhone').value.trim();
+        var type = document.getElementById('bType').value;
+        var date = document.getElementById('bDate').value;
+        var note = document.getElementById('bNote').value.trim();
 
-  ym(104290205, 'init', { ssr:true, webvisor:true, clickmap:true, ecommerce:"dataLayer", accurateTrackBounce:true, trackLinks:true });
-</script>
-<noscript><div><img src="https://mc.yandex.ru/watch/104290205" style="position:absolute; left:-9999px;" alt=""></div></noscript>
-<!-- /Яндекс.Метрика -->
+        if (!name) {
+          haptic('error');
+          nameInput.focus();
+          nameInput.style.borderColor = '#e74c3c';
+          setTimeout(function () { nameInput.style.borderColor = '' }, 1500);
+          return;
+        }
 
+        /* Format matching bot handler: action='booking_private', data={name,contact,date,type} */
+        var user = tg && tg.initDataUnsafe && tg.initDataUnsafe.user;
+        var contact = phone || (user ? ('@' + user.username) : 'Telegram');
+        var data = {
+          action: 'booking_private',
+          data: {
+            name: name,
+            contact: contact,
+            date: date || 'Не указана',
+            type: type,
+            note: note || '—'
+          }
+        };
+
+        if (tg && tg.sendData) {
+          haptic('success');
+          tg.sendData(JSON.stringify(data));
+        } else {
+          console.log('Booking data:', data);
+          form.style.display = 'none';
+          success.style.display = 'block';
+          haptic('success');
+        }
+      });
+    })();
+
+    /* ===== URGENCY MONTH ===== */
+    (function () {
+      var months = ['январе', 'феврале', 'марте', 'апреле', 'мае', 'июне', 'июле', 'августе', 'сентябре', 'октябре', 'ноябре', 'декабре'];
+      var el = document.getElementById('urgencyMonth');
+      if (el) el.textContent = months[new Date().getMonth()];
+    })();
+
+    /* ===== HERO IMG FALLBACK ===== */
+    var hi = document.getElementById('heroImg');
+    hi.addEventListener('error', function () { hi.style.display = 'none' });
+  </script>
+  <!-- TAB BAR -->
+  <nav class="tab-bar">
+    <a href="/" class="tab-item"><span>🎟</span>Афиша</a>
+    <div class="tab-item active"><span>🎩</span>Частные</div>
+    <a href="/school" class="tab-item"><span>✨</span>Школа</a>
+  </nav>
 </body>
+
 </html>
