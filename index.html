@@ -216,9 +216,15 @@
       letter-spacing: .02em
     }
 
-    .btn--primary:active {
-      filter: brightness(.92);
-      transform: scale(.96)
+    .btn--primary:active,
+    .btn--primary:hover {
+      /* Ghost/Brand Icon Style on Interaction */
+      background: transparent;
+      border: 1px solid rgba(255, 255, 255, 0.4);
+      color: #fff;
+      box-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
+      text-shadow: 0 0 8px rgba(255, 255, 255, 0.6);
+      transform: scale(.98);
     }
 
     .btn--outline {
@@ -464,10 +470,16 @@
 
     .brands__track {
       display: flex;
-      gap: 2.5rem;
-      align-items: center;
+      width: max-content;
       animation: marquee 20s linear infinite;
-      width: max-content
+    }
+
+    .brand-set {
+      display: flex;
+      gap: 2.5rem;
+      padding-right: 2.5rem;
+      /* Ensure gap between sets matches internal gap */
+      align-items: center;
     }
 
     .brand-item {
@@ -499,12 +511,12 @@
 
     @keyframes marquee {
       0% {
-        transform: translateX(0)
+        transform: translateX(0);
       }
 
       100% {
-        transform: translateX(-33.333%)
-          /* Move exactly 1/3 since we have 3 sets */
+        transform: translateX(-50%);
+        /* Move exactly half width (one full set) */
       }
     }
 
@@ -588,12 +600,16 @@
       transition: opacity .35s
     }
 
-    .pack:active {
-      box-shadow: 0 0 30px rgba(203, 161, 53, .18), 0 0 60px rgba(203, 161, 53, .06)
+    .pack:active,
+    .pack:hover {
+      box-shadow: 0 0 30px rgba(255, 255, 255, 0.4), 0 0 60px rgba(255, 255, 255, 0.1);
+      border-color: rgba(255, 255, 255, 0.7);
     }
 
-    .pack:active::before {
-      opacity: 1
+    .pack:active::before,
+    .pack:hover::before {
+      opacity: 1;
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.6), transparent 60%);
     }
 
     .pack__icon {
@@ -789,7 +805,14 @@
       border: 2px solid rgba(255, 255, 255, .25);
       box-shadow: 0 4px 20px rgba(203, 161, 53, .25);
       font-size: 2rem;
-      color: #111
+      color: #111;
+      transition: all .3s ease;
+    }
+
+    .mcard:hover .mcard__front {
+      filter: brightness(1.2) sepia(0.2);
+      box-shadow: 0 0 25px rgba(255, 255, 255, 0.5);
+      border-color: rgba(255, 255, 255, 0.8);
     }
 
     .mcard__back {
@@ -1380,29 +1403,25 @@
   <section class="brands reveal">
     <p class="brands__label">Нам доверяют</p>
     <div class="brands__track" id="brandsTrack">
-      <!-- Set 1 -->
-      <div class="brand-item"><img src="images/brands/images.png" alt="Газпром" class="brand-logo"></div>
-      <div class="brand-item"><img src="images/brands/png-klev-club-09pb-p-magnit-logotip-png-6.png" alt="Магнит"
-          class="brand-logo"></div>
-      <div class="brand-item"><img src="images/brands/images.jpeg" alt="Роснефть" class="brand-logo"></div>
-      <div class="brand-item"><img src="images/brands/images-2.png" alt="Лукойл" class="brand-logo"></div>
-      <div class="brand-item"><img src="images/brands/tenzor sbis.png" alt="Тензор" class="brand-logo"></div>
+      <!-- Original Set -->
+      <div class="brand-set">
+        <div class="brand-item"><img src="images/brands/images.png" alt="Газпром" class="brand-logo"></div>
+        <div class="brand-item"><img src="images/brands/png-klev-club-09pb-p-magnit-logotip-png-6.png" alt="Магнит"
+            class="brand-logo"></div>
+        <div class="brand-item"><img src="images/brands/images.jpeg" alt="Роснефть" class="brand-logo"></div>
+        <div class="brand-item"><img src="images/brands/images-2.png" alt="Лукойл" class="brand-logo"></div>
+        <div class="brand-item"><img src="images/brands/tenzor sbis.png" alt="Тензор" class="brand-logo"></div>
+      </div>
 
-      <!-- Set 2 (Duplicate) -->
-      <div class="brand-item"><img src="images/brands/images.png" alt="Газпром" class="brand-logo"></div>
-      <div class="brand-item"><img src="images/brands/png-klev-club-09pb-p-magnit-logotip-png-6.png" alt="Магнит"
-          class="brand-logo"></div>
-      <div class="brand-item"><img src="images/brands/images.jpeg" alt="Роснефть" class="brand-logo"></div>
-      <div class="brand-item"><img src="images/brands/images-2.png" alt="Лукойл" class="brand-logo"></div>
-      <div class="brand-item"><img src="images/brands/tenzor sbis.png" alt="Тензор" class="brand-logo"></div>
-
-      <!-- Set 3 (Duplicate for wide screens) -->
-      <div class="brand-item"><img src="images/brands/images.png" alt="Газпром" class="brand-logo"></div>
-      <div class="brand-item"><img src="images/brands/png-klev-club-09pb-p-magnit-logotip-png-6.png" alt="Магнит"
-          class="brand-logo"></div>
-      <div class="brand-item"><img src="images/brands/images.jpeg" alt="Роснефть" class="brand-logo"></div>
-      <div class="brand-item"><img src="images/brands/images-2.png" alt="Лукойл" class="brand-logo"></div>
-      <div class="brand-item"><img src="images/brands/tenzor sbis.png" alt="Тензор" class="brand-logo"></div>
+      <!-- Duplicate Set for Seamless Loop -->
+      <div class="brand-set">
+        <div class="brand-item"><img src="images/brands/images.png" alt="Газпром" class="brand-logo"></div>
+        <div class="brand-item"><img src="images/brands/png-klev-club-09pb-p-magnit-logotip-png-6.png" alt="Магнит"
+            class="brand-logo"></div>
+        <div class="brand-item"><img src="images/brands/images.jpeg" alt="Роснефть" class="brand-logo"></div>
+        <div class="brand-item"><img src="images/brands/images-2.png" alt="Лукойл" class="brand-logo"></div>
+        <div class="brand-item"><img src="images/brands/tenzor sbis.png" alt="Тензор" class="brand-logo"></div>
+      </div>
     </div>
   </section>
 
@@ -1425,20 +1444,26 @@
     <h2 class="sectionTitle reveal">Форматы выступления</h2>
     <div class="packGrid">
       <article class="pack reveal reveal-d1">
-        <div class="pack__icon">🎪</div>
+        <div class="pack__icon">
+          <!-- HAT ICON -> GENIE/MAGICIAN -->
+          <img src="icons/magician.png" class="icon-svg" alt="Private">
+        </div>
         <div class="pack__badge">Популярное</div>
-        <h3>Частные события</h3>
+        <h3>Шоу-программа</h3>
         <div class="from">от 18&nbsp;500&nbsp;₽</div>
         <ul>
           <li>20–40 минут</li>
           <li>Персонализация под событие</li>
           <li>Интерактив со зрителями</li>
         </ul>
-        <button class="btn btn--primary" data-book="Частное событие">Забронировать</button>
+        <button class="btn btn--primary" data-book="Шоу-программы">Забронировать</button>
       </article>
       <article class="pack reveal reveal-d2">
-        <div class="pack__icon">🍸</div>
-        <h3>Микромагия · Корпоратив</h3>
+        <div class="pack__icon">
+          <!-- CARDS ICON -> DICE/CRYSTALS/MAGIC -->
+          <img src="icons/magic.png" class="icon-svg" alt="Micromagic">
+        </div>
+        <h3>Микромагия</h3>
         <div class="from">от 13&nbsp;000&nbsp;₽</div>
         <ul>
           <li>30–180 минут, welcome-зоны</li>
@@ -1448,8 +1473,11 @@
         <button class="btn btn--primary" data-book="Корпоратив">Забронировать</button>
       </article>
       <article class="pack reveal reveal-d3">
-        <div class="pack__icon">🎭</div>
-        <h3>Концерт / «СЕКРЕТ»</h3>
+        <div class="pack__icon">
+          <!-- STAGE ICON -> SMOKE/WAND -->
+          <img src="icons/smoke.png" class="icon-svg" alt="Concert">
+        </div>
+        <h3>Концерт</h3>
         <div class="from">от 150&nbsp;000&nbsp;₽</div>
         <ul>
           <li>1–2 часа, атмосферный спектакль</li>
@@ -1535,21 +1563,30 @@
       <div class="mcard" data-prize="0">
         <div class="mcard__inner">
           <div class="mcard__front">🂠</div>
-          <div class="mcard__back"><span class="prize-icon">🎩</span><span class="prize-text">Скидка 5%<br>на первое
+          <div class="mcard__back"><span class="prize-icon">
+              <!-- Prize 1: Scroll/Discount -->
+              <img src="icons/scroll.png" class="icon-mt" alt="Discount">
+            </span><span class="prize-text">Скидка 5%<br>на первое
               шоу</span></div>
         </div>
       </div>
       <div class="mcard" data-prize="1">
         <div class="mcard__inner">
           <div class="mcard__front">🂠</div>
-          <div class="mcard__back"><span class="prize-icon">✨</span><span class="prize-text">Секретный<br>БОНУС</span>
+          <div class="mcard__back"><span class="prize-icon">
+              <!-- Prize 2: Magic Ball/Secret -->
+              <img src="icons/magic-ball.png" class="icon-mt" alt="Secret">
+            </span><span class="prize-text">Секретный<br>БОНУС</span>
           </div>
         </div>
       </div>
       <div class="mcard" data-prize="2">
         <div class="mcard__inner">
           <div class="mcard__front">🂠</div>
-          <div class="mcard__back"><span class="prize-icon">🎁</span><span class="prize-text">Сюрприз<br>на
+          <div class="mcard__back"><span class="prize-icon">
+              <!-- Prize 3: Gift Box/Surprise -->
+              <img src="icons/gift-box.png" class="icon-mt" alt="Surprise">
+            </span><span class="prize-text">Сюрприз<br>на
               мероприятии</span></div>
         </div>
       </div>
@@ -1720,8 +1757,6 @@
     <div class="copy">&copy; 2026 &middot; Дмитрий Костюк &middot; Иллюзионист</div>
   </footer>
 
-  <!-- ===== FLOATING BOOK BUTTON ===== -->
-  <button class="fab" id="fabBtn" aria-label="Забронировать">🎩</button>
 
   <!-- ===== BOOKING MODAL ===== -->
   <div class="modal" id="bookingModal">
@@ -1741,9 +1776,9 @@
         <div class="form-group">
           <label>Формат мероприятия</label>
           <select id="bType">
-            <option value="Частное событие">🎪 Частное событие</option>
-            <option value="Корпоратив">🍸 Корпоратив</option>
-            <option value="Концерт">🎭 Концерт</option>
+            <option value="Шоу-программа">Шоу-программа</option>
+            <option value="Микромагия">Микромагия</option>
+            <option value="Концерт">Концерт</option>
           </select>
         </div>
         <div class="form-group">
@@ -1915,7 +1950,6 @@
       function close() { modal.classList.remove('open') }
 
       document.getElementById('heroBookBtn').addEventListener('click', function () { open() });
-      document.getElementById('fabBtn').addEventListener('click', function () { open() });
       document.querySelectorAll('[data-book]').forEach(function (b) {
         b.addEventListener('click', function () { open(b.dataset.book) });
       });
@@ -1973,12 +2007,51 @@
     /* ===== HERO IMG FALLBACK ===== */
     var hi = document.getElementById('heroImg');
     hi.addEventListener('error', function () { hi.style.display = 'none' });
+
+    // Inject CSS for new icons
+    var css = document.createElement('style');
+    css.innerHTML = `
+      /* Match Brand Logo Style: Transparent "White Plate" look for EVERY ICON on site */
+      .icon-svg, .icon-nav, .icon-mt, .fab-icon { 
+        width: 48px; height: 48px; object-fit: contain; 
+        filter: invert(1) grayscale(1) brightness(2) contrast(1.2);
+        opacity: 0.9;
+        mix-blend-mode: screen; 
+      }
+      .icon-nav { width: 24px; height: 24px; filter: invert(0.5) grayscale(1); opacity: 0.6; } /* Dim idle nav items */
+      .tab-item.active .icon-nav { 
+        filter: invert(1) grayscale(1) brightness(2) contrast(1.2); 
+        opacity: 1; 
+      }
+      .icon-mt { width: 32px; height: 32px; margin:0 auto 5px; } /* Reset stroke */
+      .pack__icon { font-size: 0; line-height: 0; }
+      .fab-icon { width: 32px; height: 32px; }
+    `;
+    document.head.appendChild(css);
   </script>
   <!-- TAB BAR -->
   <nav class="tab-bar">
-    <a href="/" class="tab-item"><span>🎟</span>Афиша</a>
-    <div class="tab-item active"><span>🎩</span>Частные</div>
-    <a href="/school" class="tab-item"><span>✨</span>Школа</a>
+    <a href="/" class="tab-item">
+      <span>
+        <!-- Ticket ICON -->
+        <img src="icons/ticket.png" class="icon-nav" alt="Afisha">
+      </span>
+      Афиша
+    </a>
+    <div class="tab-item active">
+      <span>
+        <!-- Hat ICON -->
+        <img src="icons/magician.png" class="icon-nav" alt="Private">
+      </span>
+      Частные
+    </div>
+    <a href="/school" class="tab-item">
+      <span>
+        <!-- School ICON -->
+        <img src="icons/book.png" class="icon-nav" alt="School">
+      </span>
+      Школа
+    </a>
   </nav>
 </body>
 
