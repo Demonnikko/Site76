@@ -2053,6 +2053,22 @@
       Школа
     </a>
   </nav>
+
+  <script>
+    // Smart Router: Adjusts tab-bar links for GitHub Pages vs Localhost
+    (function () {
+      const isGithub = window.location.hostname.includes('github.io');
+      if (isGithub) {
+        const links = document.querySelectorAll('.tab-bar a');
+        links.forEach(link => {
+          const href = link.getAttribute('href');
+          if (href === '/') link.href = 'https://demonnikko.github.io/botosconcert/';
+          if (href === '/private') link.href = 'https://demonnikko.github.io/Site76/';
+          if (href === '/school') link.href = 'https://demonnikko.github.io/Magic-School/';
+        });
+      }
+    })();
+  </script>
 </body>
 
 </html>
