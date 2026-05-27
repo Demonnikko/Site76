@@ -2413,15 +2413,25 @@
       <button onclick="closeQuiz()"
         style="position:absolute;top:16px;right:16px;background:none;border:none;color:#aaa;font-size:24px;cursor:pointer;line-height:1;">✕</button>
 
-      <!-- Кнопка-чат -->
-      <button onclick="openAssistant()" id="assistantBtn"
-        style="position:absolute;top:16px;left:16px;background:rgba(203,161,40,0.12);border:1px solid rgba(203,161,40,0.35);color:#cba128;font-size:13px;cursor:pointer;padding:6px 12px;border-radius:18px;font-family:inherit;transition:all 0.2s;">
-        💬 Спросить
-      </button>
-
       <div id="quizContent"></div>
     </div>
   </div>
+
+  <!-- Плавающая кнопка-пузырёк помощника -->
+  <button onclick="openAssistant()" id="assistantFab" aria-label="Открыть чат с помощником"
+    style="position:fixed;right:18px;bottom:18px;width:56px;height:56px;border-radius:50%;border:1px solid rgba(203,161,40,0.45);background:linear-gradient(135deg, #1a1424, #0e0e1a);color:#cba128;font-size:22px;cursor:pointer;z-index:8000;display:flex;align-items:center;justify-content:center;box-shadow:0 8px 24px rgba(0,0,0,0.5), 0 0 30px rgba(203,161,40,0.15);transition:all 0.25s ease;">
+    <span style="display:inline-block;line-height:1;">💬</span>
+  </button>
+  <style>
+    #assistantFab:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 32px rgba(0,0,0,0.6), 0 0 40px rgba(203,161,40,0.3) !important;
+      border-color: rgba(203,161,40,0.8) !important;
+    }
+    @media (max-width: 480px) {
+      #assistantFab { right: 14px; bottom: 14px; width: 50px; height: 50px; font-size: 20px; }
+    }
+  </style>
 
   <!-- ===== AI ASSISTANT MODAL ===== -->
   <div id="assistantOverlay"
