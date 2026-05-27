@@ -2419,17 +2419,22 @@
 
   <!-- Плавающая кнопка-пузырёк помощника -->
   <button onclick="openAssistant()" id="assistantFab" aria-label="Открыть чат с помощником"
-    style="position:fixed;right:18px;bottom:18px;width:56px;height:56px;border-radius:50%;border:1px solid rgba(203,161,40,0.45);background:linear-gradient(135deg, #1a1424, #0e0e1a);color:#cba128;font-size:22px;cursor:pointer;z-index:8000;display:flex;align-items:center;justify-content:center;box-shadow:0 8px 24px rgba(0,0,0,0.5), 0 0 30px rgba(203,161,40,0.15);transition:all 0.25s ease;">
+    style="position:fixed;right:22px;bottom:22px;width:64px;height:64px;border-radius:50%;border:2px solid #cba128;background:linear-gradient(135deg, #cba128, #9b7820);color:#0a0a14;font-size:26px;cursor:pointer;z-index:9999;display:flex;align-items:center;justify-content:center;box-shadow:0 8px 28px rgba(0,0,0,0.6), 0 0 36px rgba(203,161,40,0.45);transition:all 0.25s ease;animation:assistantPulse 2.5s ease-in-out infinite;">
     <span style="display:inline-block;line-height:1;">💬</span>
+    <span id="assistantFabHint" style="position:absolute;right:78px;top:50%;transform:translateY(-50%);background:#0e0e1a;color:#cba128;border:1px solid rgba(203,161,40,0.35);padding:8px 14px;border-radius:18px;font-size:13px;white-space:nowrap;font-family:inherit;pointer-events:none;opacity:0;transition:opacity 0.25s ease;">Задать вопрос</span>
   </button>
   <style>
-    #assistantFab:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 12px 32px rgba(0,0,0,0.6), 0 0 40px rgba(203,161,40,0.3) !important;
-      border-color: rgba(203,161,40,0.8) !important;
+    @keyframes assistantPulse {
+      0%, 100% { box-shadow: 0 8px 28px rgba(0,0,0,0.6), 0 0 36px rgba(203,161,40,0.45); }
+      50%      { box-shadow: 0 8px 28px rgba(0,0,0,0.6), 0 0 50px rgba(203,161,40,0.75); }
     }
+    #assistantFab:hover {
+      transform: translateY(-2px) scale(1.05);
+    }
+    #assistantFab:hover #assistantFabHint { opacity: 1; }
     @media (max-width: 480px) {
-      #assistantFab { right: 14px; bottom: 14px; width: 50px; height: 50px; font-size: 20px; }
+      #assistantFab { right: 16px; bottom: 16px; width: 56px; height: 56px; font-size: 22px; }
+      #assistantFabHint { display: none; }
     }
   </style>
 
