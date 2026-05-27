@@ -9,13 +9,14 @@
     content="Премиальное шоу иллюзиониста Дмитрия Костюка. Частные события, корпоративы, концерты.">
   <meta name="theme-color" content="#000000">
   <meta name="color-scheme" content="dark">
+  <script src="https://cdn.jsdelivr.net/npm/@vkontakte/vk-bridge/dist/browser.min.js"></script>
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link
     href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Inter:wght@400;500;600;700&display=swap"
     rel="stylesheet">
-  <link rel="preload" as="image" href="images/portrait.jpg">
+  <link rel="preload" as="image" href="images/портрет.jpg">
   <style>
     /* ===== VARIABLES & RESET ===== */
     :root {
@@ -305,28 +306,105 @@
       font: 900 var(--fs-h1) var(--ff-head);
       letter-spacing: .06em;
       position: relative;
-      text-shadow: 0 2px 30px rgba(203, 161, 53, .3)
+      display: inline-block;
+      isolation: isolate;
+      text-shadow: 0 2px 26px rgba(203, 161, 53, .34), 0 0 1px rgba(255, 235, 183, .85);
+      animation: titleBreath 5.6s ease-in-out infinite
     }
 
-    .title::before {
+    .title::before,
+    .title::after {
       content: attr(data-txt);
       position: absolute;
       inset: 0;
-      background: linear-gradient(120deg, transparent 30%, rgba(255, 255, 255, .8) 50%, transparent 70%);
-      background-size: 200% 100%;
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
-      animation: sweep 6s linear infinite
+      pointer-events: none;
+      opacity: 0
     }
 
-    @keyframes sweep {
-      from {
-        background-position: -200% 0
+    .title::before {
+      color: #7fd6ff;
+      transform: translate(0);
+      text-shadow: -1px 0 rgba(127, 214, 255, .55);
+    }
+
+    .title::after {
+      color: #ff7fa9;
+      transform: translate(0);
+      text-shadow: 1px 0 rgba(255, 127, 169, .55)
+    }
+
+    .title.is-glitching::before {
+      opacity: .75;
+      animation: titleGlitchBlue .34s steps(2, end)
+    }
+
+    .title.is-glitching::after {
+      opacity: .7;
+      animation: titleGlitchPink .34s steps(2, end)
+    }
+
+    @keyframes titleBreath {
+      0%,
+      100% {
+        text-shadow: 0 2px 24px rgba(203, 161, 53, .28), 0 0 1px rgba(255, 235, 183, .8)
       }
 
-      to {
-        background-position: 200% 0
+      50% {
+        text-shadow: 0 4px 34px rgba(203, 161, 53, .45), 0 0 2px rgba(255, 235, 183, .95)
+      }
+    }
+
+    @keyframes titleGlitchBlue {
+      0% {
+        transform: translate(0, 0);
+        clip-path: inset(0 0 0 0)
+      }
+
+      25% {
+        transform: translate(-3px, -1px);
+        clip-path: inset(12% 0 56% 0)
+      }
+
+      50% {
+        transform: translate(2px, 1px);
+        clip-path: inset(68% 0 7% 0)
+      }
+
+      75% {
+        transform: translate(-2px, 0);
+        clip-path: inset(35% 0 32% 0)
+      }
+
+      100% {
+        transform: translate(0, 0);
+        clip-path: inset(0 0 0 0)
+      }
+    }
+
+    @keyframes titleGlitchPink {
+      0% {
+        transform: translate(0, 0);
+        clip-path: inset(0 0 0 0)
+      }
+
+      20% {
+        transform: translate(3px, 0);
+        clip-path: inset(63% 0 9% 0)
+      }
+
+      45% {
+        transform: translate(-2px, -1px);
+        clip-path: inset(10% 0 66% 0)
+      }
+
+      70% {
+        transform: translate(2px, 1px);
+        clip-path: inset(42% 0 31% 0)
+      }
+
+      100% {
+        transform: translate(0, 0);
+        clip-path: inset(0 0 0 0)
       }
     }
 
@@ -471,15 +549,16 @@
     .brands__track {
       display: flex;
       width: max-content;
-      animation: marquee 20s linear infinite;
+      will-change: transform;
+      animation: marquee var(--brands-duration, 20s) linear infinite;
     }
 
     .brand-set {
       display: flex;
       gap: 2.5rem;
       padding-right: 2.5rem;
-      /* Ensure gap between sets matches internal gap */
       align-items: center;
+      flex: 0 0 auto;
     }
 
     .brand-item {
@@ -515,73 +594,57 @@
       }
 
       100% {
-        transform: translateX(-50%);
-        /* Move exactly half width (one full set) */
+        transform: translateX(calc(-1 * var(--brands-shift, 50%)));
       }
-    }
-
-    /* ===== URGENCY BANNER ===== */
-    .urgency {
-      text-align: center;
-      padding: 1rem 16px;
-      max-width: 960px;
-      margin: 0 auto
-    }
-
-    .urgency__inner {
-      display: inline-flex;
-      align-items: center;
-      gap: .6rem;
-      padding: .6rem 1.2rem;
-      border-radius: 40px;
-      background: rgba(203, 161, 53, .08);
-      border: 1px solid rgba(203, 161, 53, .15);
-      font-size: .88rem;
-      color: var(--gold2)
-    }
-
-    .urgency__dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background: var(--gold);
-      flex-shrink: 0;
-      animation: urgPulse 1.5s ease-in-out infinite
-    }
-
-    @keyframes urgPulse {
-
-      0%,
-      100% {
-        opacity: 1;
-        transform: scale(1)
-      }
-
-      50% {
-        opacity: .4;
-        transform: scale(.7)
-      }
-    }
-
-    .urgency__text b {
-      color: var(--gold)
     }
 
     /* ===== PACK CARDS ===== */
     .packGrid {
       display: grid;
-      grid-template-columns: 1fr;
-      gap: 14px
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    @media (max-width: 768px) {
+      .packGrid {
+        grid-template-columns: 1fr;
+        max-width: 380px;
+      }
+    }
+
+    @keyframes premiumGlow {
+
+      0%,
+      100% {
+        box-shadow: 0 0 15px rgba(203, 161, 53, 0.05);
+        border-color: rgba(255, 255, 255, 0.07);
+        transform: translateY(0);
+      }
+
+      50% {
+        box-shadow: 0 10px 30px rgba(203, 161, 53, 0.2);
+        border-color: rgba(203, 161, 53, 0.3);
+        transform: translateY(-4px);
+      }
     }
 
     .pack {
       background: var(--card);
       border: 1px solid rgba(255, 255, 255, .07);
       border-radius: 18px;
-      padding: 1.4rem 1.2rem;
+      padding: 1.8rem 1.4rem;
       position: relative;
       overflow: hidden;
-      transition: all .35s ease
+      transition: all .35s ease;
+      animation: premiumGlow 6s ease-in-out infinite;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .pack:nth-child(even) {
+      animation-delay: -3s;
     }
 
     .pack::before {
@@ -597,24 +660,67 @@
       mask-composite: exclude;
       pointer-events: none;
       opacity: 0;
-      transition: opacity .35s
+      transition: opacity .35s;
     }
 
-    .pack:active,
     .pack:hover {
+      animation-play-state: paused;
       box-shadow: 0 0 30px rgba(255, 255, 255, 0.4), 0 0 60px rgba(255, 255, 255, 0.1);
       border-color: rgba(255, 255, 255, 0.7);
+      transform: translateY(-4px) scale(1.02);
     }
 
-    .pack:active::before,
     .pack:hover::before {
       opacity: 1;
       background: linear-gradient(135deg, rgba(255, 255, 255, 0.6), transparent 60%);
     }
 
     .pack__icon {
-      font-size: 2rem;
-      margin-bottom: .5rem
+      width: 72px;
+      height: 72px;
+      margin: 0 auto .75rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0;
+      line-height: 0;
+      flex: 0 0 auto;
+    }
+
+    .icon-svg,
+    .icon-nav,
+    .icon-mt,
+    .fab-icon {
+      display: block;
+      object-fit: contain;
+      filter: invert(1) grayscale(1) brightness(2) contrast(1.2);
+      opacity: 0.92;
+      mix-blend-mode: screen;
+    }
+
+    .icon-svg {
+      width: 56px;
+      height: 56px;
+      max-width: 56px;
+      max-height: 56px;
+    }
+
+    .icon-nav {
+      width: 24px;
+      height: 24px;
+      filter: invert(0.5) grayscale(1);
+      opacity: 0.6;
+    }
+
+    .icon-mt {
+      width: 32px;
+      height: 32px;
+      margin: 0 auto 5px;
+    }
+
+    .fab-icon {
+      width: 32px;
+      height: 32px;
     }
 
     .pack__badge {
@@ -657,6 +763,44 @@
 
     .pack .btn {
       width: 100%
+    }
+
+    .packGrid--formats {
+      max-width: 860px;
+      gap: 14px;
+      align-items: stretch;
+    }
+
+    .packGrid--formats .pack {
+      padding: 1.2rem 1rem;
+      border-radius: 14px;
+      min-height: 0;
+    }
+
+    .packGrid--formats .pack__badge {
+      top: 10px;
+      right: 10px;
+    }
+
+    .packGrid--formats .pack h3 {
+      font-size: clamp(16px, 2.1vw, 19px);
+    }
+
+    .packGrid--formats .pack .from {
+      margin: .2rem 0 .35rem;
+      font-size: .88rem;
+    }
+
+    .packGrid--formats .pack ul {
+      margin: .2rem 0 .75rem;
+      font-size: .86rem;
+      line-height: 1.45;
+    }
+
+    .packGrid--formats .pack .btn {
+      margin-top: auto;
+      padding: .72rem 1rem;
+      font-size: 14px;
     }
 
     /* ===== HOW IT WORKS ===== */
@@ -735,6 +879,11 @@
       object-fit: cover
     }
 
+    #showreelVideo {
+      object-position: center 22%;
+      background: #000;
+    }
+
     /* ===== ABOUT ===== */
     .about-text {
       text-align: center;
@@ -763,29 +912,54 @@
     .deck {
       display: flex;
       justify-content: center;
+      align-items: center;
       gap: 12px;
       margin: 0 auto;
+      min-height: 150px;
       perspective: 800px
     }
 
     .mcard {
       --w: clamp(90px, 26vw, 120px);
+      position: relative;
       width: var(--w);
       aspect-ratio: 62/88;
       cursor: pointer;
-      perspective: 600px
+      perspective: 600px;
+      -webkit-perspective: 600px;
+      touch-action: manipulation;
+      -webkit-tap-highlight-color: transparent;
+      opacity: 0;
+      transform: translateY(-100px) rotateZ(-15deg);
+      transition: all 0.7s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    .magic.visible .mcard,
+    .mcard.deal {
+      opacity: 1;
+      transform: translateY(0) rotateZ(0deg);
+    }
+
+    .magic.visible .mcard:nth-child(1),
+    .mcard:nth-child(1).deal {
+      transition-delay: .1s;
+    }
+
+    .magic.visible .mcard:nth-child(2),
+    .mcard:nth-child(2).deal {
+      transition-delay: .28s;
+    }
+
+    .magic.visible .mcard:nth-child(3),
+    .mcard:nth-child(3).deal {
+      transition-delay: .46s;
     }
 
     .mcard__inner {
       width: 100%;
       height: 100%;
       position: relative;
-      transform-style: preserve-3d;
-      transition: transform .7s cubic-bezier(.4, .2, .2, 1)
-    }
-
-    .mcard.flipped .mcard__inner {
-      transform: rotateY(180deg)
+      overflow: hidden;
     }
 
     .mcard__front,
@@ -796,8 +970,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      backface-visibility: hidden;
-      -webkit-backface-visibility: hidden
+      transition: opacity .38s ease, transform .45s cubic-bezier(.2, .8, .2, 1), visibility 0s linear .38s;
     }
 
     .mcard__front {
@@ -806,6 +979,9 @@
       box-shadow: 0 4px 20px rgba(203, 161, 53, .25);
       font-size: 2rem;
       color: #111;
+      opacity: 1;
+      visibility: visible;
+      transform: scale(1) translateY(0);
       transition: all .3s ease;
     }
 
@@ -816,12 +992,15 @@
     }
 
     .mcard__back {
-      transform: rotateY(180deg);
       background: var(--card);
       border: 2px solid rgba(255, 255, 255, .1);
       flex-direction: column;
       padding: .6rem;
-      gap: .3rem
+      gap: .3rem;
+      opacity: 0;
+      visibility: hidden;
+      transform: scale(.92) translateY(8px);
+      pointer-events: none;
     }
 
     .mcard.winner .mcard__back {
@@ -840,6 +1019,40 @@
       font-weight: 600
     }
 
+    .mcard.flipped .mcard__front {
+      opacity: 0;
+      visibility: hidden;
+      transform: scale(.92) translateY(-8px);
+      pointer-events: none;
+      transition-delay: 0s, 0s, .38s;
+    }
+
+    .mcard.flipped .mcard__back {
+      opacity: 1;
+      visibility: visible;
+      transform: scale(1) translateY(0);
+      pointer-events: auto;
+      transition-delay: 0s;
+    }
+
+    .mcard__hit {
+      position: absolute;
+      inset: 0;
+      z-index: 6;
+      border: 0;
+      background: transparent;
+      color: transparent;
+      cursor: pointer;
+      touch-action: manipulation;
+      -webkit-appearance: none;
+      appearance: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .mcard.revealed .mcard__hit {
+      display: none;
+    }
+
     #magicResult {
       margin-top: 1rem;
       min-height: 2.4rem;
@@ -854,98 +1067,122 @@
       opacity: 1
     }
 
-    /* ===== REVIEWS ===== */
-    .reviews-carousel {
-      position: relative;
-      overflow: hidden
-    }
-
-    .reviews-track {
-      display: flex;
-      transition: transform .5s cubic-bezier(.4, .2, .2, 1)
-    }
-
-    .review-card {
-      min-width: 100%;
-      padding: 0 4px;
-      box-sizing: border-box
-    }
-
-    .review-card__inner {
-      background: var(--card);
-      border: 1px solid rgba(255, 255, 255, .07);
+    /* ===== SINGLE REVIEW ===== */
+    .single-review {
+      max-width: 760px;
+      margin: 0 auto;
       border-radius: 16px;
-      padding: 1.4rem
+      border: 1px solid rgba(203, 161, 53, .22);
+      background: linear-gradient(180deg, rgba(18, 19, 26, .95), rgba(12, 12, 18, .92));
+      padding: 1.2rem 1.1rem;
+      box-shadow: 0 14px 45px rgba(0, 0, 0, .45);
+      text-align: left;
     }
 
-    .review-card__header {
+    .single-review__header {
       display: flex;
       align-items: center;
-      gap: .7rem;
-      margin-bottom: .7rem
+      gap: 12px;
+      margin-bottom: .9rem;
     }
 
-    .review-card__avatar {
-      width: 36px;
-      height: 36px;
+    .single-review__avatarLink {
+      display: inline-flex;
+      width: 54px;
+      height: 54px;
       border-radius: 50%;
-      background: linear-gradient(135deg, var(--gold), var(--gold2));
-      display: grid;
-      place-items: center;
-      font: 700 .85rem var(--ff-head);
-      color: #111;
-      flex-shrink: 0
+      overflow: hidden;
+      border: 2px solid rgba(203, 161, 53, .55);
+      box-shadow: 0 6px 16px rgba(0, 0, 0, .35);
+      flex-shrink: 0;
     }
 
-    .review-card__info {
+    .single-review__avatar {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .single-review__profile {
       display: flex;
       flex-direction: column;
-      gap: .1rem
+      gap: 4px;
     }
 
-    .review-card__name {
-      font-weight: 600;
-      font-size: .85rem;
-      color: var(--gold2)
-    }
-
-    .review-card__meta {
+    .single-review__vkTag {
+      display: inline-flex;
+      align-items: center;
+      width: fit-content;
+      padding: 2px 8px;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, .16);
+      color: #9cb5d8;
       font-size: .72rem;
-      color: #666
+      letter-spacing: .03em;
+      text-transform: uppercase;
+      background: rgba(255, 255, 255, .03);
     }
 
-    .review-card__stars {
-      color: var(--gold);
-      font-size: .9rem;
-      margin-bottom: .4rem;
-      letter-spacing: 2px
+    .single-review__authorLink {
+      color: var(--gold2);
+      font-weight: 700;
+      letter-spacing: .01em;
+      font-size: 1rem;
+      text-decoration: none;
     }
 
-    .review-card__text {
-      font-size: .91rem;
-      line-height: 1.65;
-      color: #bbb;
-      font-style: italic
+    .single-review__authorLink:hover {
+      text-decoration: underline;
     }
 
-    .reviews-dots {
+    .single-review__text {
+      color: #f0f0f0;
+      font-size: clamp(16px, 2.4vw, 20px);
+      line-height: 1.45;
+      margin-bottom: 0;
+      font-weight: 500;
+    }
+
+    .swiper-reviews {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 2px 0;
+    }
+
+    .swiper-reviews .swiper-slide {
+      height: auto;
+    }
+
+    .reviews-nav {
+      max-width: 760px;
+      margin: 12px auto 0;
       display: flex;
       justify-content: center;
-      gap: 8px;
-      margin-top: 1rem
+      gap: 10px;
     }
 
-    .reviews-dots span {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background: rgba(255, 255, 255, .15);
-      transition: all .3s
+    .reviews-nav__btn {
+      min-width: 124px;
+      height: 40px;
+      border-radius: 12px;
+      border: 1px solid rgba(203, 161, 53, .55);
+      background: rgba(12, 12, 18, .75);
+      color: var(--gold2);
+      font: 600 14px var(--ff-text);
+      letter-spacing: .02em;
+      cursor: pointer;
+      transition: transform .2s ease, border-color .2s ease, color .2s ease, background .2s ease;
     }
 
-    .reviews-dots span.active {
-      background: var(--gold);
-      transform: scale(1.3)
+    .reviews-nav__btn:hover {
+      border-color: var(--gold2);
+      color: #fff;
+      background: rgba(203, 161, 53, .16);
+    }
+
+    .reviews-nav__btn:active {
+      transform: translateY(1px) scale(.98);
     }
 
     /* ===== GALLERY ===== */
@@ -1034,60 +1271,6 @@
 
     .lightbox__nav--next {
       right: 8px
-    }
-
-    /* ===== FAQ ===== */
-    .qaList {
-      display: flex;
-      flex-direction: column;
-      gap: 8px
-    }
-
-    .qaList details {
-      background: var(--card);
-      border: 1px solid rgba(255, 255, 255, .07);
-      border-radius: 14px;
-      overflow: hidden;
-      transition: border-color .3s
-    }
-
-    .qaList details[open] {
-      border-color: rgba(203, 161, 53, .15)
-    }
-
-    .qaList summary {
-      list-style: none;
-      padding: .9rem 1.2rem;
-      font-weight: 600;
-      cursor: pointer;
-      color: var(--gold2);
-      display: flex;
-      align-items: center;
-      gap: .5rem;
-      font-size: .95rem
-    }
-
-    .qaList summary::-webkit-details-marker {
-      display: none
-    }
-
-    .qaList summary::after {
-      content: '+';
-      margin-left: auto;
-      font-size: 1.2rem;
-      transition: transform .3s;
-      color: var(--gold)
-    }
-
-    .qaList details[open] summary::after {
-      transform: rotate(45deg)
-    }
-
-    .qaList details div {
-      padding: 0 1.2rem 1rem;
-      color: #999;
-      line-height: 1.65;
-      font-size: .9rem
     }
 
     /* ===== FLOATING BUTTON ===== */
@@ -1284,6 +1467,10 @@
         gap: 16px
       }
 
+      .packGrid--formats {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+
       .gallery {
         columns: 3
       }
@@ -1303,54 +1490,372 @@
       }
     }
 
-    /* TAB BAR */
-    .tab-bar {
-      position: fixed;
-      bottom: 20px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 92%;
-      max-width: 400px;
-      background: rgba(10, 10, 15, 0.85);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
+    @media (max-width: 900px) {
+      .packGrid--formats {
+        grid-template-columns: 1fr;
+        max-width: 420px;
+      }
+    }
+
+
+    /* ===== MAGIC SCHOOL BLOCK ===== */
+    .magic-school {
+      text-align: center;
+    }
+    .magic-school__card {
+      max-width: 560px;
+      margin: 0 auto;
+      padding: 2.2rem 1.5rem;
+      background: rgba(255, 255, 255, 0.02);
       border: 1px solid rgba(255, 255, 255, 0.08);
-      border-radius: 24px;
-      display: flex;
-      justify-content: space-around;
-      padding: 10px 0;
-      z-index: 999;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+      border-radius: 18px;
     }
-
-    .tab-item {
-      display: flex;
-      flex-direction: column;
+    .magic-school__logo {
+      display: inline-flex;
       align-items: center;
-      justify-content: center;
-      text-decoration: none;
-      color: #6e7688;
-      font-size: 10px;
-      flex: 1;
-      transition: color .3s;
+      gap: 10px;
+      margin-bottom: 1.2rem;
     }
-
-    .tab-item span {
-      font-size: 22px;
-      margin-bottom: 2px;
-      display: block;
-      transition: transform .2s;
+    .magic-school__logo img {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 1px solid rgba(203, 161, 40, 0.3);
     }
-
-    .tab-item.active {
+    .magic-school__logo span {
+      font: 600 14px var(--ff-head);
       color: var(--gold);
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+    }
+    .magic-school__title {
+      font: 700 clamp(20px, 4.5vw, 28px) var(--ff-head);
+      color: var(--gold);
+      margin-bottom: 0.8rem;
+      line-height: 1.25;
+    }
+    .magic-school__subtitle {
+      font-size: 0.95rem;
+      color: #bbb;
+      line-height: 1.55;
+      margin: 0 auto 1.8rem;
+      max-width: 460px;
+    }
+    .magic-school__cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 28px;
+      border-radius: 30px;
+      background: transparent;
+      border: 1px solid rgba(203, 161, 40, 0.4);
+      color: var(--gold);
+      font: 600 14px var(--ff-head);
+      letter-spacing: 0.05em;
+      text-decoration: none;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    .magic-school__cta:hover {
+      background: rgba(203, 161, 40, 0.08);
+      border-color: rgba(203, 161, 40, 0.7);
+      transform: translateY(-1px);
     }
 
-    .tab-item.active span {
-      transform: translateY(-2px);
-      text-shadow: 0 0 12px rgba(214, 180, 107, 0.3);
+    /* ===== TRANSITION OVERLAY ===== */
+    #transitionOverlay {
+      position: fixed;
+      inset: 0;
+      z-index: 99999;
+      pointer-events: none;
+      opacity: 0;
+      background: radial-gradient(ellipse at center, #0a0a14 0%, #000 100%);
+      transition: opacity 0.5s ease;
     }
+    #transitionOverlay.active {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    /* кольца — расходящиеся золотые ободки */
+    .trn-ring {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 200px;
+      height: 200px;
+      margin-left: -100px;
+      margin-top: -100px;
+      border-radius: 50%;
+      border: 1px solid rgba(203, 161, 40, 0.5);
+      opacity: 0;
+      transform: scale(0.3);
+    }
+    #transitionOverlay.active .trn-ring {
+      animation: trnRingExpand 1.4s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }
+    #transitionOverlay.active .trn-ring:nth-child(2) { animation-delay: 0.12s; }
+    #transitionOverlay.active .trn-ring:nth-child(3) { animation-delay: 0.24s; }
+    #transitionOverlay.active .trn-ring:nth-child(4) { animation-delay: 0.36s; }
+
+    @keyframes trnRingExpand {
+      0%   { opacity: 0;   transform: scale(0.3); border-width: 2px; }
+      30%  { opacity: 0.9; }
+      100% { opacity: 0;   transform: scale(8);   border-width: 0.5px; }
+    }
+
+    /* центральная точка с золотой пульсацией */
+    .trn-core {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 6px;
+      height: 6px;
+      margin: -3px 0 0 -3px;
+      border-radius: 50%;
+      background: var(--gold, #cba128);
+      box-shadow:
+        0 0 20px rgba(203, 161, 40, 0.8),
+        0 0 60px rgba(203, 161, 40, 0.4);
+      opacity: 0;
+    }
+    #transitionOverlay.active .trn-core {
+      animation: trnCorePulse 1.4s ease-out forwards;
+    }
+    @keyframes trnCorePulse {
+      0%   { opacity: 0; transform: scale(0); }
+      15%  { opacity: 1; transform: scale(1); }
+      60%  { opacity: 1; transform: scale(3); box-shadow: 0 0 60px rgba(203, 161, 40, 1), 0 0 120px rgba(203, 161, 40, 0.6); }
+      100% { opacity: 0; transform: scale(20); }
+    }
+
+    /* надпись */
+    .trn-text {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) translateY(80px);
+      font: 600 14px var(--ff-head, serif);
+      color: var(--gold, #cba128);
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      opacity: 0;
+      white-space: nowrap;
+      text-shadow: 0 0 20px rgba(203, 161, 40, 0.4);
+    }
+    #transitionOverlay.active .trn-text {
+      animation: trnTextShow 1.4s ease-out forwards;
+      animation-delay: 0.3s;
+    }
+    @keyframes trnTextShow {
+      0%   { opacity: 0; letter-spacing: 0.15em; }
+      40%  { opacity: 1; letter-spacing: 0.45em; }
+      80%  { opacity: 1; letter-spacing: 0.55em; }
+      100% { opacity: 0; letter-spacing: 0.7em; }
+    }
+    .magic-school__badge {
+      display: inline-block;
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    /* Modify pack cards button */
+    .pack .btn {
+      margin-top: 15px;
+    }
+
+
+
+    /* ===== PREMIUM DRUM CAROUSEL ===== */
+    .concerts-section {
+      padding: 4rem 0 3rem;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .swiper-concerts {
+      width: 100%;
+      padding-top: 20px;
+      padding-bottom: 40px;
+    }
+
+    .swiper-concerts .swiper-slide {
+      background-position: center;
+      background-size: cover;
+      width: 280px;
+      height: 400px;
+      border-radius: 16px;
+      box-shadow: 0 15px 50px rgba(0, 0, 0, 0.8);
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      background: #080816;
+      display: flex;
+      /* Centering fallback */
+      justify-content: center;
+      align-items: center;
+    }
+
+    .swiper-concerts .swiper-slide img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      pointer-events: none;
+    }
+
+    .swiper-concerts .swiper-slide-shadow-left,
+    .swiper-concerts .swiper-slide-shadow-right {
+      background-image: none !important;
+      /* Adjust swiper shadow */
+      background: rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(2px);
+    }
+
+    .concert-info-container {
+      max-width: 600px;
+      margin: 0 auto;
+      text-align: center;
+      padding: 0 20px;
+      min-height: 140px;
+    }
+
+    .concert-info-box {
+      display: none;
+      animation: fadeIn 0.4s ease;
+    }
+
+    .concert-info-box.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .cinfo-title {
+      font: 800 clamp(24px, 6vw, 32px) var(--ff-head);
+      color: var(--gold);
+      margin-bottom: 8px;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    .cinfo-desc {
+      font-size: 0.95rem;
+      color: #ccc;
+      margin-bottom: 20px;
+      line-height: 1.5;
+    }
+
+    .swiper-button-next,
+    .swiper-button-prev {
+      color: var(--gold) !important;
+      background: rgba(0, 0, 0, 0.5);
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(4px);
+    }
+
+    .swiper-button-next:after,
+    .swiper-button-prev:after {
+      font-size: 18px !important;
+    }
+
+    /* Photo Gallery Swiper */
+    .swiper-gallery {
+      width: 100%;
+      padding-bottom: 50px;
+      overflow: hidden;
+    }
+
+    .swiper-gallery .swiper-slide {
+      --w: clamp(220px, 60vw, 320px);
+      width: var(--w);
+      aspect-ratio: 62/88;
+      opacity: 0.5;
+      transform: scale(0.9);
+      transition: .4s;
+      border-radius: 12px;
+      overflow: hidden;
+      cursor: pointer;
+      background: rgba(255, 255, 255, 0.05);
+      /* placeholder background while loading */
+    }
+
+    .swiper-gallery .swiper-slide-active {
+      opacity: 1;
+      transform: scale(1);
+      box-shadow: 0 15px 40px rgba(203, 161, 40, 0.3);
+    }
+
+    .swiper-gallery img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      /* Ensures photo is not cropped */
+      border-radius: 12px;
+    }
+
+    /* Lightbox Modal */
+    .lightbox {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.9);
+      backdrop-filter: blur(10px);
+      z-index: 10000;
+      justify-content: center;
+      align-items: center;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .lightbox.active {
+      display: flex;
+      opacity: 1;
+    }
+
+    .lightbox-content {
+      max-width: 95vw;
+      max-height: 85vh;
+      width: auto;
+      height: auto;
+      object-fit: contain;
+      border-radius: 8px;
+      box-shadow: 0 0 40px rgba(0, 0, 0, 0.8);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .lightbox-close {
+      position: absolute;
+      top: 20px;
+      right: 30px;
+      color: #fff;
+      font-size: 40px;
+      cursor: pointer;
+      line-height: 1;
+      text-shadow: 0 0 10px #000;
+    }
+
+    /* End Custom CSS */
   </style>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
 </head>
 
 <body>
@@ -1388,7 +1893,7 @@
         </div>
       </div>
       <div class="hero-cta">
-        <button class="btn btn--primary" type="button" id="heroBookBtn">Забронировать шоу</button>
+        <button class="btn btn--primary" type="button" onclick="routeToBotForPrivate()">Узнать стоимость</button>
       </div>
       <div class="scroll-hint">↓</div>
     </div>
@@ -1398,6 +1903,69 @@
   <div class="wave"><svg viewBox="0 0 1440 40" preserveAspectRatio="none">
       <path fill="#000" d="M0,20 C360,45 1080,-5 1440,20 L1440,0 L0,0 Z" />
     </svg></div>
+
+  <!-- ===== VIDEO ===== -->
+  <section class="section reveal" id="video">
+    <h2 class="sectionTitle">Шоурил</h2>
+    <div class="video-wrap">
+      <video id="showreelVideo" controls playsinline preload="metadata" poster="images/портрет.jpg">
+        <source src="video/промо.mov">
+      </video>
+    </div>
+  </section>
+
+  <!-- wave -->
+  <div class="wave wave--flip"><svg viewBox="0 0 1440 40" preserveAspectRatio="none">
+      <path fill="#000" d="M0,20 C360,45 1080,-5 1440,20 L1440,40 L0,40 Z" />
+    </svg></div>
+
+  <!-- ===== ABOUT ===== -->
+  <section class="section reveal" id="about">
+    <h2 class="sectionTitle">Обо мне</h2>
+    <div class="about-text">
+      <p>Меня зовут <strong>Дмитрий Костюк</strong> — я профессиональный иллюзионист с многолетним опытом. Создаю
+        <strong>иллюзионные шоу</strong>, в которых каждый зритель становится соучастником волшебства.
+      </p>
+      <br>
+      <p>Работал с крупнейшими компаниями России, выступал на сотнях частных мероприятий. Каждое шоу —
+        <strong>уникальная история</strong>, созданная специально для вашего события.
+      </p>
+    </div>
+
+    <!-- Strong Facts -->
+    <div class="about-facts packGrid" style="margin-top: 40px; text-align: left;">
+      <article class="pack reveal reveal-d1"
+        style="background: rgba(255,255,255,0.05); border: 1px solid rgba(203,161,40,0.2); padding: 24px;">
+        <h3 style="color:var(--gold); margin-bottom: 10px; font-size: 18px;">Автор шоу «Секрет»</h3>
+        <p style="color: #aaa; font-size: 14px; line-height: 1.5;">Уникальное иллюзионное шоу, не имеющее аналогов в
+          России. Стирает грань между реальностью и вымыслом.</p>
+      </article>
+      <article class="pack reveal reveal-d2"
+        style="background: rgba(255,255,255,0.05); border: 1px solid rgba(203,161,40,0.2); padding: 24px;">
+        <h3 style="color:var(--gold); margin-bottom: 10px; font-size: 18px;">Магический Stand-Up</h3>
+        <p style="color: #aaa; font-size: 14px; line-height: 1.5;">Создатель первого в Ярославле магического стендапа.
+          Уникальный формат на стыке комедии и магии.</p>
+      </article>
+      <article class="pack reveal reveal-d3"
+        style="background: rgba(255,255,255,0.05); border: 1px solid rgba(203,161,40,0.2); padding: 24px;">
+        <h3 style="color:var(--gold); margin-bottom: 10px; font-size: 18px;">«Спасти Матвея»</h3>
+        <p style="color: #aaa; font-size: 14px; line-height: 1.5;">Уникальный детский иммерсивный спектакль в России,
+          где сами дети в процессе решают судьбу главного героя.</p>
+      </article>
+      <article class="pack reveal reveal-d4"
+        style="background: rgba(255,255,255,0.05); border: 1px solid rgba(203,161,40,0.2); padding: 24px;">
+        <h3 style="color:var(--gold); margin-bottom: 10px; font-size: 18px;">10 лет опыта</h3>
+        <p style="color: #aaa; font-size: 14px; line-height: 1.5;">Педагог по образованию. Объездил с гастролями всю
+          страну. Член Российской Ассоциации Иллюзионистов.</p>
+      </article>
+      <article class="pack reveal reveal-d5"
+        style="background: rgba(255,255,255,0.05); border: 1px solid rgba(203,161,40,0.2); padding: 24px;">
+        <h3 style="color:var(--gold); margin-bottom: 10px; font-size: 18px;">ТВ-шоу «Школа волшебства»</h3>
+        <p style="color: #aaa; font-size: 14px; line-height: 1.5;">Создатель и ведущий детского магического шоу на
+          «Первом Ярославском» телеканале.</p>
+      </article>
+    </div>
+  </section>
 
   <!-- ===== BRANDS ===== -->
   <section class="brands reveal">
@@ -1425,15 +1993,6 @@
     </div>
   </section>
 
-  <!-- ===== URGENCY BANNER ===== -->
-  <div class="urgency reveal">
-    <div class="urgency__inner">
-      <span class="urgency__dot"></span>
-      <span class="urgency__text">Осталось <b id="urgencySlots">3</b> свободные даты в <span
-          id="urgencyMonth">феврале</span></span>
-    </div>
-  </div>
-
   <!-- wave -->
   <div class="wave wave--flip"><svg viewBox="0 0 1440 40" preserveAspectRatio="none">
       <path fill="#000" d="M0,20 C480,45 960,-5 1440,20 L1440,40 L0,40 Z" />
@@ -1442,7 +2001,7 @@
   <!-- ===== FORMATS ===== -->
   <section class="section" id="formats">
     <h2 class="sectionTitle reveal">Форматы выступления</h2>
-    <div class="packGrid">
+    <div class="packGrid packGrid--formats">
       <article class="pack reveal reveal-d1">
         <div class="pack__icon">
           <!-- HAT ICON -> GENIE/MAGICIAN -->
@@ -1456,7 +2015,7 @@
           <li>Персонализация под событие</li>
           <li>Интерактив со зрителями</li>
         </ul>
-        <button class="btn btn--primary" data-book="Шоу-программы">Забронировать</button>
+        <button class="btn btn--primary" onclick="routeToBotForPrivate()">Узнать стоимость</button>
       </article>
       <article class="pack reveal reveal-d2">
         <div class="pack__icon">
@@ -1470,7 +2029,7 @@
           <li>Фокусы в руках гостей</li>
           <li>Идеально для банкетов</li>
         </ul>
-        <button class="btn btn--primary" data-book="Корпоратив">Забронировать</button>
+        <button class="btn btn--primary" onclick="routeToBotForPrivate()">Узнать стоимость</button>
       </article>
       <article class="pack reveal reveal-d3">
         <div class="pack__icon">
@@ -1484,15 +2043,10 @@
           <li>Сценическое оформление</li>
           <li>Для больших залов</li>
         </ul>
-        <button class="btn btn--primary" data-book="Концерт">Забронировать</button>
+        <button class="btn btn--primary" onclick="routeToBotForPrivate()">Узнать стоимость</button>
       </article>
     </div>
   </section>
-
-  <!-- wave -->
-  <div class="wave"><svg viewBox="0 0 1440 40" preserveAspectRatio="none">
-      <path fill="#000" d="M0,15 C320,40 720,0 1080,30 C1260,40 1380,15 1440,20 L1440,0 L0,0 Z" />
-    </svg></div>
 
   <!-- ===== HOW IT WORKS ===== -->
   <section class="section" id="howItWorks">
@@ -1502,19 +2056,19 @@
         <div class="process__dot"></div>
         <div class="process__num">Шаг 1</div>
         <div class="process__title">Оставьте заявку</div>
-        <div class="process__desc">Нажмите «Забронировать» и заполните короткую форму — это займёт 30 секунд</div>
+        <div class="process__desc">Нажмите «Узнать стоимость» и пройдите короткий квиз — это займёт 30 секунд</div>
       </div>
       <div class="process__step reveal reveal-d2">
         <div class="process__dot"></div>
         <div class="process__num">Шаг 2</div>
         <div class="process__title">Обсуждаем детали</div>
-        <div class="process__desc">Свяжусь с вами прямо в Telegram для уточнения формата и пожеланий</div>
+        <div class="process__desc">Свяжусь с вами в ВКонтакте для уточнения формата и пожеланий</div>
       </div>
       <div class="process__step reveal reveal-d3">
         <div class="process__dot"></div>
         <div class="process__num">Шаг 3</div>
         <div class="process__title">Готовлю шоу</div>
-        <div class="process__desc">Создаю уникальную программу, персонализированную под ваше событие</div>
+        <div class="process__desc">Создаю магию для вас</div>
       </div>
       <div class="process__step reveal reveal-d4">
         <div class="process__dot"></div>
@@ -1525,14 +2079,167 @@
     </div>
   </section>
 
-  <!-- ===== VIDEO ===== -->
-  <section class="section reveal" id="video">
-    <h2 class="sectionTitle">Шоурил</h2>
-    <div class="video-wrap">
-      <video controls playsinline preload="metadata" poster="images/портрет.jpg" style="object-position: 50% 40%;">
-        <source src="video/промо.MOV" type="video/quicktime">
-        <source src="video/промо.MOV" type="video/mp4">
-      </video>
+  <!-- wave -->
+  <div class="wave wave--flip"><svg viewBox="0 0 1440 40" preserveAspectRatio="none">
+      <path fill="#000" d="M0,20 C480,45 960,-5 1440,20 L1440,40 L0,40 Z" />
+    </svg></div>
+
+  <!-- ===== REVIEW ===== -->
+  <section class="section reveal" id="reviews">
+    <h2 class="sectionTitle">Отзывы клиентов</h2>
+    <div class="swiper swiper-reviews reveal reveal-d1">
+      <div class="swiper-wrapper">
+        <div class="swiper-slide">
+          <article class="single-review">
+            <div class="single-review__header">
+              <a class="single-review__avatarLink" href="https://vk.com/id69894050"
+                onclick="event.preventDefault(); routeToMiniApp('https://vk.com/id69894050')">
+                <img class="single-review__avatar" src="images/reviews/stas-rostovskiy.jpg" alt="Стас Ростовский">
+              </a>
+              <div class="single-review__profile">
+                <span class="single-review__vkTag">ВКонтакте</span>
+                <a class="single-review__authorLink" href="https://vk.com/id69894050"
+                  onclick="event.preventDefault(); routeToMiniApp('https://vk.com/id69894050')">Стас Ростовский</a>
+              </div>
+            </div>
+            <p class="single-review__text">Спасибо За праздник для дочери, дети были в восторге, родители с удовольствием принимали участие</p>
+          </article>
+        </div>
+        <div class="swiper-slide">
+          <article class="single-review">
+            <div class="single-review__header">
+              <a class="single-review__avatarLink" href="https://vk.com/dubinetsaleksandr"
+                onclick="event.preventDefault(); routeToMiniApp('https://vk.com/dubinetsaleksandr')">
+                <img class="single-review__avatar" src="images/reviews/aleksandr-dubinets.jpg" alt="Александр Дубинец">
+              </a>
+              <div class="single-review__profile">
+                <span class="single-review__vkTag">ВКонтакте</span>
+                <a class="single-review__authorLink" href="https://vk.com/dubinetsaleksandr"
+                  onclick="event.preventDefault(); routeToMiniApp('https://vk.com/dubinetsaleksandr')">Александр Дубинец</a>
+              </div>
+            </div>
+            <p class="single-review__text">Знаю Дмитрия давно, он является моим другом. Но не смотря на это, хотелось бы абстрагироваться от этого и написать, что он со всей ответственностью и серьезностью подходит к делу, которым занимается, погружаясь в него с головой. Обладая театральными качествами и выраженной харизмой, с уверенностью могу сказать, что он украсит любой праздник своим присутствием, будь то ведущий, фокусник или певец!</p>
+          </article>
+        </div>
+        <div class="swiper-slide">
+          <article class="single-review">
+            <div class="single-review__header">
+              <a class="single-review__avatarLink" href="https://vk.com/id71692360"
+                onclick="event.preventDefault(); routeToMiniApp('https://vk.com/id71692360')">
+                <img class="single-review__avatar" src="images/reviews/katerina-bakhmitskaya.jpg" alt="Катерина Бахмицкая">
+              </a>
+              <div class="single-review__profile">
+                <span class="single-review__vkTag">ВКонтакте</span>
+                <a class="single-review__authorLink" href="https://vk.com/id71692360"
+                  onclick="event.preventDefault(); routeToMiniApp('https://vk.com/id71692360')">Катерина Бахмицкая</a>
+              </div>
+            </div>
+            <p class="single-review__text">Я работаю ведущей на корпаративах. И решила для гостей сделать сюрприз. И заказала Дмитрия в качестве фокусника. И теперь делюсь с вами своими впечатлениями)))) Сюрприз удался, гости были в восторге, программа насыщенная, я бы сказала удивительная и волшебная. Хочу сказать огромное спасибо Дмитрию, за такое необыкновенное украшение праздника. Ростов ждет в гости такого яркого специалиста и просто мастера своего дела🤗🤗👍🙂</p>
+          </article>
+        </div>
+        <div class="swiper-slide">
+          <article class="single-review">
+            <div class="single-review__header">
+              <a class="single-review__avatarLink" href="https://vk.com/id22481300"
+                onclick="event.preventDefault(); routeToMiniApp('https://vk.com/id22481300')">
+                <img class="single-review__avatar" src="images/reviews/sergey-muravyev.jpg" alt="Сергей Муравьев">
+              </a>
+              <div class="single-review__profile">
+                <span class="single-review__vkTag">ВКонтакте</span>
+                <a class="single-review__authorLink" href="https://vk.com/id22481300"
+                  onclick="event.preventDefault(); routeToMiniApp('https://vk.com/id22481300')">Сергей Муравьев</a>
+              </div>
+            </div>
+            <p class="single-review__text">Заказывали Дмитрия в кинотеатр Киномир в Ростове. Детям очень понравилось, все фокусы необычные. У нас такого не увидишь в городе. Все были в восторге</p>
+          </article>
+        </div>
+        <div class="swiper-slide">
+          <article class="single-review">
+            <div class="single-review__header">
+              <a class="single-review__avatarLink" href="https://vk.com/pasha.putilov"
+                onclick="event.preventDefault(); routeToMiniApp('https://vk.com/pasha.putilov')">
+                <img class="single-review__avatar" src="images/reviews/pasha-putilov.jpg" alt="Паша Путилов">
+              </a>
+              <div class="single-review__profile">
+                <span class="single-review__vkTag">ВКонтакте</span>
+                <a class="single-review__authorLink" href="https://vk.com/pasha.putilov"
+                  onclick="event.preventDefault(); routeToMiniApp('https://vk.com/pasha.putilov')">Паша Путилов</a>
+              </div>
+            </div>
+            <p class="single-review__text">Увидел фокусы, которые показывал Дмитрий в Инстаграмме и решил ради интереса пригласить на праздник, необычная программа, интересное шоу, не думал что мне понравится 😊👍</p>
+          </article>
+        </div>
+        <div class="swiper-slide">
+          <article class="single-review">
+            <div class="single-review__header">
+              <a class="single-review__avatarLink" href="https://vk.com/id400718232"
+                onclick="event.preventDefault(); routeToMiniApp('https://vk.com/id400718232')">
+                <img class="single-review__avatar" src="images/reviews/firuza-anisimova.jpg" alt="Фируза Анисимова">
+              </a>
+              <div class="single-review__profile">
+                <span class="single-review__vkTag">ВКонтакте</span>
+                <a class="single-review__authorLink" href="https://vk.com/id400718232"
+                  onclick="event.preventDefault(); routeToMiniApp('https://vk.com/id400718232')">Фируза Анисимова</a>
+              </div>
+            </div>
+            <p class="single-review__text">Скажу Вам честно.На выступлениях Дмитрия невозможно сидеть с закрытым ртом, от восторга, у зрителей и конечно же у меня улыбка не сходит с лица , дети и взрослые всегда уходят с хорошим настроением и массой приятных впечатлений.</p>
+          </article>
+        </div>
+      </div>
+    </div>
+    <div class="reviews-nav reveal reveal-d2">
+      <button class="reviews-nav__btn reviews-nav__prev" type="button">← Назад</button>
+      <button class="reviews-nav__btn reviews-nav__next" type="button">Вперёд →</button>
+    </div>
+  </section>
+
+  <!-- wave -->
+  <div class="wave wave--flip"><svg viewBox="0 0 1440 40" preserveAspectRatio="none">
+      <path fill="#000" d="M0,20 C480,45 960,-5 1440,20 L1440,40 L0,40 Z" />
+    </svg></div>
+
+  <!-- ===== CONCERTS CAROUSEL ===== -->
+  <section class="section concerts-section" id="concerts">
+    <h2 class="sectionTitle reveal">Авторские шоу</h2>
+
+    <div class="swiper swiper-concerts reveal reveal-d1">
+      <div class="swiper-wrapper">
+        <div class="swiper-slide">
+          <!-- SECRET -->
+          <img src="images/afisha/secret.jpg" alt="СЕКРЕТ" onerror="this.src='images/портрет.jpg'">
+        </div>
+        <div class="swiper-slide">
+          <!-- HULIGAN -->
+          <img src="../vk-tickets/huligan-poster.png" alt="ХУЛИГАН" onerror="this.src='images/afisha/huligan.jpg'">
+        </div>
+        <div class="swiper-slide">
+          <!-- MATVEY -->
+          <img src="images/afisha/matvey.jpg" alt="СПАСТИ МАТВЕЯ" onerror="this.src='images/портрет.jpg'">
+        </div>
+      </div>
+
+      <!-- Optional arrows -->
+      <div class="swiper-button-prev"></div>
+      <div class="swiper-button-next"></div>
+    </div>
+
+    <div class="concert-info-container reveal reveal-d2">
+      <div id="cInfo0" class="concert-info-box active">
+        <h3 class="cinfo-title">СЕКРЕТ</h3>
+        <p class="cinfo-desc">Иллюзионный спектакль, стирающий грань между реальностью и вымыслом. Эмоции, которые вы
+          никогда не испытывали.</p>
+      </div>
+      <div id="cInfo1" class="concert-info-box">
+        <h3 class="cinfo-title">ХУЛИГАН</h3>
+        <p class="cinfo-desc">Дерзкое и откровенное шоу. Магия с характером, где правила созданы для того, чтобы их
+          нарушать.</p>
+      </div>
+      <div id="cInfo2" class="concert-info-box">
+        <h3 class="cinfo-title">СПАСТИ МАТВЕЯ</h3>
+        <p class="cinfo-desc">Интерактивный триллер. Непредсказуемый сюжет, где зрители влияют на ход событий.</p>
+        <span class="magic-school__badge" style="color:var(--gold); border-color:var(--gold); opacity:0.8;">Скоро
+          премьера</span>
+      </div>
     </div>
   </section>
 
@@ -1541,26 +2248,12 @@
       <path fill="#000" d="M0,20 C360,45 1080,-5 1440,20 L1440,40 L0,40 Z" />
     </svg></div>
 
-  <!-- ===== ABOUT ===== -->
-  <section class="section reveal" id="about">
-    <h2 class="sectionTitle">Обо мне</h2>
-    <div class="about-text">
-      <p>Меня зовут <strong>Дмитрий Костюк</strong> — я профессиональный иллюзионист с многолетним опытом. Создаю
-        <strong>иллюзионные шоу</strong>, в которых каждый зритель становится соучастником волшебства.
-      </p>
-      <br>
-      <p>Работал с крупнейшими компаниями России, выступал на сотнях частных мероприятий. Каждое шоу —
-        <strong>уникальная история</strong>, созданная специально для вашего события.
-      </p>
-    </div>
-  </section>
-
   <!-- ===== MAGIC CARD TRICK ===== -->
   <section class="section magic reveal" id="magic">
     <h2 class="sectionTitle">Испытайте магию</h2>
     <p class="magic__hint" id="magicHint">Выберите одну карту</p>
     <div class="deck" id="deck">
-      <div class="mcard" data-prize="0">
+      <div class="mcard" data-prize="0" onclick="return handleMagicCardTap(event, this)">
         <div class="mcard__inner">
           <div class="mcard__front">🂠</div>
           <div class="mcard__back"><span class="prize-icon">
@@ -1569,8 +2262,9 @@
             </span><span class="prize-text">Скидка 5%<br>на первое
               шоу</span></div>
         </div>
+        <button class="mcard__hit" type="button" aria-label="Открыть карту" onclick="return handleMagicCardTap(event, this)" ontouchend="return handleMagicCardTap(event, this)"></button>
       </div>
-      <div class="mcard" data-prize="1">
+      <div class="mcard" data-prize="1" onclick="return handleMagicCardTap(event, this)">
         <div class="mcard__inner">
           <div class="mcard__front">🂠</div>
           <div class="mcard__back"><span class="prize-icon">
@@ -1579,8 +2273,9 @@
             </span><span class="prize-text">Секретный<br>БОНУС</span>
           </div>
         </div>
+        <button class="mcard__hit" type="button" aria-label="Открыть карту" onclick="return handleMagicCardTap(event, this)" ontouchend="return handleMagicCardTap(event, this)"></button>
       </div>
-      <div class="mcard" data-prize="2">
+      <div class="mcard" data-prize="2" onclick="return handleMagicCardTap(event, this)">
         <div class="mcard__inner">
           <div class="mcard__front">🂠</div>
           <div class="mcard__back"><span class="prize-icon">
@@ -1589,134 +2284,46 @@
             </span><span class="prize-text">Сюрприз<br>на
               мероприятии</span></div>
         </div>
+        <button class="mcard__hit" type="button" aria-label="Открыть карту" onclick="return handleMagicCardTap(event, this)" ontouchend="return handleMagicCardTap(event, this)"></button>
       </div>
     </div>
     <div id="magicResult"></div>
   </section>
 
-  <!-- ===== REVIEWS ===== -->
-  <section class="section reveal" id="reviews">
-    <h2 class="sectionTitle">Отзывы</h2>
-    <div class="reviews-carousel" id="reviewsCarousel">
-      <div class="reviews-track" id="reviewsTrack">
-        <div class="review-card">
-          <div class="review-card__inner">
-            <div class="review-card__header">
-              <div class="review-card__avatar">А</div>
-              <div class="review-card__info"><span class="review-card__name">Анна</span><span
-                  class="review-card__meta">Свадьба · 2025</span></div>
-            </div>
-            <div class="review-card__stars">★★★★★</div>
-            <p class="review-card__text">«Это было невероятно! Гости до сих пор обсуждают, как вы это сделали. Спасибо
-              за магию!»</p>
-          </div>
-        </div>
-        <div class="review-card">
-          <div class="review-card__inner">
-            <div class="review-card__header">
-              <div class="review-card__avatar">С</div>
-              <div class="review-card__info"><span class="review-card__name">Сергей</span><span
-                  class="review-card__meta">Корпоратив · Технопарк</span></div>
-            </div>
-            <div class="review-card__stars">★★★★★</div>
-            <p class="review-card__text">«Приглашали на корпоратив. Очень стильно, тактично и смешно. Идеальный баланс.»
-            </p>
-          </div>
-        </div>
-        <div class="review-card">
-          <div class="review-card__inner">
-            <div class="review-card__header">
-              <div class="review-card__avatar">Е</div>
-              <div class="review-card__info"><span class="review-card__name">Елена</span><span
-                  class="review-card__meta">День рождения · 2025</span></div>
-            </div>
-            <div class="review-card__stars">★★★★★</div>
-            <p class="review-card__text">«Дети в восторге, взрослые в шоке. Лучший артист, которого мы видели.»</p>
-          </div>
-        </div>
-        <div class="review-card">
-          <div class="review-card__inner">
-            <div class="review-card__header">
-              <div class="review-card__avatar">М</div>
-              <div class="review-card__info"><span class="review-card__name">Максим</span><span
-                  class="review-card__meta">Корпоратив · 2024</span></div>
-            </div>
-            <div class="review-card__stars">★★★★★</div>
-            <p class="review-card__text">«Заказывали шоу на юбилей компании. Эффект превзошёл все ожидания. Рекомендую!»
-            </p>
-          </div>
-        </div>
-        <div class="review-card">
-          <div class="review-card__inner">
-            <div class="review-card__header">
-              <div class="review-card__avatar">И</div>
-              <div class="review-card__info"><span class="review-card__name">Ирина</span><span
-                  class="review-card__meta">Свадьба · 2024</span></div>
-            </div>
-            <div class="review-card__stars">★★★★★</div>
-            <p class="review-card__text">«Дмитрий создал настоящую атмосферу чуда. Каждый гость чувствовал себя
-              особенным.»</p>
-          </div>
-        </div>
-        <div class="review-card">
-          <div class="review-card__inner">
-            <div class="review-card__header">
-              <div class="review-card__avatar">О</div>
-              <div class="review-card__info"><span class="review-card__name">Олег</span><span
-                  class="review-card__meta">Юбилей · 2025</span></div>
-            </div>
-            <div class="review-card__stars">★★★★★</div>
-            <p class="review-card__text">«На юбилей мамы пригласили Дмитрия — это был лучший подарок. 80 гостей
-              аплодировали стоя!»</p>
-          </div>
-        </div>
-        <div class="review-card">
-          <div class="review-card__inner">
-            <div class="review-card__header">
-              <div class="review-card__avatar">Д</div>
-              <div class="review-card__info"><span class="review-card__name">Дарья</span><span
-                  class="review-card__meta">Выпускной · 2025</span></div>
-            </div>
-            <div class="review-card__stars">★★★★★</div>
-            <p class="review-card__text">«Заказали шоу на выпускной. Ребята были в шоке, учителя смеялись. Лучшее
-              завершение вечера!»</p>
-          </div>
-        </div>
-        <div class="review-card">
-          <div class="review-card__inner">
-            <div class="review-card__header">
-              <div class="review-card__avatar">А</div>
-              <div class="review-card__info"><span class="review-card__name">Алексей</span><span
-                  class="review-card__meta">Новогодний корпоратив</span></div>
-            </div>
-            <div class="review-card__stars">★★★★★</div>
-            <p class="review-card__text">«Третий год подряд приглашаем Дмитрия на новогодний корпоратив. Коллеги каждый
-              раз ждут с нетерпением.»</p>
-          </div>
-        </div>
-      </div>
-      <div class="reviews-dots" id="reviewsDots"></div>
-    </div>
-  </section>
-
-  <!-- wave -->
-  <div class="wave"><svg viewBox="0 0 1440 40" preserveAspectRatio="none">
-      <path fill="#000" d="M0,20 C480,45 960,-5 1440,20 L1440,0 L0,0 Z" />
-    </svg></div>
-
   <!-- ===== GALLERY ===== -->
   <section class="section reveal" id="gallerySection">
     <h2 class="sectionTitle">Галерея</h2>
-    <div class="gallery" id="gallery">
-      <img src="photos/IMG_2206.JPG" alt="Фото с мероприятия" loading="lazy">
-      <img src="images/gallery/event-01.webp" alt="Фото с мероприятия" loading="lazy">
-      <img src="photos/_p8x0i6xxpsxg99ra7qnh_40.png" alt="Фото с мероприятия" loading="lazy">
-      <img src="images/gallery/event-04.webp" alt="Фото с мероприятия" loading="lazy">
-      <img src="images/gallery/event-05.webp" alt="Фото с мероприятия" loading="lazy">
-      <img src="images/gallery/event-06.webp" alt="Фото с мероприятия" loading="lazy">
-      <img src="images/gallery/event-07.webp" alt="Фото с мероприятия" loading="lazy">
-      <img src="images/gallery/event-08.webp" alt="Фото с мероприятия" loading="lazy">
-      <img src="images/gallery/event-10.webp" alt="Фото с мероприятия" loading="lazy">
+    <div class="swiper swiper-gallery">
+      <div class="swiper-wrapper">
+        <div class="swiper-slide" onclick="openLightbox(this)"><img src="images/gallery/portrait-2206.jpg"
+            alt="Фото с мероприятия"
+            onerror="this.onerror=null;this.src='photos/_p8x0i6xxpsxg99ra7qnh_40.png'">
+        </div>
+        <div class="swiper-slide" onclick="openLightbox(this)"><img src="images/gallery/event-01.webp"
+            alt="Фото с мероприятия"></div>
+        <div class="swiper-slide" onclick="openLightbox(this)"><img src="images/gallery/event-02.webp"
+            alt="Фото с мероприятия"></div>
+        <div class="swiper-slide" onclick="openLightbox(this)"><img src="images/gallery/event-03.webp"
+            alt="Фото с мероприятия"></div>
+        <div class="swiper-slide" onclick="openLightbox(this)"><img src="photos/_p8x0i6xxpsxg99ra7qnh_40.png"
+            onerror="this.onerror=null;this.src='images/gallery/event-04.webp'"
+            alt="Фото с мероприятия"></div>
+        <div class="swiper-slide" onclick="openLightbox(this)"><img src="images/gallery/event-04.webp"
+            alt="Фото с мероприятия"></div>
+        <div class="swiper-slide" onclick="openLightbox(this)"><img src="images/gallery/event-05.webp"
+            alt="Фото с мероприятия"></div>
+        <div class="swiper-slide" onclick="openLightbox(this)"><img src="images/gallery/event-06.webp"
+            alt="Фото с мероприятия"></div>
+        <div class="swiper-slide" onclick="openLightbox(this)"><img src="images/gallery/event-07.webp"
+            alt="Фото с мероприятия"></div>
+        <div class="swiper-slide" onclick="openLightbox(this)"><img src="images/gallery/event-08.webp"
+            alt="Фото с мероприятия"></div>
+        <div class="swiper-slide" onclick="openLightbox(this)"><img src="images/gallery/event-09.webp"
+            alt="Фото с мероприятия"></div>
+        <div class="swiper-slide" onclick="openLightbox(this)"><img src="images/gallery/event-10.webp"
+            alt="Фото с мероприятия"></div>
+      </div>
+      <div class="swiper-pagination"></div>
     </div>
   </section>
 
@@ -1725,31 +2332,19 @@
       <path fill="#000" d="M0,15 C320,40 720,0 1080,30 C1260,40 1380,15 1440,20 L1440,40 L0,40 Z" />
     </svg></div>
 
-  <!-- ===== FAQ ===== -->
-  <section class="section reveal" id="faq">
-    <h2 class="sectionTitle">Частые вопросы</h2>
-    <div class="qaList">
-      <details>
-        <summary>Как забронировать шоу?</summary>
-        <div>Нажмите «Забронировать» — заполните короткую форму. Заявка придёт мне мгновенно, и я свяжусь с вами в
-          Telegram в течение пары часов.</div>
-      </details>
-      <details>
-        <summary>За сколько бронировать?</summary>
-        <div>Рекомендую минимум за 2 недели. Популярные даты (Новый год, выпускные) бронируют за 1–2 месяца.</div>
-      </details>
-      <details>
-        <summary>В каких городах выступаете?</summary>
-        <div>Основная база — Ярославль, но выступаю по всей России. Выезд обсуждается индивидуально.</div>
-      </details>
-      <details>
-        <summary>Можно персонализировать шоу?</summary>
-        <div>Обязательно! Каждое выступление адаптируется под ваше событие: тематика, реквизит, сценарий.</div>
-      </details>
-      <details>
-        <summary>Что входит в стоимость?</summary>
-        <div>Полное шоу, реквизит, подготовка сценария. Выезд за пределы города обсуждается отдельно.</div>
-      </details>
+
+
+  <!-- ===== MAGIC SCHOOL ===== -->
+  <section class="section magic-school reveal" id="school">
+    <h2 class="sectionTitle">Школа фокусов</h2>
+    <div class="magic-school__card">
+      <div class="magic-school__logo">
+        <img src="images/abracadabra-logo.png" alt="Abracadabra" onerror="this.style.display='none'" />
+        <span>ABRACADABRA</span>
+      </div>
+      <h3 class="magic-school__title">Для детей 7–13 лет</h3>
+      <p class="magic-school__subtitle">Первая школа фокусов в Ярославле. Уверенность, речь и артистизм через искусство иллюзии.</p>
+      <a href="https://magic-school-eight.vercel.app/#video" class="magic-school__cta" onclick="return startSchoolTransition(event)">Перейти на сайт школы →</a>
     </div>
   </section>
 
@@ -1758,45 +2353,14 @@
   </footer>
 
 
-  <!-- ===== BOOKING MODAL ===== -->
-  <div class="modal" id="bookingModal">
-    <div class="modal__bg" id="bookingBg"></div>
-    <div class="modal__panel">
-      <button class="modal__close" id="bookingClose">✕</button>
-      <div id="bookingForm">
-        <h2>Забронировать</h2>
-        <div class="form-group">
-          <label>Ваше имя</label>
-          <input type="text" id="bName" placeholder="Как вас зовут?" maxlength="60" autocomplete="name">
-        </div>
-        <div class="form-group">
-          <label>Телефон / Telegram</label>
-          <input type="tel" id="bPhone" placeholder="+7..." maxlength="20" autocomplete="tel">
-        </div>
-        <div class="form-group">
-          <label>Формат мероприятия</label>
-          <select id="bType">
-            <option value="Шоу-программа">Шоу-программа</option>
-            <option value="Микромагия">Микромагия</option>
-            <option value="Концерт">Концерт</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label>Желаемая дата</label>
-          <input type="date" id="bDate">
-        </div>
-        <div class="form-group">
-          <label>Пожелания (необязательно)</label>
-          <textarea id="bNote" placeholder="Расскажите о вашем событии..." maxlength="500" rows="2"></textarea>
-        </div>
-        <button class="btn btn--primary" style="width:100%;margin-top:.4rem" id="submitBooking">Отправить
-          заявку</button>
-      </div>
-      <div id="bookingSuccess">
-        <div class="success-icon">✅</div>
-        <h2 style="color:var(--gold);font-family:var(--ff-head);margin-bottom:.5rem">Заявка отправлена!</h2>
-        <p style="color:#999;line-height:1.5">Я свяжусь с вами в ближайшее время прямо в Telegram</p>
-      </div>
+  <!-- ===== QUIZ MODAL ===== -->
+  <div id="quizOverlay"
+    style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:9000;overflow-y:auto;padding:20px;box-sizing:border-box;">
+    <div
+      style="max-width:480px;margin:40px auto;background:#0e0e1a;border-radius:20px;border:1px solid rgba(203,161,40,0.3);padding:32px 24px;position:relative;">
+      <button onclick="closeQuiz()"
+        style="position:absolute;top:16px;right:16px;background:none;border:none;color:#aaa;font-size:24px;cursor:pointer;line-height:1;">✕</button>
+      <div id="quizContent"></div>
     </div>
   </div>
 
@@ -1809,20 +2373,100 @@
   </div>
 
   <script>
-    /* ===== TELEGRAM WEBAPP INIT ===== */
-    var tg = window.Telegram && window.Telegram.WebApp;
-    if (tg) {
-      tg.ready();
-      tg.expand();
-      tg.setHeaderColor('#000000');
-      tg.setBackgroundColor('#000000');
-    }
-    function haptic(t) { try { tg && tg.HapticFeedback && tg.HapticFeedback.impactOccurred(t || 'light') } catch (e) { } }
+    /* ===== PLATFORM BRIDGE INIT ===== */
+    window.APP_PLATFORM = {
+      isVK: false,
+      vkInited: false,
+      isTelegram: false
+    };
 
-    /* ===== PRELOADER ===== */
-    window.addEventListener('load', function () {
-      setTimeout(function () { document.getElementById('preloader').classList.add('hidden') }, 800);
+    (function initPlatformBridge() {
+      try {
+        if (window.vkBridge && typeof window.vkBridge.send === 'function') {
+          APP_PLATFORM.isVK = true;
+          if (typeof window.vkBridge.subscribe === 'function') {
+            window.vkBridge.subscribe(function () { });
+          }
+          window.vkBridge.send('VKWebAppInit')
+            .then(function () {
+              APP_PLATFORM.vkInited = true;
+            })
+            .catch(function (error) {
+              console.error('VKWebAppInit failed:', error);
+            });
+        }
+      } catch (e) {
+        console.error('VK bridge bootstrap error:', e);
+      }
+    })();
+
+    function expandTelegramWebApp() {
+      try {
+        if (!window.Telegram || !window.Telegram.WebApp) return;
+        APP_PLATFORM.isTelegram = true;
+        var tg = window.Telegram.WebApp;
+        if (typeof tg.ready === 'function') tg.ready();
+        if (typeof tg.expand === 'function') tg.expand();
+        if (typeof tg.requestFullscreen === 'function') {
+          try { tg.requestFullscreen(); } catch (e) { }
+        }
+      } catch (e) { }
+    }
+    expandTelegramWebApp();
+    document.addEventListener('visibilitychange', function () {
+      if (!document.hidden) expandTelegramWebApp();
     });
+    function haptic() { }
+
+    /* ===== PRELOADER & EFFECTS ===== */
+    window.addEventListener('load', function () {
+      setTimeout(function () {
+        document.getElementById('preloader').classList.add('hidden');
+        initTitleGlitch(document.querySelector('.title'));
+      }, 800);
+
+      // 3D Tilt Effect on Packs
+      var tiltElements = document.querySelectorAll('.pack, .mcard__inner, .concert-info-box');
+      tiltElements.forEach(function (el) {
+        el.addEventListener('mousemove', function (e) {
+          var rect = el.getBoundingClientRect();
+          var x = e.clientX - rect.left;
+          var y = e.clientY - rect.top;
+          var centerX = rect.width / 2;
+          var centerY = rect.height / 2;
+          var rotateX = ((y - centerY) / centerY) * -10;
+          var rotateY = ((x - centerX) / centerX) * 10;
+          el.style.transform = 'perspective(1000px) scale3d(1.02, 1.02, 1.02) rotateX(' + rotateX + 'deg) rotateY(' + rotateY + 'deg)';
+          el.style.transition = 'none';
+        });
+        el.addEventListener('mouseleave', function () {
+          el.style.transform = '';
+          el.style.transition = 'transform 0.5s ease';
+        });
+      });
+    });
+
+    /* ===== HERO TITLE GLITCH ===== */
+    function initTitleGlitch(element) {
+      if (!element) return;
+      var prefersReduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (prefersReduced) return;
+
+      var text = element.getAttribute('data-txt') || element.textContent.replace(/\s+/g, ' ').trim();
+      if (text) element.setAttribute('data-txt', text);
+
+      function pulse() {
+        element.classList.add('is-glitching');
+        setTimeout(function () {
+          element.classList.remove('is-glitching');
+        }, 340);
+
+        var next = 2500 + Math.random() * 4200;
+        setTimeout(pulse, next);
+      }
+
+      setTimeout(pulse, 1200);
+    }
 
     /* ===== SCROLL PROGRESS BAR ===== */
     var progressBar = document.getElementById('scrollProgress');
@@ -1831,13 +2475,38 @@
       if (max > 0) progressBar.style.width = (window.scrollY / max * 100) + '%';
     }, { passive: true });
 
+    function isElementNearViewport(el, offset) {
+      if (!el) return false;
+      var rect = el.getBoundingClientRect();
+      var viewportHeight = window.innerHeight || document.documentElement.clientHeight || 0;
+      var safeOffset = typeof offset === 'number' ? offset : 40;
+      return rect.top <= viewportHeight - safeOffset && rect.bottom >= 0;
+    }
+
     /* ===== SCROLL REVEAL ===== */
-    var revealObs = new IntersectionObserver(function (entries) {
-      entries.forEach(function (e) {
-        if (e.isIntersecting) { e.target.classList.add('visible'); revealObs.unobserve(e.target) }
+    var revealNodes = Array.prototype.slice.call(document.querySelectorAll('.reveal'));
+    function revealEligibleNodes() {
+      revealNodes.forEach(function (el) {
+        if (el.classList.contains('visible')) return;
+        if (isElementNearViewport(el, 30)) el.classList.add('visible');
       });
-    }, { threshold: .12, rootMargin: '0px 0px -30px 0px' });
-    document.querySelectorAll('.reveal').forEach(function (el) { revealObs.observe(el) });
+    }
+
+    if ('IntersectionObserver' in window) {
+      var revealObs = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) {
+          if (e.isIntersecting) { e.target.classList.add('visible'); revealObs.unobserve(e.target) }
+        });
+      }, { threshold: .12, rootMargin: '0px 0px -30px 0px' });
+      revealNodes.forEach(function (el) { revealObs.observe(el) });
+      revealEligibleNodes();
+      window.addEventListener('scroll', revealEligibleNodes, { passive: true });
+      window.addEventListener('resize', revealEligibleNodes);
+      window.addEventListener('load', revealEligibleNodes);
+      setTimeout(revealEligibleNodes, 700);
+    } else {
+      revealNodes.forEach(function (el) { el.classList.add('visible') });
+    }
 
     /* ===== COUNTER ANIMATION ===== */
     function animNum(el, target, duration, decimal) {
@@ -1878,135 +2547,253 @@
       loop();
     })();
 
-    /* ===== REVIEWS CAROUSEL ===== */
-    (function () {
-      var track = document.getElementById('reviewsTrack'), dots = document.getElementById('reviewsDots');
-      var cards = track.querySelectorAll('.review-card'), cur = 0, timer;
-      cards.forEach(function (_, i) { var d = document.createElement('span'); if (!i) d.classList.add('active'); dots.appendChild(d) });
-      function goTo(i) { cur = i; track.style.transform = 'translateX(-' + i * 100 + '%)'; dots.querySelectorAll('span').forEach(function (d, j) { d.classList.toggle('active', j === i) }) }
-      function next() { goTo((cur + 1) % cards.length) }
-      timer = setInterval(next, 4000);
-      var sx;
-      track.addEventListener('touchstart', function (e) { sx = e.touches[0].clientX; clearInterval(timer) }, { passive: true });
-      track.addEventListener('touchend', function (e) { var dx = e.changedTouches[0].clientX - sx; if (Math.abs(dx) > 40) { dx < 0 ? goTo(Math.min(cur + 1, cards.length - 1)) : goTo(Math.max(cur - 1, 0)) } timer = setInterval(next, 4000) }, { passive: true });
-      dots.addEventListener('click', function (e) { if (e.target.tagName === 'SPAN') { goTo([].indexOf.call(dots.children, e.target)); clearInterval(timer); timer = setInterval(next, 4000) } });
-    })();
-
     /* ===== GALLERY LIGHTBOX ===== */
     (function () {
       var lb = document.getElementById('lightbox'), img = document.getElementById('lbImg');
-      var imgs = [].slice.call(document.querySelectorAll('#gallery img')), ci = 0;
-      imgs.forEach(function (im, i) { im.addEventListener('click', function () { ci = i; img.src = im.src; lb.classList.add('open'); haptic('light') }) });
-      document.getElementById('lbClose').addEventListener('click', function () { lb.classList.remove('open') });
-      document.getElementById('lbPrev').addEventListener('click', function () { ci = (ci - 1 + imgs.length) % imgs.length; img.src = imgs[ci].src });
-      document.getElementById('lbNext').addEventListener('click', function () { ci = (ci + 1) % imgs.length; img.src = imgs[ci].src });
-      lb.addEventListener('click', function (e) { if (e.target === lb) lb.classList.remove('open') });
+      var imgs = [].slice.call(document.querySelectorAll('#gallerySection .swiper-slide img')), ci = 0;
+      if (!lb || !img) return;
+
+      function openByIndex(i) {
+        if (!imgs.length) return;
+        ci = (i + imgs.length) % imgs.length;
+        img.src = imgs[ci].src;
+        lb.classList.add('active');
+        document.body.style.overflow = 'hidden';
+        haptic('light');
+      }
+
+      function closeLb() {
+        lb.classList.remove('active');
+        document.body.style.overflow = '';
+      }
+
+      imgs.forEach(function (im, i) {
+        im.addEventListener('click', function (e) {
+          e.stopPropagation();
+          openByIndex(i);
+        });
+      });
+      document.getElementById('lbClose').addEventListener('click', closeLb);
+      document.getElementById('lbPrev').addEventListener('click', function () { openByIndex(ci - 1); });
+      document.getElementById('lbNext').addEventListener('click', function () { openByIndex(ci + 1); });
+      lb.addEventListener('click', function (e) { if (e.target === lb) closeLb(); });
       var tx;
       lb.addEventListener('touchstart', function (e) { tx = e.touches[0].clientX }, { passive: true });
-      lb.addEventListener('touchend', function (e) { var d = e.changedTouches[0].clientX - tx; if (Math.abs(d) > 50) { d < 0 ? document.getElementById('lbNext').click() : document.getElementById('lbPrev').click() } }, { passive: true });
+      lb.addEventListener('touchend', function (e) { var d = e.changedTouches[0].clientX - tx; if (Math.abs(d) > 50) { d < 0 ? openByIndex(ci + 1) : openByIndex(ci - 1) } }, { passive: true });
     })();
 
     /* ===== MAGIC CARD TRICK ===== */
     (function () {
-      var cards = document.querySelectorAll('.mcard'), played = false;
-      var results = ['Скидка 5% — ваша! Упомяните при бронировании', 'Вы выиграли Секретный БОНУС к заказу!', 'Сюрприз ждёт вас на мероприятии!'];
-      var resultEl = document.getElementById('magicResult'), hintEl = document.getElementById('magicHint');
+      var cards = Array.prototype.slice.call(document.querySelectorAll('.mcard'));
+      if (!cards.length) return;
+      var magicSection = document.getElementById('magic');
+      var resultEl = document.getElementById('magicResult');
+      var hintEl = document.getElementById('magicHint');
+      var fallbackPrizeDefs = [
+        { id: 0, type: 'discount', percent: 5, userLabel: 'Скидка 5% на первое шоу', adminLabel: 'Скидка 5% на первое шоу' },
+        { id: 1, type: 'bonus', userLabel: 'Секретный бонус к заказу', adminLabel: 'Секретный бонус к заказу' },
+        { id: 2, type: 'surprise', userLabel: 'Сюрприз на мероприятии', adminLabel: 'Сюрприз на мероприятии' }
+      ];
+
+      function prizeTextById(id) {
+        if (id === 0) return 'Скидка 5% — ваша! Упомяните при бронировании';
+        if (id === 1) return 'Вы выиграли Секретный БОНУС к заказу!';
+        return 'Сюрприз ждёт вас на мероприятии!';
+      }
+
+      function readSavedPrizeSafe() {
+        try {
+          if (typeof window.getMagicPrize === 'function') return window.getMagicPrize();
+        } catch (e) { }
+        try {
+          var raw = localStorage.getItem('site76_magic_prize') || sessionStorage.getItem('site76_magic_prize');
+          if (!raw) return null;
+          var parsed = JSON.parse(raw);
+          var pid = typeof parsed.id === 'number' ? parsed.id : parseInt(parsed.id, 10);
+          if (isNaN(pid)) return null;
+          var base = fallbackPrizeDefs.find(function (x) { return x.id === pid; });
+          if (!base) return null;
+          return Object.assign({}, base, parsed, { id: pid, source: parsed.source || 'magic-game' });
+        } catch (e) {
+          return null;
+        }
+      }
+
+      function savePrizeSafe(prize) {
+        try {
+          if (typeof window.saveMagicPrize === 'function') {
+            window.saveMagicPrize(prize);
+            return;
+          }
+        } catch (e) { }
+        try {
+          var serialized = JSON.stringify(prize || null);
+          if (!prize) {
+            localStorage.removeItem('site76_magic_prize');
+            sessionStorage.removeItem('site76_magic_prize');
+            return;
+          }
+          localStorage.setItem('site76_magic_prize', serialized);
+          sessionStorage.setItem('site76_magic_prize', serialized);
+        } catch (e) { }
+      }
+
+      function trackGoalSafe(name, payload) {
+        try {
+          if (typeof window.trackYandexGoal === 'function') window.trackYandexGoal(name, payload || {});
+        } catch (e) { }
+      }
+
+      function hapticSafe(kind) {
+        try {
+          if (typeof window.haptic === 'function') window.haptic(kind);
+        } catch (e) { }
+      }
+
+      function setCardVisual(card, open) {
+        var front = card.querySelector('.mcard__front');
+        var back = card.querySelector('.mcard__back');
+        var hit = card.querySelector('.mcard__hit');
+        if (!front || !back) return;
+        card.classList.add('deal');
+        if (open) {
+          card.classList.add('flipped');
+          card.classList.add('revealed');
+          front.style.display = 'none';
+          back.style.display = 'flex';
+          back.style.opacity = '1';
+          back.style.visibility = 'visible';
+          back.style.transform = 'scale(1) translateY(0)';
+          if (hit) hit.style.display = 'none';
+        } else {
+          card.classList.remove('flipped');
+          card.classList.remove('revealed');
+          card.classList.remove('winner');
+          card.style.transform = '';
+          card.style.pointerEvents = 'auto';
+          front.style.display = 'flex';
+          back.style.display = 'none';
+          back.style.opacity = '0';
+          back.style.visibility = 'hidden';
+          back.style.transform = 'scale(.92) translateY(8px)';
+          if (hit) {
+            hit.style.display = 'block';
+            hit.disabled = false;
+          }
+        }
+      }
+
+      function ensureCardsVisible() {
+        cards.forEach(function (card) {
+          card.classList.add('deal');
+          if (!card.classList.contains('flipped')) setCardVisual(card, false);
+        });
+      }
+
+      var savedPrize = readSavedPrizeSafe();
+      var played = !!savedPrize;
+
+      ensureCardsVisible();
+      setTimeout(ensureCardsVisible, 200);
+      setTimeout(ensureCardsVisible, 1200);
+
+      if ('IntersectionObserver' in window && magicSection) {
+        var magicObs = new IntersectionObserver(function (entries) {
+          entries.forEach(function (entry) {
+            if (entry.isIntersecting) ensureCardsVisible();
+          });
+        }, { threshold: 0.1 });
+        magicObs.observe(magicSection);
+      } else {
+        window.addEventListener('scroll', ensureCardsVisible, { passive: true });
+      }
+
+      if (savedPrize) {
+        cards.forEach(function (card) {
+          setCardVisual(card, true);
+          card.style.pointerEvents = 'none';
+          var hitBtn = card.querySelector('.mcard__hit');
+          if (hitBtn) hitBtn.disabled = true;
+          if (parseInt(card.dataset.prize, 10) === savedPrize.id) {
+            card.classList.add('winner');
+            card.style.transform = 'scale(1.1)';
+          }
+        });
+        if (hintEl) hintEl.textContent = 'Ваш бонус сохранен. Нажмите «Узнать стоимость», чтобы применить его в квизе';
+        if (resultEl) {
+          resultEl.textContent = savedPrize.userLabel || prizeTextById(savedPrize.id);
+          resultEl.classList.add('show');
+        }
+      }
+
+      function revealPrize(card) {
+        if (!card || played) return;
+        played = true;
+        hapticSafe('medium');
+        var idx = parseInt(card.dataset.prize, 10);
+        if (isNaN(idx) || idx < 0 || idx > 2) idx = 0;
+        var base = fallbackPrizeDefs.find(function (x) { return x.id === idx; }) || fallbackPrizeDefs[0];
+
+        cards.forEach(function (item) {
+          setCardVisual(item, true);
+          item.style.pointerEvents = 'none';
+          var hitBtn = item.querySelector('.mcard__hit');
+          if (hitBtn) hitBtn.disabled = true;
+        });
+        card.classList.add('winner');
+        card.style.transform = 'scale(1.1)';
+
+        savePrizeSafe({
+          id: base.id,
+          type: base.type,
+          percent: base.percent || 0,
+          userLabel: base.userLabel,
+          adminLabel: base.adminLabel,
+          source: 'magic-game',
+          capturedAt: new Date().toISOString()
+        });
+        trackGoalSafe('magic_bonus_claimed', { prizeId: base.id, app: 'site76' });
+
+        if (resultEl) {
+          resultEl.textContent = prizeTextById(base.id);
+          resultEl.classList.add('show');
+        }
+        if (hintEl) hintEl.textContent = 'Нажмите «Узнать стоимость», чтобы активировать';
+        setTimeout(function () { hapticSafe('success'); }, 120);
+      }
+
+      window.handleMagicCardTap = function (event, node) {
+        if (event) {
+          if (typeof event.preventDefault === 'function') event.preventDefault();
+          if (typeof event.stopPropagation === 'function') event.stopPropagation();
+        }
+        var card = node && node.closest ? node.closest('.mcard') : null;
+        revealPrize(card);
+        return false;
+      };
+
       cards.forEach(function (card) {
-        card.addEventListener('click', function () {
-          if (played) return;
-          played = true;
-          haptic('medium');
-          var idx = parseInt(card.dataset.prize);
-          card.classList.add('winner');
-          cards.forEach(function (c) { c.classList.add('flipped') });
-          setTimeout(function () {
-            resultEl.textContent = results[idx];
-            resultEl.classList.add('show');
-            hintEl.textContent = 'Нажмите «Забронировать», чтобы активировать';
-            haptic('success');
-          }, 700);
+        card.setAttribute('role', 'button');
+        card.setAttribute('tabindex', '0');
+        card.style.touchAction = 'manipulation';
+
+        var hit = card.querySelector('.mcard__hit');
+        if (hit) {
+          hit.addEventListener('click', function (e) { window.handleMagicCardTap(e, hit); });
+          hit.addEventListener('pointerup', function (e) { window.handleMagicCardTap(e, hit); });
+        }
+
+        card.addEventListener('click', function (e) { window.handleMagicCardTap(e, card); });
+        card.addEventListener('pointerup', function (e) { window.handleMagicCardTap(e, card); });
+        card.addEventListener('keydown', function (e) {
+          if (e.key === 'Enter' || e.key === ' ') window.handleMagicCardTap(e, card);
         });
       });
     })();
 
-    /* ===== BOOKING MODAL ===== */
-    (function () {
-      var modal = document.getElementById('bookingModal');
-      var form = document.getElementById('bookingForm');
-      var success = document.getElementById('bookingSuccess');
-      var nameInput = document.getElementById('bName');
-
-      function open(type) {
-        if (type) document.getElementById('bType').value = type;
-        if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user && !nameInput.value) {
-          var u = tg.initDataUnsafe.user;
-          nameInput.value = u.first_name + (u.last_name ? ' ' + u.last_name : '');
-        }
-        form.style.display = 'block';
-        success.style.display = 'none';
-        modal.classList.add('open');
-        haptic('medium');
-      }
-      function close() { modal.classList.remove('open') }
-
-      document.getElementById('heroBookBtn').addEventListener('click', function () { open() });
-      document.querySelectorAll('[data-book]').forEach(function (b) {
-        b.addEventListener('click', function () { open(b.dataset.book) });
-      });
-      document.getElementById('bookingBg').addEventListener('click', close);
-      document.getElementById('bookingClose').addEventListener('click', close);
-
-      document.getElementById('submitBooking').addEventListener('click', function () {
-        var name = nameInput.value.trim();
-        var phone = document.getElementById('bPhone').value.trim();
-        var type = document.getElementById('bType').value;
-        var date = document.getElementById('bDate').value;
-        var note = document.getElementById('bNote').value.trim();
-
-        if (!name) {
-          haptic('error');
-          nameInput.focus();
-          nameInput.style.borderColor = '#e74c3c';
-          setTimeout(function () { nameInput.style.borderColor = '' }, 1500);
-          return;
-        }
-
-        /* Format matching bot handler: action='booking_private', data={name,contact,date,type} */
-        var user = tg && tg.initDataUnsafe && tg.initDataUnsafe.user;
-        var contact = phone || (user ? ('@' + user.username) : 'Telegram');
-        var data = {
-          action: 'booking_private',
-          data: {
-            name: name,
-            contact: contact,
-            date: date || 'Не указана',
-            type: type,
-            note: note || '—'
-          }
-        };
-
-        if (tg && tg.sendData) {
-          haptic('success');
-          tg.sendData(JSON.stringify(data));
-        } else {
-          console.log('Booking data:', data);
-          form.style.display = 'none';
-          success.style.display = 'block';
-          haptic('success');
-        }
-      });
-    })();
-
-    /* ===== URGENCY MONTH ===== */
-    (function () {
-      var months = ['январе', 'феврале', 'марте', 'апреле', 'мае', 'июне', 'июле', 'августе', 'сентябре', 'октябре', 'ноябре', 'декабре'];
-      var el = document.getElementById('urgencyMonth');
-      if (el) el.textContent = months[new Date().getMonth()];
-    })();
-
     /* ===== HERO IMG FALLBACK ===== */
     var hi = document.getElementById('heroImg');
-    hi.addEventListener('error', function () { hi.style.display = 'none' });
+    if (hi) hi.addEventListener('error', function () { hi.style.display = 'none' });
 
     // Inject CSS for new icons
     var css = document.createElement('style');
@@ -2018,57 +2805,931 @@
         opacity: 0.9;
         mix-blend-mode: screen; 
       }
-      .icon-nav { width: 24px; height: 24px; filter: invert(0.5) grayscale(1); opacity: 0.6; } /* Dim idle nav items */
-      .tab-item.active .icon-nav { 
-        filter: invert(1) grayscale(1) brightness(2) contrast(1.2); 
-        opacity: 1; 
-      }
+      .icon-nav { width: 24px; height: 24px; filter: invert(0.5) grayscale(1); opacity: 0.6; }
       .icon-mt { width: 32px; height: 32px; margin:0 auto 5px; } /* Reset stroke */
-      .pack__icon { font-size: 0; line-height: 0; }
       .fab-icon { width: 32px; height: 32px; }
     `;
     document.head.appendChild(css);
   </script>
-  <!-- TAB BAR -->
-  <nav class="tab-bar">
-    <a href="/" class="tab-item">
-      <span>
-        <!-- Ticket ICON -->
-        <img src="icons/ticket.png" class="icon-nav" alt="Afisha">
-      </span>
-      Афиша
-    </a>
-    <div class="tab-item active">
-      <span>
-        <!-- Hat ICON -->
-        <img src="icons/magician.png" class="icon-nav" alt="Private">
-      </span>
-      Частные
-    </div>
-    <a href="/school" class="tab-item">
-      <span>
-        <!-- School ICON -->
-        <img src="icons/book.png" class="icon-nav" alt="School">
-      </span>
-      Школа
-    </a>
-  </nav>
 
+
+  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
   <script>
-    // Smart Router: Adjusts tab-bar links for GitHub Pages vs Localhost
-    (function () {
-      const isGithub = window.location.hostname.includes('github.io');
-      if (isGithub) {
-        const links = document.querySelectorAll('.tab-bar a');
-        links.forEach(link => {
-          const href = link.getAttribute('href');
-          if (href === '/') link.href = 'https://demonnikko.github.io/botosconcert/';
-          if (href === '/private') link.href = 'https://demonnikko.github.io/Site76/';
-          if (href === '/school') link.href = 'https://demonnikko.github.io/Magic-School/';
+    var VK_PERSONAL_ID = 196783025;
+    var VK_COMMUNITY_ID = 209268664;
+    var TG_CONTACT_URL = 'https://t.me/Dmitrokko';
+    var VK_PERSONAL_CHAT_URL = 'https://vk.com/im?sel=' + VK_PERSONAL_ID;
+    var VK_CONTACT_URL = VK_PERSONAL_CHAT_URL;
+    var MAGIC_PRIZES = [
+      {
+        id: 0,
+        type: 'discount',
+        percent: 5,
+        userLabel: 'Скидка 5% на первое шоу',
+        adminLabel: 'Скидка 5% на первое шоу'
+      },
+      {
+        id: 1,
+        type: 'bonus',
+        userLabel: 'Секретный бонус к заказу',
+        adminLabel: 'Секретный бонус к заказу'
+      },
+      {
+        id: 2,
+        type: 'surprise',
+        userLabel: 'Сюрприз на мероприятии',
+        adminLabel: 'Сюрприз на мероприятии'
+      }
+    ];
+
+    function getTelegramViewer() {
+      try {
+        var tgUser = window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.initDataUnsafe
+          ? window.Telegram.WebApp.initDataUnsafe.user
+          : null;
+        if (!tgUser) return null;
+        return {
+          id: tgUser.id || '',
+          username: tgUser.username || '',
+          name: [tgUser.first_name || '', tgUser.last_name || ''].join(' ').trim()
+        };
+      } catch (e) {
+        return null;
+      }
+    }
+
+    var site76MetricsState = {
+      counterId: '',
+      app: 'site76',
+      ready: false
+    };
+    var SITE76_FALLBACK_COUNTER_ID = '107696179';
+
+    function initYandexMetrika(counterId, appName) {
+      var normalizedId = String(counterId || '').trim();
+      if (!normalizedId) return;
+      if (site76MetricsState.ready && site76MetricsState.counterId === normalizedId) return;
+
+      site76MetricsState.counterId = normalizedId;
+      site76MetricsState.app = appName || 'site76';
+
+      function boot() {
+        if (typeof window.ym !== 'function' || site76MetricsState.ready) return;
+        window.ym(Number(site76MetricsState.counterId), 'init', {
+          clickmap: true,
+          trackLinks: true,
+          accurateTrackBounce: true,
+          webvisor: true,
+          trackHash: true
+        });
+        site76MetricsState.ready = true;
+        trackYandexGoal('miniapp_open', { app: site76MetricsState.app });
+      }
+
+      if (typeof window.ym === 'function') {
+        boot();
+        return;
+      }
+
+      if (!document.querySelector('script[data-ym-loader="site76"]')) {
+        var tag = document.createElement('script');
+        tag.async = true;
+        tag.src = 'https://mc.yandex.ru/metrika/tag.js';
+        tag.dataset.ymLoader = 'site76';
+        document.head.appendChild(tag);
+      }
+
+      var attempts = 0;
+      var timer = setInterval(function () {
+        attempts += 1;
+        if (typeof window.ym === 'function') {
+          clearInterval(timer);
+          boot();
+        } else if (attempts > 60) {
+          clearInterval(timer);
+        }
+      }, 250);
+    }
+
+    function trackYandexGoal(goalName, params) {
+      if (!site76MetricsState.ready || !site76MetricsState.counterId || typeof window.ym !== 'function') return;
+      try {
+        window.ym(Number(site76MetricsState.counterId), 'reachGoal', goalName, params || {});
+      } catch (e) { }
+    }
+
+    setTimeout(function () {
+      if (!site76MetricsState.ready) initYandexMetrika(SITE76_FALLBACK_COUNTER_ID, 'site76');
+    }, 2500);
+
+    var site76MagicPrizeMemory = null;
+
+    function saveMagicPrize(prize) {
+      site76MagicPrizeMemory = prize || null;
+      try {
+        if (!prize) {
+          localStorage.removeItem('site76_magic_prize');
+          sessionStorage.removeItem('site76_magic_prize');
+          return;
+        }
+        var serialized = JSON.stringify(prize);
+        localStorage.setItem('site76_magic_prize', serialized);
+        sessionStorage.setItem('site76_magic_prize', serialized);
+      } catch (e) {
+        try {
+          if (!prize) sessionStorage.removeItem('site76_magic_prize');
+          else sessionStorage.setItem('site76_magic_prize', JSON.stringify(prize));
+        } catch (err) { }
+      }
+    }
+
+    function getMagicPrize() {
+      try {
+        var raw = null;
+        try {
+          raw = localStorage.getItem('site76_magic_prize');
+        } catch (e) { }
+        if (!raw) {
+          try {
+            raw = sessionStorage.getItem('site76_magic_prize');
+          } catch (e) { }
+        }
+        if (!raw && site76MagicPrizeMemory) raw = JSON.stringify(site76MagicPrizeMemory);
+        if (!raw) return null;
+        var parsed = JSON.parse(raw);
+        var prizeId = typeof parsed.id === 'number' ? parsed.id : parseInt(parsed.id, 10);
+        if (isNaN(prizeId)) return null;
+        var basePrize = MAGIC_PRIZES.find(function (item) { return item.id === prizeId; });
+        if (!basePrize) return null;
+        return {
+          id: basePrize.id,
+          type: basePrize.type,
+          percent: basePrize.percent || 0,
+          userLabel: basePrize.userLabel,
+          adminLabel: basePrize.adminLabel,
+          capturedAt: parsed.capturedAt || '',
+          source: 'magic-game'
+        };
+      } catch (e) {
+        return null;
+      }
+    }
+
+    function buildVkPersonalChatUrl(message) {
+      var url = VK_PERSONAL_CHAT_URL;
+      if (message) url += '&message=' + encodeURIComponent(message);
+      return url;
+    }
+
+    function buildQuizContactMessage(summary) {
+      if (!summary) return '';
+      var lines = [
+        'Здравствуйте, Дмитрий.',
+        'Я прошел(а) квиз на сайте и хочу обсудить бронирование.',
+        'Заявка: ' + summary.leadId,
+        'Дата: ' + summary.date,
+        'Город: ' + summary.location,
+        'Формат: ' + summary.service + ' — ' + summary.duration
+      ];
+      if (summary.guestsLabel) lines.push('Гости: ' + summary.guestsLabel);
+      if (summary.hostLabel) lines.push('Ведущий: ' + summary.hostLabel);
+      if (summary.magicPrizeLabel) lines.push('Бонус из игры: ' + summary.magicPrizeLabel);
+      if (summary.priceText) lines.push('Расчет: ' + summary.priceText);
+      return lines.join('\n');
+    }
+
+    function buildQuizLeadPayload(summary, meta) {
+      meta = meta || {};
+      var viewer = getTelegramViewer();
+      return {
+        kind: meta.kind || 'quiz_completed',
+        leadId: summary.leadId,
+        channel: meta.channel || '',
+        note: meta.note || '',
+        source: 'site76_quiz',
+        viewer: viewer,
+        magic: summary.magicPrize || null,
+        order: {
+          area: qState.oblast || '',
+          city: qState.city || '',
+          date: summary.date,
+          guests: summary.guestsLabel || '',
+          audience: qState.audience || '',
+          service: summary.service,
+          duration: summary.duration,
+          host: summary.hostLabel || '',
+          wishes: qState.welcomeWishes || '',
+          price: summary.priceText || 'Нужно рассчитать вручную',
+          discount: summary.magicPrizeLabel || '',
+          deposit: summary.depositText || '',
+          holidayMultiplier: summary.holidayText || ''
+        }
+      };
+    }
+
+    async function sendQuizLead(summary, meta) {
+      meta = meta || {};
+      if (!summary || !summary.leadId) return;
+      trackYandexGoal('quiz_lead_sent', { channel: meta.channel || 'unknown', app: 'site76' });
+
+      qState.sentLeadEvents = qState.sentLeadEvents || {};
+      var eventKey = [summary.leadId, meta.kind || 'quiz_completed', meta.channel || 'none'].join(':');
+      if (qState.sentLeadEvents[eventKey]) return;
+      qState.sentLeadEvents[eventKey] = 'pending';
+
+      try {
+        var response = await fetch('/api/lead', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json; charset=utf-8' },
+          body: JSON.stringify(buildQuizLeadPayload(summary, meta)),
+          keepalive: true
+        });
+
+        if (!response.ok) throw new Error('Lead API returned ' + response.status);
+        var data = await response.json().catch(function () { return { ok: false }; });
+        if (!data || !data.ok) throw new Error('Lead API returned invalid payload');
+        qState.sentLeadEvents[eventKey] = 'done';
+      } catch (error) {
+        console.error('Quiz lead send failed:', error);
+        delete qState.sentLeadEvents[eventKey];
+      }
+    }
+
+    function handleQuizBookingChannel(channel) {
+      var summary = qState.lastQuizResult;
+      trackYandexGoal(channel === 'telegram' ? 'quiz_contact_vk_personal' : 'quiz_contact_vk', { app: 'site76' });
+      if (summary) {
+        sendQuizLead(summary, {
+          kind: 'quiz_contact_click',
+          channel: channel,
+          note: channel === 'vk'
+            ? 'Клиент нажал кнопку бронирования через VK.'
+            : 'Клиент нажал кнопку связи через личный VK.'
         });
       }
-    })();
+
+      closeQuiz();
+      if (channel === 'vk') {
+        routeToMiniApp(buildVkPersonalChatUrl(summary ? summary.contactMessage : ''));
+        return;
+      }
+      routeToMiniApp(buildVkPersonalChatUrl(summary ? summary.contactMessage : ''));
+    }
+
+    // ===== CONCERTS CAROUSEL INIT =====
+    var concertsSwiper = new Swiper('.swiper-concerts', {
+      effect: 'coverflow', // Drum/3D effect
+      grabCursor: true,
+      centeredSlides: true,
+      slidesPerView: 'auto',
+      loop: false,
+      initialSlide: 0,
+      autoplay: {
+        delay: 3000,
+        disableOnInteraction: false,
+      },
+      coverflowEffect: {
+        rotate: 40,
+        stretch: 0,
+        depth: 250,
+        modifier: 1,
+        slideShadows: true,
+      },
+      navigation: {
+        nextEl: '.swiper-button-next',
+        prevEl: '.swiper-button-prev',
+      },
+      on: {
+        slideChange: function () {
+          var idx = this.activeIndex;
+          var infos = document.querySelectorAll('.concert-info-box');
+          infos.forEach(function (el, i) {
+            if (i === idx) {
+              el.classList.add('active');
+            } else {
+              el.classList.remove('active');
+            }
+          });
+          if (window.haptic) haptic('light');
+        }
+      }
+    });
+
+    // ===== REVIEWS CAROUSEL INIT =====
+    var reviewsNode = document.querySelector('.swiper-reviews');
+    if (reviewsNode) {
+      new Swiper('.swiper-reviews', {
+        loop: true,
+        slidesPerView: 1,
+        spaceBetween: 10,
+        speed: 520,
+        autoHeight: true,
+        allowTouchMove: true,
+        navigation: {
+          nextEl: '.reviews-nav__next',
+          prevEl: '.reviews-nav__prev'
+        }
+      });
+    }
+
+    // ===== ROUTING =====
+    function routeToMiniApp(url) {
+      var targetUrl = String(url || '').trim();
+      if (!targetUrl) return;
+
+      try {
+        if (window.Telegram && window.Telegram.WebApp) {
+          if ((/^https:\/\/t\.me\//i.test(targetUrl) || /^tg:\/\//i.test(targetUrl)) && typeof window.Telegram.WebApp.openTelegramLink === 'function') {
+            window.Telegram.WebApp.openTelegramLink(targetUrl);
+            return;
+          }
+          if (/^https?:\/\//i.test(targetUrl) && typeof window.Telegram.WebApp.openLink === 'function') {
+            window.Telegram.WebApp.openLink(targetUrl);
+            return;
+          }
+        }
+      } catch (e) { }
+
+      if (window.vkBridge && typeof vkBridge.send === 'function') {
+        vkBridge.send('VKWebAppOpenURL', { url: targetUrl })
+          .catch(function () {
+            vkBridge.send('VKWebAppOpenUrl', { url: targetUrl })
+              .catch(function () { window.open(targetUrl, '_blank', 'noopener'); });
+          });
+        return;
+      }
+
+      window.open(targetUrl, '_blank', 'noopener');
+    }
+
+    // ===== INLINE QUIZ & DYNAMIC CALCULATOR =====
+    var dynCfg = null;
+    var CALC_SERVICES = {
+      'Детское шоу': { '30 минут': 8000, '40 минут': 10000, 'Индивидуальное': 15000 },
+      'Стандартная шоу-программа': { '20 минут': 14000, '30 минут': 20000, '40 минут': 26000 },
+      'Индивидуальное шоу': { '20 минут': 20000, '30 минут': 28000, '40 минут': 36000 },
+      'Взрослое шоу': { '20 минут': 14000, '30 минут': 20000, '40 минут': 26000 },
+      'Микромагия': { '30 минут': 10000, '1 час': 16000, '2 часа': 24000, '3 часа': 30000 },
+      'Свадьба': { '20 минут': 20000, '30 минут': 27000 },
+      'Корпоратив': { '20 минут': 21000, '30 минут': 28000 },
+      'Юбилей': { '20 минут': 18000, '30 минут': 28000 },
+      'Выпускной': { '20 минут': 17000, '30 минут': 24000 }
+    };
+    var CALC_TRAVEL = {
+      'Ярославская': { 'Ярославль': 1000, 'Гаврилов-Ям': 2000, 'Тутаев': 2000, 'Ростов': 3000, 'Данилов': 3000, 'Рыбинск': 3000, 'Любим': 4000, 'Мышкин': 4000, 'Углич': 4000, 'Переславль': 4000, 'Пошехонье': 5000 },
+      'Ивановская': { 'Иваново': 2000, 'Кохма': 2000, 'Тейково': 3000, 'Фурманов': 3000, 'Шуя': 3000, 'Приволжск': 3000, 'Вичуга': 4000, 'Родники': 4000, 'Кинешма': 4000, 'Южа': 5000 },
+      'Костромская': { 'Кострома': 3000, 'Волгореченск': 3000, 'Нерехта': 3000, 'Галич': 4000, 'Буй': 5000, 'Мантурово': 5000, 'Шарья': 7000 },
+      'Владимирская': { 'Александров': 4000, 'Владимир': 5000, 'Ковров': 5000, 'Гусь-Хрустальный': 6000, 'Муром': 7000 },
+      'Вологодская': { 'Вологда': 5000, 'Сокол': 5500, 'Череповец': 7000 },
+      'Московская': { 'Москва': 6000, 'Химки': 7000, 'Мытищи': 7000, 'Люберцы': 7000, 'Красногорск': 7000, 'Королёв': 7000, 'Одинцово': 7000, 'Балашиха': 7000, 'Реутов': 7000, 'Подольск': 8000, 'Видное': 8000, 'Пушкино': 8000, 'Щёлково': 8000, 'Домодедово': 8000, 'Зеленоград': 8000, 'Сергиев Посад': 9000, 'Коломна': 9000 }
+    };
+    var CALC_HOLIDAYS = { '12-31': 2, '01-01': 2, '05-09': 1.4, '02-23': 1.3 };
+    var CALC_HOLIDAY_RANGES = [
+      { sm: 12, sd: 10, em: 12, ed: 30, k: 1.5 },
+      { sm: 1, sd: 2, em: 1, ed: 8, k: 1.3 },
+      { sm: 5, sd: 1, em: 5, ed: 3, k: 1.2 },
+      { sm: 5, sd: 4, em: 5, ed: 8, k: 1.3 },
+      { sm: 3, sd: 6, em: 3, ed: 8, k: 1.3 }
+    ];
+
+    function getCfgServices() { return (dynCfg && dynCfg.services) || CALC_SERVICES; }
+    function getCfgTravel() { return (dynCfg && dynCfg.travel) || CALC_TRAVEL; }
+    function getCfgHolidays() { return (dynCfg && dynCfg.holidays) || CALC_HOLIDAYS; }
+    function getCfgRanges() { return (dynCfg && dynCfg.holidayRanges) || CALC_HOLIDAY_RANGES; }
+    function getCfgDeposit() { return (dynCfg && dynCfg.deposit) || 50; }
+
+    function getTravelCost(oblast, city) {
+      var t = getCfgTravel();
+      var reg = t[oblast];
+      if (!reg) return 0;
+      if (reg.cities) return reg.cities[city] || 0;
+      return reg[city] || 0;
+    }
+
+    function getAvailableRegions() {
+      return Object.keys(getCfgTravel() || {});
+    }
+
+    function getAvailableCities(oblast) {
+      var reg = (getCfgTravel() || {})[oblast];
+      if (!reg) return [];
+      return Object.keys(reg.cities || reg || {});
+    }
+
+    function getHolidayMultiplier(month, day) {
+      if (!month || !day) return 1;
+      var key = String(month).padStart(2, '0') + '-' + String(day).padStart(2, '0');
+      var keyLegacy = key.replace('-', '_');
+      var hols = getCfgHolidays();
+      if (hols[key]) return hols[key];
+      if (hols[keyLegacy]) return hols[keyLegacy];
+      var y = new Date().getFullYear();
+      var dateTs = new Date(y, month - 1, day).getTime();
+      var ranges = getCfgRanges();
+      for (var i = 0; i < ranges.length; i++) {
+        var r = ranges[i];
+        var startTs = new Date(y, r.sm - 1, r.sd).getTime();
+        var endTs = new Date(y, r.em - 1, r.ed).getTime();
+        if (endTs < startTs) {
+          if (dateTs >= startTs || dateTs <= endTs) return r.k;
+        } else {
+          if (dateTs >= startTs && dateTs <= endTs) return r.k;
+        }
+      }
+      return 1;
+    }
+
+    function rub(n) { return String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ' ') + ' ₽'; }
+
+    // Fetch dynamic config on load
+    window.addEventListener('load', function () {
+      fetch('/api/prices')
+        .then(res => res.json())
+        .then(data => {
+          if (data && data.services) dynCfg = data;
+          if (data && data.metrics && data.metrics.yandexCounterId) {
+            initYandexMetrika(data.metrics.yandexCounterId, 'site76');
+          }
+        })
+        .catch(err => {
+          console.error('Using fallback prices.', err);
+          if (!site76MetricsState.ready) initYandexMetrika(SITE76_FALLBACK_COUNTER_ID, 'site76');
+        });
+    });
+
+    // Quiz State
+    var qState = {
+      step: '', // start, month, day, time, oblast, city, audience, guests, vedushchy, category, indiv_sub, welcome_wishes, duration
+      month: 0, day: 0, time: '',
+      oblast: '', city: '',
+      audience: '', guests: '', vedushchy: '',
+      category: '', indivEvent: '', welcomeWishes: '',
+      serviceType: '', duration: '',
+      history: [], // stack of steps to go back
+      lastQuizResult: null,
+      sentLeadEvents: {}
+    };
+
+    var uiTitle = '';
+    var uiButtons = []; // {label, color, val}
+    var uiInput = null; // {placeholder}
+
+    function pushState(newStep) {
+      qState.history.push(qState.step);
+      qState.step = newStep;
+      renderActiveStep();
+    }
+    function popState() {
+      if (qState.history.length === 0) return;
+      qState.step = qState.history.pop();
+      renderActiveStep();
+    }
+
+    function renderActiveStep() {
+      uiButtons = []; uiInput = null; uiTitle = '';
+      var s = qState.step;
+
+      if (s === 'start') {
+        uiTitle = 'Чтобы узнать стоимость, вам нужно будет ответить на несколько вопросов.\nЭто займет не более минуты. Готовы?';
+        uiButtons = [{ label: 'Далее →', val: 'start', color: 'primary' }];
+      }
+      else if (s === 'month') {
+        uiTitle = 'В каком месяце будет праздник?';
+        var mNames = ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'];
+        mNames.forEach((n, i) => uiButtons.push({ label: n, val: i + 1 }));
+      }
+      else if (s === 'day') {
+        uiTitle = 'Месяц: ' + ['январь', 'февраль', 'март', 'апрель', 'май', 'июнь', 'июль', 'август', 'сентябрь', 'октябрь', 'ноябрь', 'декабрь'][qState.month - 1] + '\nВыберите число:';
+        var days31 = [1, 3, 5, 7, 8, 10, 12];
+        var maxDay = qState.month === 2 ? 29 : days31.includes(qState.month) ? 31 : 30;
+        for (var i = 1; i <= maxDay; i++) uiButtons.push({ label: i.toString(), val: i });
+      }
+      else if (s === 'time') {
+        uiTitle = 'Напишите примерное время начала\n(например: 18:00, вечером)';
+        uiInput = { placeholder: 'Введите время...' };
+        uiButtons = [{ label: '🕒 Пока не знаю', val: 'Не указано', color: 'secondary' }];
+      }
+      else if (s === 'oblast') {
+        uiTitle = 'Шаг 2 из 3: Локация\nВыберите область:';
+        getAvailableRegions().forEach(ob => uiButtons.push({ label: ob, val: ob }));
+      }
+      else if (s === 'city') {
+        uiTitle = 'Область: ' + qState.oblast + '\nВыберите город:';
+        var cities = getAvailableCities(qState.oblast);
+        cities.forEach(c => uiButtons.push({ label: c, val: c }));
+      }
+      else if (s === 'audience') {
+        uiTitle = 'Шаг 3 из 3: Формат\nДля кого шоу?';
+        uiButtons = [
+          { label: '👶 Для детей', val: 'детское', color: 'primary' },
+          { label: '🎭 Для взрослых', val: 'взрослые', color: 'primary' }
+        ];
+      }
+      else if (s === 'guests') {
+        uiTitle = 'Сколько примерно будет гостей?';
+        uiButtons = [
+          { label: '👤 До 30 человек', val: 'мало' },
+          { label: '👥 Больше 30 человек', val: 'много' }
+        ];
+      }
+      else if (s === 'vedushchy') {
+        uiTitle = 'Будет ли на мероприятии ведущий?';
+        uiButtons = [
+          { label: '✅ Есть ведущий', val: 'Да' },
+          { label: '❌ Нет ведущего', val: 'Нет' }
+        ];
+      }
+      else if (s === 'category') {
+        uiTitle = 'Выберите формат шоу:';
+        uiButtons = [
+          { label: '🎭 Стандартная шоу-программа', val: 'Стандартная шоу-программа' },
+          { label: '🎪 Индивидуальное шоу', val: 'Индивидуальное шоу' },
+          { label: '🪄 Фокусы на встречу гостей / Фуршет', val: 'Микромагия' }
+        ];
+      }
+      else if (s === 'indiv_sub') {
+        uiTitle = '🎪 Индивидуальное шоу\nКакое у вас событие?';
+        uiButtons = [
+          { label: '🎓 Выпускной', val: 'Выпускной' },
+          { label: '💍 Свадьба', val: 'Свадьба' },
+          { label: '🏢 Корпоратив', val: 'Корпоратив' },
+          { label: '🎂 Юбилей', val: 'Юбилей' }
+        ];
+      }
+      else if (s === 'welcome_wishes') {
+        uiTitle = '🪄 Микромагия / Фуршет\nЧто вы хотите видеть? Опишите в свободной форме:';
+        uiInput = { placeholder: 'Пожелания к формату...' };
+      }
+      else if (s === 'duration') {
+        if (qState.serviceType === 'Детское шоу') {
+          uiTitle = '👶 Для детей\nВыберите длительность:';
+          uiButtons = [{ label: '30 минут', val: '30 минут' }, { label: '40 минут', val: '40 минут' }, { label: 'Индивидуальное (шоу + МК)', val: 'Индивидуальное' }];
+        } else if (qState.serviceType === 'Стандартная шоу-программа' || qState.serviceType === 'Индивидуальное шоу') {
+          uiTitle = qState.serviceType + '\nВыберите длительность:';
+          uiButtons = [{ label: '20 минут', val: '20 минут' }, { label: '30 минут', val: '30 минут' }, { label: '40 минут', val: '40 минут' }];
+        } else if (qState.serviceType === 'Микромагия_мало') {
+          uiTitle = '🪄 Микромагия (До 30 чел)\nФокусы на расстоянии вытянутой руки.\nВыберите длительность:';
+          uiButtons = [{ label: '30 минут', val: '30 минут' }, { label: '1 час', val: '1 час' }];
+        } else if (qState.serviceType === 'Микромагия_много') {
+          uiTitle = '🪄 Микромагия (Фуршет)\nВыберите длительность:';
+          uiButtons = [{ label: '30 минут', val: '30 минут' }, { label: '1 час', val: '1 час' }, { label: '2 часа', val: '2 часа' }, { label: '3 часа', val: '3 часа' }];
+        }
+      }
+
+      drawQuizHTML();
+    }
+
+    function drawQuizHTML() {
+      var html = '';
+      var progress = 0;
+      if (['start', 'month', 'day', 'time'].includes(qState.step)) progress = 33;
+      if (['oblast', 'city'].includes(qState.step)) progress = 66;
+      if (['audience', 'guests', 'vedushchy', 'category', 'indiv_sub', 'welcome_wishes', 'duration'].includes(qState.step)) progress = 95;
+
+      html += '<div style="margin-bottom:24px;">'
+        + '<div style="height:4px;background:rgba(255,255,255,0.1);border-radius:2px;">'
+        + '<div style="height:4px;background:#CBA135;border-radius:2px;width:' + progress + '%;transition:.3s;"></div>'
+        + '</div></div>';
+
+      var titleParts = uiTitle.split('\n');
+      html += '<h3 style="font-family:var(--ff-head);color:#fff;font-size:20px;margin-bottom:8px;">' + titleParts[0] + '</h3>';
+      if (titleParts[1]) html += '<p style="color:#aaa;font-size:15px;margin-bottom:20px;line-height:1.4;">' + titleParts[1] + '</p><br>';
+
+      if (uiInput) {
+        html += '<input id="qDynInput" type="text" placeholder="' + uiInput.placeholder + '" style="width:100%;background:#12121f;color:#eee;border:1px solid rgba(203,161,40,0.4);border-radius:10px;padding:14px 16px;font-size:15px;outline:none;box-sizing:border-box;margin-bottom:20px;" onkeydown="if(event.key===\'Enter\')handleDynInput()">';
+        html += '<button onclick="handleDynInput()" class="btn btn--primary" style="width:100%;">Далее →</button>';
+      }
+
+      if (uiButtons.length > 0) {
+        html += '<div style="display:flex;flex-wrap:wrap;gap:10px;">';
+        uiButtons.forEach(b => {
+          var bg = b.color === 'primary' ? 'linear-gradient(135deg,var(--gold),var(--gold2))' : 'rgba(203,161,40,0.1)';
+          var color = b.color === 'primary' ? '#111' : '#eee';
+          var hoverBg = b.color === 'primary' ? bg : 'rgba(203,161,40,0.25)';
+          var flex = ['day', 'month', 'duration', 'indiv_sub'].includes(qState.step) ? 'flex: 1 1 calc(33% - 10px); min-width:80px; text-align:center;' : 'width:100%; text-align:left;';
+          if (qState.step === 'month' || qState.step === 'duration' || qState.step === 'indiv_sub') flex = 'flex: 1 1 calc(50% - 10px); min-width:120px; text-align:center;';
+          if (qState.step === 'start') flex = 'width:100%; text-align:center;';
+
+          html += '<button onclick="handleDynClick(\'' + String(b.val) + '\')" style="background:' + bg + ';border:1px solid rgba(203,161,40,0.35);color:' + color + ';border-radius:10px;padding:14px 16px;font-size:15px;font-weight:600;cursor:pointer;transition:.2s;' + flex + '" onmouseover="this.style.background=\'' + hoverBg + '\'" onmouseout="this.style.background=\'' + bg + '\'">' + b.label + '</button>';
+        });
+        html += '</div>';
+      }
+
+      var activeMagicPrize = getMagicPrize();
+      if (qState.step === 'start' && activeMagicPrize) {
+        html += '<div style="margin-top:14px;margin-bottom:16px;padding:12px 14px;border-radius:12px;background:rgba(143,210,160,0.08);border:1px solid rgba(143,210,160,0.25);color:#cfe8d4;font-size:14px;line-height:1.45;">🎁 Активный бонус из игры: <b style="color:#8fd2a0;">' + activeMagicPrize.userLabel + '</b></div>';
+      }
+
+      if (qState.history.length > 0) {
+        html += '<button onclick="routeToMiniApp(\'' + VK_CONTACT_URL + '\')" style="margin-top:20px;width:100%;text-align:center;background:none;border:1px dashed rgba(255,255,255,0.2);color:#ccc;padding:12px;border-radius:8px;font-size:14px;cursor:pointer;transition:.2s;" onmouseover="this.style.borderColor=\'var(--gold)\';this.style.color=\'#fff\'" onmouseout="this.style.borderColor=\'rgba(255,255,255,0.2)\';this.style.color=\'#ccc\'">💬 Написать лично</button>';
+        html += '<div style="text-align:center;"><button onclick="popState()" style="margin-top:12px;background:none;border:none;color:#888;font-size:14px;cursor:pointer;padding:8px 0;">← Назад</button></div>';
+      } else if (qState.step === 'start') {
+        html += '<button onclick="routeToMiniApp(\'' + VK_CONTACT_URL + '\')" style="margin-top:20px;width:100%;text-align:center;background:none;border:1px dashed rgba(255,255,255,0.2);color:#ccc;padding:12px;border-radius:8px;font-size:14px;cursor:pointer;transition:.2s;" onmouseover="this.style.borderColor=\'var(--gold)\';this.style.color=\'#fff\'" onmouseout="this.style.borderColor=\'rgba(255,255,255,0.2)\';this.style.color=\'#ccc\'">💬 Или написать лично</button>';
+      }
+
+      document.getElementById('quizContent').innerHTML = html;
+      var inp = document.getElementById('qDynInput');
+      if (inp) { inp.focus(); }
+    }
+
+    function handleDynClick(val) {
+      if (qState.step === 'start') { pushState('month'); return; }
+      if (qState.step === 'month') { qState.month = parseInt(val); pushState('day'); return; }
+      if (qState.step === 'day') { qState.day = parseInt(val); pushState('time'); return; }
+      if (qState.step === 'time') { qState.time = val; pushState('oblast'); return; }
+      if (qState.step === 'oblast') { qState.oblast = val; pushState('city'); return; }
+      if (qState.step === 'city') { qState.city = val; pushState('audience'); return; }
+
+      if (qState.step === 'audience') {
+        qState.audience = val;
+        if (val === 'детское') { qState.serviceType = 'Детское шоу'; pushState('duration'); }
+        else { pushState('guests'); }
+        return;
+      }
+      if (qState.step === 'guests') {
+        qState.guests = val;
+        if (val === 'мало') { qState.serviceType = 'Микромагия_мало'; pushState('duration'); }
+        else { pushState('vedushchy'); }
+        return;
+      }
+      if (qState.step === 'vedushchy') { qState.vedushchy = val; pushState('category'); return; }
+      if (qState.step === 'category') {
+        qState.category = val;
+        if (val === 'Индивидуальное шоу') { pushState('indiv_sub'); }
+        else if (val === 'Микромагия') { qState.serviceType = 'Микромагия_много'; pushState('welcome_wishes'); }
+        else { qState.serviceType = 'Стандартная шоу-программа'; pushState('duration'); }
+        return;
+      }
+      if (qState.step === 'indiv_sub') {
+        qState.indivEvent = val; qState.serviceType = 'Индивидуальное шоу'; pushState('duration'); return;
+      }
+      if (qState.step === 'duration') {
+        qState.duration = val;
+        finishDynQuiz();
+        return;
+      }
+    }
+
+    function handleDynInput() {
+      var val = (document.getElementById('qDynInput') || {}).value || '';
+      if (qState.step === 'time') { qState.time = val || 'Не указано'; pushState('oblast'); return; }
+      if (qState.step === 'welcome_wishes') { qState.welcomeWishes = val || 'Нет'; pushState('duration'); return; }
+    }
+
+    function calcFinalPrice() {
+      // Logic from vkbot.js calcPrice
+      var mappedType = qState.serviceType;
+      var mappedDur = qState.duration;
+      if (mappedType === 'Микромагия_мало' || mappedType === 'Микромагия_много') mappedType = 'Микромагия';
+      if (mappedType === 'Стандартная шоу-программа') mappedType = 'Взрослое шоу';
+      if (mappedType === 'Индивидуальное шоу') mappedType = qState.indivEvent || 'Выпускной';
+
+      var svcEntry = (getCfgServices()[mappedType] || {})[mappedDur];
+      var serviceBase = typeof svcEntry === 'object' ? (svcEntry.price || 0) : (svcEntry || 0);
+      if (!serviceBase) return null;
+
+      var travelCost = getTravelCost(qState.oblast, qState.city);
+      var mult = getHolidayMultiplier(qState.month, qState.day);
+      var originalTotal = Math.round((serviceBase + travelCost) * mult);
+      var magicPrize = getMagicPrize();
+      var discountAmount = 0;
+      if (magicPrize && magicPrize.type === 'discount' && magicPrize.percent > 0) {
+        discountAmount = Math.round(originalTotal * (magicPrize.percent / 100));
+      }
+      var total = Math.max(originalTotal - discountAmount, 0);
+      var depositPct = getCfgDeposit() / 100;
+      var deposit = Math.round(total * depositPct);
+
+      return {
+        total: total,
+        originalTotal: originalTotal,
+        discountAmount: discountAmount,
+        deposit: deposit,
+        travel: travelCost,
+        mult: mult,
+        magicPrize: magicPrize
+      };
+    }
+
+    function finishDynQuiz() {
+      trackYandexGoal('quiz_completed', { app: 'site76' });
+      var dateStr = qState.day + '.' + qState.month + ' / ' + qState.time;
+      var locStr = qState.oblast + ', ' + qState.city;
+      var typeStr = (qState.serviceType === 'Микромагия_мало' || qState.serviceType === 'Микромагия_много') ? 'Микромагия' : qState.serviceType;
+      if (qState.indivEvent) typeStr += ' (' + qState.indivEvent + ')';
+
+      var price = calcFinalPrice();
+      var magicPrize = getMagicPrize();
+      var guestsLabel = qState.guests ? (qState.guests === 'мало' ? 'До 30' : 'Больше 30') : '';
+      var leadId = 'QZ-' + Date.now().toString().slice(-8);
+      var priceText = price ? rub(price.total) : '';
+      var depositText = price ? rub(price.deposit) : '';
+      var holidayText = price && price.mult > 1 ? price.mult + 'x' : '';
+
+      var msg = '🎩 Расчёт с сайта\n\n'
+        + '📅 Дата: ' + dateStr + '\n📍 Город: ' + locStr + '\n'
+        + '🎪 Формат: ' + typeStr + ' — ' + qState.duration + '\n';
+
+      if (qState.guests) msg += '👥 Гости: ' + guestsLabel + '\n';
+      if (qState.vedushchy) msg += '🎤 Ведущий: ' + qState.vedushchy + '\n';
+      if (qState.welcomeWishes) msg += '✨ Пожелания: ' + qState.welcomeWishes + '\n';
+      if (magicPrize) msg += '🎁 Бонус из игры: ' + magicPrize.userLabel + '\n';
+      if (qState.serviceType === 'Детское шоу') msg += '\n📌 Каждый ребенок сверх 10 = +1 000 руб.\n';
+
+      var html = '<div style="text-align:center;">';
+      html += '<div style="font-size:48px;margin-bottom:10px;">✅</div>';
+
+      if (price) {
+        msg += '\n💰 Расчёт:\nИтого: ' + rub(price.total) + '\nПредоплата: ' + rub(price.deposit);
+        html += '<h3 style="font-family:var(--ff-head);color:var(--gold);font-size:24px;margin-bottom:20px;">Ваш предварительный расчет</h3>';
+        html += '<div style="background:rgba(255,255,255,0.03);border:1px dashed rgba(203,161,40,0.3);padding:16px;border-radius:12px;margin-bottom:24px;">';
+        if (price.discountAmount > 0) {
+          html += '<p style="color:#777;font-size:14px;margin-bottom:6px;text-decoration:line-through;">Без бонуса: ' + rub(price.originalTotal) + '</p>';
+        }
+        html += '<p style="color:#eee;font-size:16px;margin-bottom:8px;">Итоговая стоимость: <b style="color:var(--gold);font-size:20px;">' + rub(price.total) + '</b></p>';
+        html += '<p style="color:#aaa;font-size:14px;">Размер предоплаты: ' + rub(price.deposit) + '</p>';
+        if (price.magicPrize) {
+          html += '<p style="color:#8fd2a0;font-size:13px;margin-top:8px;">Активирован бонус: ' + price.magicPrize.userLabel + '</p>';
+        }
+        if (price.mult > 1) html += '<p style="color:#e96;font-size:12px;margin-top:6px;">*Учтена праздничная наценка ' + price.mult + 'x</p>';
+        html += '<p style="color:#88a;font-size:13px;margin-top:2px;">*Это сумма под ключ</p>';
+        html += '</div>';
+        html += '<p style="color:#ccc;font-size:14px;margin-bottom:24px;line-height:1.5;">Теперь вы можете сразу написать Дмитрию в личку ВКонтакте. Контекст квиза и бонус из игры автоматически отправятся в уведомление, чтобы разговор начался уже по делу.</p>';
+        html += '<button onclick="handleQuizBookingChannel(\'vk\')" class="btn btn--primary" style="width:100%;margin-bottom:12px;font-size:17px;">Забронировать в VK</button>';
+        html += '<button onclick="handleQuizBookingChannel(\'telegram\')" class="btn" style="width:100%;margin-bottom:12px;font-size:17px;">Написать лично в VK</button>';
+      } else {
+        html += '<h3 style="font-family:var(--ff-head);color:var(--gold);font-size:24px;margin-bottom:20px;">Заявка сформирована</h3>';
+        html += '<p style="color:#ccc;font-size:14px;margin-bottom:24px;line-height:1.5;">К сожалению, точную стоимость рассчитать автоматически не удалось. Но контекст уже сохранён: Дмитрий увидит ответы квиза и сможет быстро дать точную стоимость в удобном вам канале.</p>';
+        html += '<button onclick="handleQuizBookingChannel(\'vk\')" class="btn btn--primary" style="width:100%;margin-bottom:12px;font-size:17px;">Написать в VK</button>';
+        html += '<button onclick="handleQuizBookingChannel(\'telegram\')" class="btn" style="width:100%;margin-bottom:12px;font-size:17px;">Написать лично в VK</button>';
+      }
+
+      html += '<div style="display:flex;justify-content:center;gap:20px;">';
+      html += '<button onclick="popState()" style="background:none;border:none;color:#888;font-size:14px;cursor:pointer;">← Назад</button>';
+      html += '<button onclick="closeQuiz()" style="background:none;border:none;color:#888;font-size:14px;cursor:pointer;">Закрыть</button>';
+      html += '</div>';
+      html += '</div>';
+
+      qState.lastQuizResult = {
+        leadId: leadId,
+        date: dateStr,
+        location: locStr,
+        service: typeStr,
+        duration: qState.duration,
+        guestsLabel: guestsLabel,
+        hostLabel: qState.vedushchy || '',
+        wishes: qState.welcomeWishes || '',
+        priceText: priceText,
+        depositText: depositText,
+        holidayText: holidayText,
+        magicPrize: magicPrize,
+        magicPrizeLabel: magicPrize ? magicPrize.userLabel : '',
+        contactMessage: '',
+        rawMessage: msg
+      };
+      qState.lastQuizResult.contactMessage = buildQuizContactMessage(qState.lastQuizResult);
+
+      document.getElementById('quizContent').innerHTML = html;
+      sendQuizLead(qState.lastQuizResult, { kind: 'quiz_completed', note: 'Клиент завершил квиз и увидел итоговый экран.' });
+    }
+
+    function openQuiz() {
+      qState = {
+        step: 'start',
+        month: 0,
+        day: 0,
+        time: '',
+        oblast: '',
+        city: '',
+        audience: '',
+        guests: '',
+        vedushchy: '',
+        category: '',
+        indivEvent: '',
+        welcomeWishes: '',
+        serviceType: '',
+        duration: '',
+        history: [],
+        lastQuizResult: null,
+        sentLeadEvents: {}
+      };
+      document.getElementById('quizOverlay').style.display = 'block';
+      document.body.style.overflow = 'hidden';
+      renderActiveStep();
+    }
+    function closeQuiz() {
+      document.getElementById('quizOverlay').style.display = 'none';
+      document.body.style.overflow = '';
+    }
+
+    function quizSendToVK(msg) {
+      closeQuiz();
+      routeToMiniApp(buildVkPersonalChatUrl(msg));
+    }
+    function routeToBotForPrivate() { openQuiz(); }
+
+    // Lightbox Logic
+    function openLightbox(el) {
+      var lb = document.getElementById('lightbox');
+      var lbImg = document.getElementById('lbImg');
+      if (!lb || !lbImg || !el) return;
+      var imgPath;
+      if (el.tagName === 'IMG') {
+        imgPath = el.src;
+      } else if (el.tagName === 'DIV' && el.classList.contains('swiper-slide')) {
+        imgPath = el.querySelector('img').src;
+      }
+      if (imgPath) {
+        lbImg.src = imgPath;
+        lb.classList.add('active');
+        document.body.style.overflow = 'hidden';
+      }
+    }
+
+    function closeLightbox() {
+      var lb = document.getElementById('lightbox');
+      var lbImg = document.getElementById('lbImg');
+      if (!lb || !lbImg) return;
+      lb.classList.remove('active');
+      document.body.style.overflow = '';
+      lbImg.src = '';
+    }
+
+    function initBrandsMarquee() {
+      var track = document.getElementById('brandsTrack');
+      if (!track) return;
+      var sets = track.querySelectorAll('.brand-set');
+      if (!sets.length) return;
+
+      var firstSet = sets[0];
+      var recalc = function () {
+        var shift = Math.round(firstSet.getBoundingClientRect().width || 0);
+        if (!shift) return;
+        track.style.setProperty('--brands-shift', shift + 'px');
+        var duration = Math.max(14, shift / 65);
+        track.style.setProperty('--brands-duration', duration.toFixed(2) + 's');
+      };
+
+      recalc();
+      window.addEventListener('resize', recalc, { passive: true });
+      track.querySelectorAll('img').forEach(function (img) {
+        if (!img.complete) {
+          img.addEventListener('load', recalc, { once: true });
+          img.addEventListener('error', recalc, { once: true });
+        }
+      });
+    }
+
+    // Initialize Gallery Swiper
+    document.addEventListener("DOMContentLoaded", function () {
+      initBrandsMarquee();
+      new Swiper('.swiper-gallery', {
+        effect: 'coverflow',
+        grabCursor: true,
+        centeredSlides: true,
+        slidesPerView: 'auto',
+        coverflowEffect: {
+          rotate: 40,
+          stretch: 0,
+          depth: 250,
+          modifier: 1,
+          slideShadows: true,
+        },
+        loop: true,
+        autoplay: {
+          delay: 3000,
+          disableOnInteraction: false,
+        },
+        pagination: {
+          el: '.swiper-pagination',
+        },
+      });
+    });
   </script>
+
+  <!-- ===== TRANSITION OVERLAY ===== -->
+  <div id="transitionOverlay">
+    <div class="trn-ring"></div>
+    <div class="trn-ring"></div>
+    <div class="trn-ring"></div>
+    <div class="trn-ring"></div>
+    <div class="trn-core"></div>
+    <div class="trn-text">Abracadabra</div>
+  </div>
+  <script>
+    function startSchoolTransition(e) {
+      e.preventDefault();
+      var url = e.currentTarget.getAttribute('href');
+      var overlay = document.getElementById('transitionOverlay');
+      overlay.classList.add('active');
+      // переход после полного цикла анимации
+      setTimeout(function () {
+        window.location.href = url;
+      }, 1300);
+      return false;
+    }
+  </script>
+
 </body>
 
 </html>
