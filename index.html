@@ -3891,10 +3891,20 @@
       var startTime = Date.now();
       var MIN_THINK = 900 + Math.random() * 600; // 0.9-1.5s — будто менеджер читает
 
+      // sessionId — стабильный ID этого посетителя в localStorage
+      var sessionId = '';
+      try {
+        sessionId = localStorage.getItem('ekat_sid') || '';
+        if (!sessionId) {
+          sessionId = 'sid_' + Date.now().toString(36) + '_' + Math.random().toString(36).slice(2, 10);
+          localStorage.setItem('ekat_sid', sessionId);
+        }
+      } catch (_) { }
+
       fetch('/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ messages: assistantMessages, quizContext: quizContext })
+        body: JSON.stringify({ messages: assistantMessages, quizContext: quizContext, sessionId: sessionId })
       })
         .then(function (r) { return r.json(); })
         .then(function (data) {
