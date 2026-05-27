@@ -2441,7 +2441,7 @@
       style="max-width:500px;height:calc(100vh - 40px);max-height:680px;margin:0 auto;background:#0e0e1a;border-radius:20px;border:1px solid rgba(203,161,40,0.3);position:relative;display:flex;flex-direction:column;overflow:hidden;">
       <div style="display:flex;align-items:center;gap:12px;padding:18px 20px;border-bottom:1px solid rgba(203,161,40,0.15);background:rgba(203,161,40,0.05);">
         <div style="position:relative;width:42px;height:42px;flex-shrink:0;">
-          <img src="images/katerina.jpg" alt="Екатерина" style="width:42px;height:42px;border-radius:50%;object-fit:cover;border:1.5px solid rgba(203,161,40,0.5);box-shadow:0 0 14px rgba(203,161,40,0.25);">
+          <img src="images/katerina.jpg" alt="Екатерина" style="width:42px;height:42px;border-radius:50%;object-fit:cover;object-position:50% 25%;border:1.5px solid rgba(203,161,40,0.5);box-shadow:0 0 14px rgba(203,161,40,0.25);">
           <span style="position:absolute;right:-1px;bottom:-1px;width:11px;height:11px;background:#3ddc84;border:2px solid #0e0e1a;border-radius:50%;"></span>
         </div>
         <div style="flex:1;min-width:0;">
@@ -3736,10 +3736,32 @@
     function openAssistant() {
       var ov = document.getElementById('assistantOverlay');
       ov.style.display = 'block';
-      // первое приветствие
+
+      // Первое приветствие — два сообщения с эффектом "печатает"
       if (assistantMessages.length === 0) {
-        addAssistantBubble('assistant', 'Здравствуйте! Меня зовут Екатерина, я менеджер Дмитрия. Расскажите про ваше мероприятие — формат, дату, город — и я посчитаю точную стоимость.');
+        var greeting1 = 'Здравствуйте! Меня зовут Екатерина 🤝';
+        var greeting2 = 'Я менеджер Дмитрия Костюка. Расскажите про ваше мероприятие — посчитаю точную стоимость.';
+
+        // показываем "печатает" сразу
+        addAssistantTyping();
+
+        setTimeout(function () {
+          removeAssistantTyping();
+          assistantMessages.push({ role: 'assistant', content: greeting1 });
+          streamAssistantReply(greeting1).then(function () {
+            // короткая пауза → опять "печатает" → второе сообщение
+            setTimeout(function () {
+              addAssistantTyping();
+              setTimeout(function () {
+                removeAssistantTyping();
+                assistantMessages.push({ role: 'assistant', content: greeting2 });
+                streamAssistantReply(greeting2);
+              }, 900);
+            }, 350);
+          });
+        }, 700);
       }
+
       setTimeout(function () {
         var input = document.getElementById('assistantInput');
         if (input) input.focus();
