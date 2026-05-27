@@ -2440,10 +2440,13 @@
     <div id="assistantPanel"
       style="max-width:500px;height:calc(100vh - 40px);max-height:680px;margin:0 auto;background:#0e0e1a;border-radius:20px;border:1px solid rgba(203,161,40,0.3);position:relative;display:flex;flex-direction:column;overflow:hidden;">
       <div style="display:flex;align-items:center;gap:12px;padding:18px 20px;border-bottom:1px solid rgba(203,161,40,0.15);background:rgba(203,161,40,0.05);">
-        <div style="width:36px;height:36px;border-radius:50%;background:radial-gradient(circle,#fff8d6,#cba128);box-shadow:0 0 16px rgba(203,161,40,0.5);"></div>
+        <div style="position:relative;width:42px;height:42px;flex-shrink:0;">
+          <img src="images/katerina.jpg" alt="Екатерина" style="width:42px;height:42px;border-radius:50%;object-fit:cover;border:1.5px solid rgba(203,161,40,0.5);box-shadow:0 0 14px rgba(203,161,40,0.25);">
+          <span style="position:absolute;right:-1px;bottom:-1px;width:11px;height:11px;background:#3ddc84;border:2px solid #0e0e1a;border-radius:50%;"></span>
+        </div>
         <div style="flex:1;min-width:0;">
-          <div style="color:#cba128;font-size:15px;font-weight:600;font-family:var(--ff-head,serif);">Менеджер Дмитрия</div>
-          <div style="color:#888;font-size:12px;">подберёт формат и посчитает цену</div>
+          <div style="color:#cba128;font-size:15px;font-weight:600;font-family:var(--ff-head,serif);">Екатерина</div>
+          <div style="color:#7fc999;font-size:12px;">онлайн · менеджер Дмитрия</div>
         </div>
         <button onclick="closeAssistant()"
           style="background:none;border:none;color:#aaa;font-size:22px;cursor:pointer;padding:0 4px;line-height:1;">✕</button>
@@ -3735,7 +3738,7 @@
       ov.style.display = 'block';
       // первое приветствие
       if (assistantMessages.length === 0) {
-        addAssistantBubble('assistant', 'Здравствуйте! Я менеджер Дмитрия. Расскажите про ваше мероприятие — формат, дату, город — и я посчитаю точную стоимость.');
+        addAssistantBubble('assistant', 'Здравствуйте! Меня зовут Екатерина, я менеджер Дмитрия. Расскажите про ваше мероприятие — формат, дату, город — и я посчитаю точную стоимость.');
       }
       setTimeout(function () {
         var input = document.getElementById('assistantInput');
