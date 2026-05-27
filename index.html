@@ -2421,7 +2421,7 @@
   <button onclick="openAssistant()" id="assistantFab" aria-label="Открыть чат с помощником"
     style="position:fixed;right:22px;bottom:22px;width:64px;height:64px;border-radius:50%;border:2px solid #cba128;background:linear-gradient(135deg, #cba128, #9b7820);color:#0a0a14;font-size:26px;cursor:pointer;z-index:9999;display:flex;align-items:center;justify-content:center;box-shadow:0 8px 28px rgba(0,0,0,0.6), 0 0 36px rgba(203,161,40,0.45);transition:all 0.25s ease;animation:assistantPulse 2.5s ease-in-out infinite;">
     <span style="display:inline-block;line-height:1;">💬</span>
-    <span id="assistantFabHint" style="position:absolute;right:78px;top:50%;transform:translateY(-50%);background:#0e0e1a;color:#cba128;border:1px solid rgba(203,161,40,0.35);padding:8px 14px;border-radius:18px;font-size:13px;white-space:nowrap;font-family:inherit;pointer-events:none;opacity:0;transition:opacity 0.25s ease;">Задать вопрос</span>
+    <span id="assistantFabHint" style="position:absolute;right:78px;top:50%;transform:translateY(-50%);background:#0e0e1a;color:#cba128;border:1px solid rgba(203,161,40,0.35);padding:8px 14px;border-radius:18px;font-size:13px;white-space:nowrap;font-family:inherit;pointer-events:none;opacity:0;transition:opacity 0.25s ease;">Узнать стоимость</span>
   </button>
   <style>
     @keyframes assistantPulse {
@@ -2446,8 +2446,8 @@
       <div style="display:flex;align-items:center;gap:12px;padding:18px 20px;border-bottom:1px solid rgba(203,161,40,0.15);background:rgba(203,161,40,0.05);">
         <div style="width:36px;height:36px;border-radius:50%;background:radial-gradient(circle,#fff8d6,#cba128);box-shadow:0 0 16px rgba(203,161,40,0.5);"></div>
         <div style="flex:1;min-width:0;">
-          <div style="color:#cba128;font-size:15px;font-weight:600;font-family:var(--ff-head,serif);">Помощник Дмитрия</div>
-          <div style="color:#888;font-size:12px;">отвечает на ваши вопросы</div>
+          <div style="color:#cba128;font-size:15px;font-weight:600;font-family:var(--ff-head,serif);">Менеджер Дмитрия</div>
+          <div style="color:#888;font-size:12px;">подберёт формат и посчитает цену</div>
         </div>
         <button onclick="closeAssistant()"
           style="background:none;border:none;color:#aaa;font-size:22px;cursor:pointer;padding:0 4px;line-height:1;">✕</button>
@@ -3728,7 +3728,7 @@
       closeQuiz();
       routeToMiniApp(buildVkPersonalChatUrl(msg));
     }
-    function routeToBotForPrivate() { openQuiz(); }
+    function routeToBotForPrivate() { openAssistant(); }
 
     // ===== AI ASSISTANT =====
     var assistantMessages = []; // history { role, content }
@@ -3739,7 +3739,7 @@
       ov.style.display = 'block';
       // первое приветствие
       if (assistantMessages.length === 0) {
-        addAssistantBubble('assistant', 'Здравствуйте! Я помощник Дмитрия. Спросите что угодно про шоу, цены, форматы — постараюсь помочь.');
+        addAssistantBubble('assistant', 'Здравствуйте! Я менеджер Дмитрия. Расскажите про ваше мероприятие — формат, дату, город — и я посчитаю точную стоимость.');
       }
       setTimeout(function () {
         var input = document.getElementById('assistantInput');
