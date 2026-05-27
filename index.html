@@ -2419,6 +2419,22 @@
 
 
   <!-- ===== AI ASSISTANT MODAL ===== -->
+  <style>
+    #assistantTyping .td {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #cba128;
+      opacity: 0.4;
+      animation: tdBlink 1.2s ease-in-out infinite;
+    }
+    #assistantTyping .td:nth-child(2) { animation-delay: 0.18s; }
+    #assistantTyping .td:nth-child(3) { animation-delay: 0.36s; }
+    @keyframes tdBlink {
+      0%, 60%, 100% { opacity: 0.3; transform: translateY(0); }
+      30%           { opacity: 1;   transform: translateY(-2px); }
+    }
+  </style>
   <div id="assistantOverlay"
     style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.92);z-index:9500;overflow:hidden;padding:20px;box-sizing:border-box;">
     <div id="assistantPanel"
@@ -3759,8 +3775,9 @@
       if (!box) return null;
       var b = document.createElement('div');
       b.id = 'assistantTyping';
-      b.style.cssText = 'align-self:flex-start;padding:10px 14px;color:#888;font-size:14px;';
-      b.textContent = '...';
+      b.style.cssText = 'align-self:flex-start;padding:10px 14px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.06);border-radius:16px;display:flex;align-items:center;gap:4px;';
+      b.innerHTML =
+        '<span class="td"></span><span class="td"></span><span class="td"></span>';
       box.appendChild(b);
       box.scrollTop = box.scrollHeight;
       return b;
@@ -3768,6 +3785,51 @@
     function removeAssistantTyping() {
       var t = document.getElementById('assistantTyping');
       if (t) t.remove();
+    }
+
+    // Постепенный вывод текста как живой набор
+    function streamAssistantReply(fullText) {
+      return new Promise(function (resolve) {
+        var box = document.getElementById('assistantMessages');
+        if (!box) { resolve(); return; }
+        var bubble = document.createElement('div');
+        bubble.style.cssText = [
+          'max-width: 85%',
+          'padding: 10px 14px',
+          'border-radius: 16px',
+          'font-size: 14px',
+          'line-height: 1.45',
+          'white-space: pre-wrap',
+          'word-wrap: break-word',
+          'align-self: flex-start',
+          'background: rgba(255,255,255,0.05)',
+          'color: #eee',
+          'border: 1px solid rgba(255,255,255,0.06)'
+        ].join(';');
+        box.appendChild(bubble);
+
+        // Бьём текст на слова, чтобы шёл естественный набор
+        var words = fullText.split(/(\s+)/); // сохраняем пробелы между словами
+        var i = 0;
+        var current = '';
+
+        function step() {
+          if (i >= words.length) { resolve(); return; }
+          current += words[i];
+          bubble.textContent = current;
+          box.scrollTop = box.scrollHeight;
+          i++;
+          // 35-90мс на слово + случайная микро-пауза для оживления
+          var word = words[i - 1] || '';
+          var delay = 35 + Math.random() * 55;
+          if (word.length > 6) delay += 30;
+          // Иногда лёгкая «задумчивая» пауза после точки/запятой
+          if (/[.!?]$/.test(word.trim())) delay += 250;
+          else if (/[,;:]$/.test(word.trim())) delay += 120;
+          setTimeout(step, delay);
+        }
+        step();
+      });
     }
 
     function sendAssistantMessage(e) {
@@ -3800,6 +3862,10 @@
         }
       } catch (_) { }
 
+      // Засекаем время запроса для минимальной задержки «человечности»
+      var startTime = Date.now();
+      var MIN_THINK = 900 + Math.random() * 600; // 0.9-1.5s — будто менеджер читает
+
       fetch('/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -3807,17 +3873,25 @@
       })
         .then(function (r) { return r.json(); })
         .then(function (data) {
+          // Гарантируем минимальную задержку перед стартом печати
+          var elapsed = Date.now() - startTime;
+          var wait = Math.max(0, MIN_THINK - elapsed);
+          return new Promise(function (resolve) {
+            setTimeout(function () { resolve(data); }, wait);
+          });
+        })
+        .then(function (data) {
           removeAssistantTyping();
           if (data && data.ok && data.reply) {
             assistantMessages.push({ role: 'assistant', content: data.reply });
-            addAssistantBubble('assistant', data.reply);
+            return streamAssistantReply(data.reply);
           } else {
-            addAssistantBubble('assistant', 'Извините, не удалось получить ответ. Попробуйте позже или оставьте заявку через квиз.');
+            addAssistantBubble('assistant', 'Извините, не удалось получить ответ. Попробуйте позже.');
           }
         })
         .catch(function () {
           removeAssistantTyping();
-          addAssistantBubble('assistant', 'Извините, помощник временно недоступен. Попробуйте позже или нажмите «Узнать стоимость».');
+          addAssistantBubble('assistant', 'Извините, я временно недоступен. Попробуйте чуть позже.');
         })
         .finally(function () {
           assistantBusy = false;
