@@ -2448,11 +2448,15 @@
       -webkit-tap-highlight-color: transparent;
     }
     .kp-tab .kp-tab-icon {
-      font-size: 18px;
+      width: 22px;
+      height: 22px;
+      object-fit: contain;
       line-height: 1;
       margin-bottom: 2px;
-      filter: grayscale(0.4) opacity(0.85);
+      filter: grayscale(0.5) opacity(0.7) brightness(1.15);
       transition: filter 0.25s ease, transform 0.25s ease;
+      pointer-events: none;
+      user-select: none;
     }
     .kp-tab:hover { color: #e7c776; }
     .kp-tab:hover .kp-tab-icon { filter: none; transform: translateY(-1px); }
@@ -2466,7 +2470,7 @@
       color: #6a6a78;
       cursor: not-allowed;
     }
-    .kp-tab.disabled .kp-tab-icon { filter: grayscale(1) opacity(0.5); }
+    .kp-tab.disabled .kp-tab-icon { filter: grayscale(1) opacity(0.4); }
     .kp-tab .kp-soon {
       position: absolute;
       top: 2px;
@@ -2502,32 +2506,32 @@
 
     @media (max-width: 380px) {
       .kp-tab { font-size: 10px; padding: 7px 4px; }
-      .kp-tab .kp-tab-icon { font-size: 16px; }
+      .kp-tab .kp-tab-icon { width: 20px; height: 20px; }
     }
     @media (min-width: 900px) {
       #kpBottomNav { bottom: 22px; width: 460px; }
       .kp-tab { padding: 10px 8px; font-size: 12px; }
-      .kp-tab .kp-tab-icon { font-size: 20px; }
+      .kp-tab .kp-tab-icon { width: 24px; height: 24px; }
     }
   </style>
 
   <nav id="kpBottomNav" role="navigation" aria-label="Kostyuk Project">
     <div class="kp-tab-wrap">
       <a class="kp-tab active" href="#" aria-current="page">
-        <span class="kp-tab-icon">🎩</span>
+        <img class="kp-tab-icon" src="icons/magician.png" alt="" />
         <span>Частные заказы</span>
       </a>
     </div>
     <div class="kp-tab-wrap">
       <a class="kp-tab" id="kpTabSchool" href="https://magic-school-eight.vercel.app/" onclick="return kpGoToSchool(event)">
-        <span class="kp-tab-icon">🪄</span>
+        <img class="kp-tab-icon" src="icons/wand.png" alt="" />
         <span>Школа фокусов</span>
       </a>
     </div>
     <div class="kp-tab-wrap">
       <button type="button" class="kp-tab disabled" onclick="kpShowSoon()" aria-disabled="true">
         <span class="kp-soon">скоро</span>
-        <span class="kp-tab-icon">🎭</span>
+        <img class="kp-tab-icon" src="icons/smoke.png" alt="" />
         <span>Концерты</span>
       </button>
     </div>
