@@ -2402,7 +2402,160 @@
 
   <footer>
     <div class="copy">&copy; 2026 &middot; Дмитрий Костюк &middot; Иллюзионист</div>
+    <div class="footer-spacer" aria-hidden="true"></div>
   </footer>
+
+  <!-- ===== KOSTYUK PROJECT — НИЖНЕЕ МЕНЮ ===== -->
+  <style>
+    .footer-spacer { height: 80px; }
+    #kpBottomNav {
+      position: fixed;
+      left: 50%;
+      bottom: 14px;
+      transform: translateX(-50%);
+      z-index: 9500;
+      display: flex;
+      gap: 4px;
+      padding: 6px;
+      background: rgba(14, 14, 26, 0.85);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border: 1px solid rgba(203, 161, 40, 0.32);
+      border-radius: 999px;
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.55), 0 0 0 1px rgba(255, 255, 255, 0.03) inset;
+      width: min(94vw, 440px);
+      justify-content: space-between;
+    }
+    .kp-tab {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2px;
+      padding: 8px 6px;
+      border-radius: 999px;
+      color: #c9c9d4;
+      text-decoration: none;
+      cursor: pointer;
+      background: transparent;
+      border: none;
+      font-family: inherit;
+      font-size: 11px;
+      line-height: 1.1;
+      letter-spacing: 0.02em;
+      transition: color 0.25s ease, background 0.25s ease, transform 0.25s ease;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .kp-tab .kp-tab-icon {
+      font-size: 18px;
+      line-height: 1;
+      margin-bottom: 2px;
+      filter: grayscale(0.4) opacity(0.85);
+      transition: filter 0.25s ease, transform 0.25s ease;
+    }
+    .kp-tab:hover { color: #e7c776; }
+    .kp-tab:hover .kp-tab-icon { filter: none; transform: translateY(-1px); }
+    .kp-tab.active {
+      color: #0e0e1a;
+      background: linear-gradient(135deg, #e7c776 0%, #cba128 100%);
+      box-shadow: 0 4px 14px rgba(203, 161, 40, 0.45);
+    }
+    .kp-tab.active .kp-tab-icon { filter: none; }
+    .kp-tab.disabled {
+      color: #6a6a78;
+      cursor: not-allowed;
+    }
+    .kp-tab.disabled .kp-tab-icon { filter: grayscale(1) opacity(0.5); }
+    .kp-tab .kp-soon {
+      position: absolute;
+      top: 2px;
+      right: 8px;
+      font-size: 8px;
+      color: #cba128;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      opacity: 0.8;
+    }
+    .kp-tab-wrap { position: relative; flex: 1; display: flex; }
+
+    /* Toast «Скоро» */
+    #kpToast {
+      position: fixed;
+      left: 50%;
+      bottom: 110px;
+      transform: translateX(-50%) translateY(10px);
+      z-index: 9600;
+      background: rgba(14, 14, 26, 0.95);
+      border: 1px solid rgba(203, 161, 40, 0.4);
+      color: #e7c776;
+      padding: 12px 20px;
+      border-radius: 14px;
+      font-size: 13px;
+      letter-spacing: 0.02em;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease, transform 0.3s ease;
+      backdrop-filter: blur(12px);
+    }
+    #kpToast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+    @media (max-width: 380px) {
+      .kp-tab { font-size: 10px; padding: 7px 4px; }
+      .kp-tab .kp-tab-icon { font-size: 16px; }
+    }
+    @media (min-width: 900px) {
+      #kpBottomNav { bottom: 22px; width: 460px; }
+      .kp-tab { padding: 10px 8px; font-size: 12px; }
+      .kp-tab .kp-tab-icon { font-size: 20px; }
+    }
+  </style>
+
+  <nav id="kpBottomNav" role="navigation" aria-label="Kostyuk Project">
+    <div class="kp-tab-wrap">
+      <a class="kp-tab active" href="#" aria-current="page">
+        <span class="kp-tab-icon">🎩</span>
+        <span>Частные заказы</span>
+      </a>
+    </div>
+    <div class="kp-tab-wrap">
+      <a class="kp-tab" id="kpTabSchool" href="https://magic-school-eight.vercel.app/" onclick="return kpGoToSchool(event)">
+        <span class="kp-tab-icon">🪄</span>
+        <span>Школа фокусов</span>
+      </a>
+    </div>
+    <div class="kp-tab-wrap">
+      <button type="button" class="kp-tab disabled" onclick="kpShowSoon()" aria-disabled="true">
+        <span class="kp-soon">скоро</span>
+        <span class="kp-tab-icon">🎭</span>
+        <span>Концерты</span>
+      </button>
+    </div>
+  </nav>
+
+  <div id="kpToast" role="status" aria-live="polite">Раздел «Концерты» скоро откроется</div>
+
+  <script>
+    function kpGoToSchool(e) {
+      if (e) e.preventDefault();
+      var url = 'https://magic-school-eight.vercel.app/';
+      var portal = document.getElementById('kostyukPortal');
+      if (portal) {
+        portal.classList.add('active');
+        setTimeout(function(){ window.location.href = url; }, 1750);
+      } else {
+        window.location.href = url;
+      }
+      return false;
+    }
+    function kpShowSoon() {
+      var t = document.getElementById('kpToast');
+      if (!t) return;
+      t.classList.add('show');
+      clearTimeout(window.__kpToastTimer);
+      window.__kpToastTimer = setTimeout(function(){ t.classList.remove('show'); }, 2200);
+    }
+  </script>
 
 
   <!-- ===== QUIZ MODAL ===== -->
