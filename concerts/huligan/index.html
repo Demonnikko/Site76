@@ -1,0 +1,903 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>ХУЛИgan — Магический стендап · Дмитрий Костюк</title>
+  <meta name="description" content="ХУЛИgan — магический стендап Дмитрия Костюка. 1 час 20 минут дерзкого юмора (16+) и иллюзий с вашими вещами." />
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/kp-favicon-32.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/kp-apple-touch.png" />
+  <link rel="stylesheet" href="/vendor/fonts/fonts.css" />
+  <link rel="stylesheet" href="/ecosystem.css?v=4" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+    :root {
+      --bg: #080503;
+      --bg2: #14080a;
+      --fire: #FF6B00;
+      --fire-bright: #FFE566;
+      --fire-deep: #FF3D00;
+      --fire-coal: #A81800;
+      --brick: #6B1F0E;
+      --text: #fff5eb;
+      --muted: rgba(255, 245, 235, 0.6);
+      --border: rgba(255, 110, 0, 0.32);
+    }
+    html, body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+    a { color: inherit; text-decoration: none; }
+
+    /* Floating fire embers */
+    .embers {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+      z-index: 0;
+    }
+    .ember {
+      position: absolute;
+      width: 4px;
+      height: 4px;
+      background: var(--fire);
+      border-radius: 50%;
+      filter: blur(0.5px);
+      box-shadow: 0 0 8px var(--fire), 0 0 18px rgba(255, 60, 0, 0.7);
+      opacity: 0.7;
+      animation: rise linear infinite;
+    }
+    @keyframes rise {
+      0%   { transform: translateY(100vh) translateX(0) scale(1); opacity: 0; }
+      10%  { opacity: 0.8; }
+      90%  { opacity: 0.6; }
+      100% { transform: translateY(-10vh) translateX(40px) scale(0.4); opacity: 0; }
+    }
+
+    .back-btn {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      z-index: 100;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 16px 10px 14px;
+      border-radius: 999px;
+      background: rgba(20, 8, 4, 0.85);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--border);
+      color: var(--text);
+      font-size: 12px;
+      letter-spacing: 0.06em;
+      cursor: pointer;
+      transition: background 0.25s ease, transform 0.25s ease;
+    }
+    .back-btn:hover { background: rgba(255, 110, 0, 0.18); transform: translateX(-3px); }
+    .back-btn::before { content: '‹'; font-size: 18px; line-height: 1; }
+
+    main { position: relative; z-index: 2; }
+
+    /* ========= HERO ========= */
+    .hero {
+      min-height: 100vh;
+      padding: 80px 20px 120px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      background:
+        radial-gradient(circle at 50% 60%, rgba(255, 60, 0, 0.18) 0%, transparent 55%),
+        var(--bg);
+      position: relative;
+    }
+    /* Brick texture overlay */
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      opacity: 0.04;
+      background-image:
+        repeating-linear-gradient(0deg, transparent 0 40px, rgba(255, 110, 0, 0.3) 40px 41px),
+        repeating-linear-gradient(90deg, transparent 0 80px, rgba(255, 110, 0, 0.3) 80px 81px);
+      pointer-events: none;
+    }
+
+    .poster-wrap {
+      max-width: 380px;
+      width: 100%;
+      margin-bottom: 36px;
+      position: relative;
+      animation: shake 7s ease-in-out infinite;
+    }
+    @keyframes shake {
+      0%, 100% { transform: rotate(0deg); }
+      25%      { transform: rotate(-1deg); }
+      75%      { transform: rotate(1deg); }
+    }
+    .poster {
+      width: 100%;
+      height: auto;
+      border-radius: 12px;
+      box-shadow:
+        0 30px 80px rgba(0,0,0,0.8),
+        0 0 80px rgba(255, 60, 0, 0.35);
+      display: block;
+    }
+
+    .eyebrow {
+      display: inline-block;
+      font-family: 'Anton', sans-serif;
+      font-size: 13px;
+      letter-spacing: 0.32em;
+      text-transform: uppercase;
+      color: var(--fire);
+      margin-bottom: 14px;
+      transform: skewX(-6deg);
+    }
+    h1.title {
+      font-family: 'Anton', sans-serif;
+      font-size: clamp(56px, 13vw, 130px);
+      font-weight: 400;
+      letter-spacing: 0.01em;
+      line-height: 0.9;
+      background: linear-gradient(180deg, #FFE566 0%, #FF9000 42%, #FF3D00 82%, #A81800 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      margin-bottom: 14px;
+      text-shadow: 0 0 60px rgba(255, 60, 0, 0.35);
+      transform: skewX(-4deg);
+    }
+    h1.title .gan {
+      background: linear-gradient(180deg, #fff 0%, #FFE566 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    .subtitle {
+      font-family: 'Anton', sans-serif;
+      font-size: clamp(16px, 2.8vw, 22px);
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--fire-bright);
+      max-width: 540px;
+      margin-bottom: 32px;
+      transform: skewX(-3deg);
+    }
+    .meta {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-bottom: 36px;
+    }
+    .meta__item {
+      font-family: 'Anton', sans-serif;
+      font-size: 13px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--fire-bright);
+      padding: 7px 16px;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      background: rgba(255, 60, 0, 0.08);
+    }
+
+    .buy-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 18px 38px;
+      border-radius: 8px;
+      background: linear-gradient(180deg, #FF9000 0%, #FF3D00 60%, #A81800 100%);
+      color: #fff;
+      font-family: 'Anton', sans-serif;
+      font-size: 18px;
+      font-weight: 400;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      box-shadow: 0 12px 36px rgba(255, 60, 0, 0.55), inset 0 1px 0 rgba(255,255,255,0.25);
+      cursor: pointer;
+      border: 1px solid rgba(255, 144, 0, 0.6);
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+      position: relative;
+      transform: skewX(-4deg);
+    }
+    .buy-cta:hover {
+      transform: skewX(-4deg) translateY(-2px);
+      box-shadow: 0 16px 44px rgba(255, 60, 0, 0.7), inset 0 1px 0 rgba(255,255,255,0.3);
+    }
+
+    /* === МОДАЛКА БРОНИ === */
+    .modal {
+      position: fixed;
+      inset: 0;
+      z-index: 9800;
+      background: rgba(0, 0, 0, 0.88);
+      backdrop-filter: blur(12px);
+      display: none;
+      align-items: flex-start;
+      justify-content: center;
+      padding: 40px 16px 100px;
+      overflow-y: auto;
+    }
+    .modal.show { display: flex; }
+    .modal__box {
+      width: 100%;
+      max-width: 520px;
+      background: linear-gradient(180deg, #14080a 0%, #0c0503 100%);
+      border-radius: 16px;
+      border: 1px solid var(--border);
+      padding: 32px 24px 28px;
+      box-shadow: 0 30px 80px rgba(0,0,0,0.85), 0 0 80px rgba(255, 60, 0, 0.25);
+      position: relative;
+    }
+    .modal__close {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.08);
+      color: var(--text);
+      border: 1px solid var(--border);
+      font-size: 18px;
+      cursor: pointer;
+      line-height: 1;
+    }
+    .modal__close:hover { background: rgba(255, 110, 0, 0.25); }
+    .modal__title {
+      font-family: 'Anton', sans-serif;
+      font-size: 30px;
+      font-weight: 400;
+      text-align: center;
+      margin-bottom: 6px;
+      letter-spacing: 0.04em;
+      background: linear-gradient(180deg, #FFE566 0%, #FF9000 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      transform: skewX(-3deg);
+    }
+    .modal__sub {
+      text-align: center;
+      color: var(--muted);
+      font-size: 13px;
+      margin-bottom: 24px;
+    }
+
+    /* Карточка билета (общий вход) */
+    .ticket-card {
+      background: linear-gradient(180deg, rgba(60, 20, 5, 0.45) 0%, rgba(20, 8, 4, 0.45) 100%);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 22px 20px;
+      margin-bottom: 22px;
+      text-align: center;
+    }
+    .ticket-card__type {
+      font-family: 'Anton', sans-serif;
+      font-size: 22px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      background: linear-gradient(180deg, #fff 0%, #FFE566 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      margin-bottom: 6px;
+      transform: skewX(-2deg);
+    }
+    .ticket-card__desc {
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.5;
+      margin-bottom: 14px;
+    }
+    .ticket-card__price {
+      font-family: 'Anton', sans-serif;
+      font-size: 14px;
+      color: var(--fire);
+      letter-spacing: 0.18em;
+      opacity: 0.7;
+    }
+
+    /* Поля формы */
+    .field {
+      display: block;
+      margin-bottom: 14px;
+    }
+    .field__label {
+      display: block;
+      font-family: 'Anton', sans-serif;
+      font-size: 11px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--fire);
+      margin-bottom: 6px;
+    }
+    .field__input,
+    .field__textarea {
+      width: 100%;
+      padding: 12px 14px;
+      border-radius: 8px;
+      background: rgba(0,0,0,0.45);
+      border: 1px solid var(--border);
+      color: var(--text);
+      font-family: inherit;
+      font-size: 15px;
+      transition: border-color 0.25s ease, background 0.25s ease;
+      -webkit-appearance: none;
+      appearance: none;
+    }
+    .field__input:focus,
+    .field__textarea:focus {
+      outline: none;
+      border-color: var(--fire);
+      background: rgba(0,0,0,0.65);
+    }
+    .field__textarea { resize: vertical; min-height: 70px; }
+
+    /* Счётчик билетов */
+    .qty-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 18px;
+      padding: 12px 0;
+    }
+    .qty-btn {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: linear-gradient(180deg, #FF9000 0%, #FF3D00 100%);
+      color: #fff;
+      border: none;
+      font-size: 22px;
+      font-weight: 700;
+      cursor: pointer;
+      line-height: 1;
+    }
+    .qty-btn:disabled { opacity: 0.35; cursor: not-allowed; }
+    .qty-val {
+      font-family: 'Anton', sans-serif;
+      font-size: 32px;
+      color: #fff;
+      min-width: 44px;
+      text-align: center;
+    }
+
+    .modal__submit {
+      width: 100%;
+      padding: 18px;
+      border-radius: 10px;
+      background: linear-gradient(180deg, #FF9000 0%, #FF3D00 60%, #A81800 100%);
+      color: #fff;
+      font-family: 'Anton', sans-serif;
+      font-size: 18px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      border: 1px solid rgba(255, 144, 0, 0.6);
+      cursor: pointer;
+      margin-top: 10px;
+      transition: transform 0.2s ease, opacity 0.2s ease;
+      transform: skewX(-2deg);
+    }
+    .modal__submit:hover { transform: skewX(-2deg) translateY(-1px); }
+    .modal__submit:disabled { opacity: 0.5; cursor: not-allowed; transform: skewX(-2deg); }
+
+    .modal__success {
+      text-align: center;
+      padding: 24px 8px;
+    }
+    .modal__success-icon {
+      font-size: 64px;
+      margin-bottom: 14px;
+    }
+    .modal__success h3 {
+      font-family: 'Anton', sans-serif;
+      font-size: 28px;
+      letter-spacing: 0.06em;
+      margin-bottom: 8px;
+      color: var(--fire-bright);
+      transform: skewX(-3deg);
+    }
+    .modal__success p {
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    /* Stamp "только 40 мест" */
+    .stamp {
+      display: inline-block;
+      font-family: 'Anton', sans-serif;
+      font-size: 14px;
+      letter-spacing: 0.18em;
+      color: #FFE566;
+      border: 2px dashed rgba(255, 200, 0, 0.55);
+      padding: 8px 18px;
+      border-radius: 6px;
+      transform: rotate(-4deg) skewX(-3deg);
+      margin-top: 18px;
+    }
+
+    /* ========= SECTIONS ========= */
+    .section {
+      padding: 80px 20px;
+      max-width: 880px;
+      margin: 0 auto;
+      text-align: center;
+    }
+    .section__eyebrow {
+      font-family: 'Anton', sans-serif;
+      font-size: 13px;
+      letter-spacing: 0.42em;
+      text-transform: uppercase;
+      color: var(--fire);
+      margin-bottom: 14px;
+      display: block;
+    }
+    .section__title {
+      font-family: 'Anton', sans-serif;
+      font-size: clamp(32px, 5.5vw, 56px);
+      font-weight: 400;
+      margin-bottom: 28px;
+      line-height: 1;
+      letter-spacing: 0.02em;
+      background: linear-gradient(180deg, #fff 0%, #FFE566 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      transform: skewX(-2deg);
+    }
+    .section__text {
+      font-size: 16px;
+      line-height: 1.7;
+      color: rgba(255, 245, 235, 0.85);
+      margin-bottom: 18px;
+      text-align: left;
+    }
+    .section__text strong { color: var(--fire-bright); font-weight: 700; }
+    .section__quote {
+      font-family: 'Anton', sans-serif;
+      font-size: clamp(20px, 3vw, 28px);
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--fire-bright);
+      max-width: 720px;
+      margin: 50px auto;
+      padding: 30px;
+      border-left: 4px solid var(--fire);
+      border-right: 4px solid var(--fire);
+      background: linear-gradient(90deg, rgba(255, 60, 0, 0.05) 0%, transparent 50%, rgba(255, 60, 0, 0.05) 100%);
+      transform: skewX(-2deg);
+      line-height: 1.3;
+    }
+
+    /* Triggers grid */
+    .triggers {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 14px;
+      margin-top: 36px;
+    }
+    .trigger {
+      padding: 22px 18px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: linear-gradient(180deg, rgba(60, 20, 5, 0.45) 0%, rgba(20, 8, 4, 0.45) 100%);
+      text-align: left;
+      position: relative;
+      transform: skewX(-2deg);
+    }
+    .trigger__check {
+      width: 28px; height: 28px;
+      border-radius: 6px;
+      background: linear-gradient(135deg, var(--fire) 0%, var(--fire-deep) 100%);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+    .trigger__title {
+      font-family: 'Anton', sans-serif;
+      font-size: 18px;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+      color: #fff;
+    }
+    .trigger__desc {
+      font-size: 13.5px;
+      line-height: 1.5;
+      color: var(--muted);
+    }
+
+    /* Footer CTA */
+    .footer-cta {
+      padding: 80px 20px 160px;
+      text-align: center;
+      background:
+        radial-gradient(circle at 50% 0%, rgba(255, 60, 0, 0.15) 0%, transparent 60%),
+        transparent;
+    }
+    .footer-cta__title {
+      font-family: 'Anton', sans-serif;
+      font-size: clamp(28px, 4.5vw, 42px);
+      font-weight: 400;
+      margin-bottom: 14px;
+      color: #fff;
+      letter-spacing: 0.02em;
+      transform: skewX(-2deg);
+    }
+    .footer-cta__sub {
+      font-size: 14px;
+      color: var(--muted);
+      margin-bottom: 30px;
+      max-width: 460px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    /* Bottom nav */
+    #kpBottomNav {
+      position: fixed;
+      left: 50%;
+      bottom: 14px;
+      transform: translateX(-50%);
+      z-index: 9500;
+      display: flex;
+      gap: 4px;
+      padding: 6px;
+      background: rgba(20, 8, 4, 0.92);
+      backdrop-filter: blur(18px);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.65);
+      width: min(94vw, 440px);
+      justify-content: space-between;
+      font-family: inherit;
+    }
+    .kp-tab {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2px;
+      padding: 8px 6px;
+      border-radius: 999px;
+      color: #d8c7b6;
+      cursor: pointer;
+      background: transparent;
+      border: none;
+      font-family: inherit;
+      font-size: 11px;
+      letter-spacing: 0.02em;
+      transition: color 0.25s ease, background 0.25s ease;
+    }
+    .kp-tab .kp-tab-icon {
+      width: 22px; height: 22px; object-fit: contain;
+      margin-bottom: 2px;
+      filter: grayscale(0.5) opacity(0.7) brightness(1.15);
+    }
+    .kp-tab:hover { color: var(--fire-bright); }
+    .kp-tab:hover .kp-tab-icon { filter: none; }
+    .kp-tab.active {
+      color: #1a0a02;
+      background: linear-gradient(135deg, #FFE566 0%, #FF9000 100%);
+    }
+    .kp-tab.active .kp-tab-icon { filter: none; }
+    .kp-tab-wrap { flex: 1; display: flex; }
+
+    .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.8s ease, transform 0.8s cubic-bezier(0.2,0.8,0.2,1); }
+    .reveal.in { opacity: 1; transform: translateY(0); }
+    .d-1 { transition-delay: 0.15s; } .d-2 { transition-delay: 0.3s; } .d-3 { transition-delay: 0.45s; } .d-4 { transition-delay: 0.6s; }
+  </style>
+</head>
+<body>
+  <div class="embers" id="embers"></div>
+  <a class="back-btn" href="/concerts">К афише</a>
+
+  <main>
+    <section class="hero">
+      <div class="poster-wrap reveal">
+        <img class="poster" src="/concerts/images/huligan.jpg" alt="Афиша ХУЛИgan" />
+      </div>
+      <div class="eyebrow reveal d-1">Магический стендап</div>
+      <h1 class="title reveal d-1">ХУЛИ<span class="gan">gan</span></h1>
+      <div class="subtitle reveal d-2">Мы вас предупредили — 16+</div>
+
+      <div class="meta reveal d-3">
+        <span class="meta__item">16+</span>
+        <span class="meta__item">1 час 20 мин</span>
+        <span class="meta__item">Только 40 мест</span>
+      </div>
+
+      <button class="buy-cta reveal d-4" onclick="openHuliganModal()">Купить билет</button>
+    </section>
+
+    <section class="section">
+      <span class="section__eyebrow">Что это вообще такое</span>
+      <h2 class="section__title">Магия + стендап = ХУЛИgan</h2>
+      <p class="section__text">
+        Это не просто показ трюков. Это <strong>дерзкий коктейль из взрослого юмора (16+) и профессиональной иллюзии</strong>.
+        Ломка стереотипов, общение без цензуры и смех до слёз — пока мозг пытается понять «Как он это сделал?!»
+      </p>
+      <p class="section__text">
+        <strong>Магия с вашими вещами</strong> (вернём всё, но не точно). Никаких «выйдите на сцену и улыбнитесь» —
+        ты часть шоу с момента, как сел в кресло.
+      </p>
+
+      <div class="section__quote">
+        «Как он это сделал?!» — задаст себе каждый. Но никто не получит ответа.
+      </div>
+    </section>
+
+    <section class="section">
+      <span class="section__eyebrow">Чего ждать</span>
+      <h2 class="section__title">Что будет на шоу</h2>
+
+      <div class="triggers">
+        <div class="trigger">
+          <div class="trigger__check">✓</div>
+          <div class="trigger__title">Юмор без цензуры</div>
+          <div class="trigger__desc">Жёсткие шутки, неудобные темы, разговор как с другом за кружкой.</div>
+        </div>
+        <div class="trigger">
+          <div class="trigger__check">✓</div>
+          <div class="trigger__title">Магия с твоими вещами</div>
+          <div class="trigger__desc">Кошелёк, часы, телефон — всё попадает в шоу. И всё возвращается. Обычно.</div>
+        </div>
+        <div class="trigger">
+          <div class="trigger__check">✓</div>
+          <div class="trigger__title">Только 40 мест</div>
+          <div class="trigger__desc">Никакой стадионной дистанции. Ты рядом с артистом.</div>
+        </div>
+        <div class="trigger">
+          <div class="trigger__check">✓</div>
+          <div class="trigger__title">Сломанный мозг</div>
+          <div class="trigger__desc">Гарантировано. Иначе вернём деньги (но не точно).</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="footer-cta">
+      <div class="footer-cta__title">40 мест — мало. Бери сейчас.</div>
+      <div class="footer-cta__sub">Билеты разлетаются быстро. Оставь бронь — менеджер свяжется.</div>
+      <button class="buy-cta" onclick="openHuliganModal()">Купить билет</button>
+    </section>
+  </main>
+
+  <!-- ============== МОДАЛКА БРОНИ ============== -->
+  <div class="modal" id="bookingModal" role="dialog" aria-modal="true">
+    <div class="modal__box">
+      <button class="modal__close" onclick="closeHuliganModal()" aria-label="Закрыть">×</button>
+
+      <div id="bookingForm">
+        <div class="modal__title">ХУЛИGAN</div>
+        <div class="modal__sub">Магический стендап · 16+</div>
+
+        <div class="ticket-card">
+          <div class="ticket-card__type">Общий вход</div>
+          <div class="ticket-card__desc">
+            40 мест на шоу. Без рассадки — садись где удобно.<br>Главное — успеть купить.
+          </div>
+          <div class="ticket-card__price">Скоро цены</div>
+        </div>
+
+        <form id="bookingFormEl" onsubmit="return submitHuliganBooking(event)">
+          <label class="field">
+            <span class="field__label">Желаемая дата</span>
+            <input class="field__input" type="text" name="eventDate" placeholder="например: 31 января 2026" />
+          </label>
+
+          <div class="field">
+            <span class="field__label">Сколько билетов</span>
+            <div class="qty-row">
+              <button type="button" class="qty-btn" id="qtyMinus" onclick="changeQty(-1)">−</button>
+              <span class="qty-val" id="qtyVal">2</span>
+              <button type="button" class="qty-btn" id="qtyPlus" onclick="changeQty(1)">+</button>
+            </div>
+            <input type="hidden" name="ticketCount" id="ticketCount" value="2" />
+          </div>
+
+          <label class="field">
+            <span class="field__label">Ваше имя *</span>
+            <input class="field__input" type="text" name="name" required placeholder="Как к вам обращаться" />
+          </label>
+
+          <label class="field">
+            <span class="field__label">Телефон *</span>
+            <input class="field__input" type="tel" name="phone" required placeholder="+7 999 123-45-67" />
+          </label>
+
+          <label class="field">
+            <span class="field__label">Telegram (необязательно)</span>
+            <input class="field__input" type="text" name="telegram" placeholder="@username" />
+          </label>
+
+          <label class="field">
+            <span class="field__label">Комментарий</span>
+            <textarea class="field__textarea" name="comment" placeholder="Пожелания, вопросы"></textarea>
+          </label>
+
+          <button class="modal__submit" type="submit" id="bookingSubmit">Забронировать</button>
+        </form>
+      </div>
+
+      <div id="bookingSuccess" style="display:none">
+        <div class="modal__success">
+          <div class="modal__success-icon">🔥</div>
+          <h3>Принято!</h3>
+          <p>Менеджер Екатерина свяжется с вами,<br>чтобы подтвердить дату и оплату.</p>
+          <button class="modal__submit" onclick="closeHuliganModal()" style="margin-top:24px;max-width:220px;margin-left:auto;margin-right:auto;display:block;">Огонь</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <section class="kp-ecosystem-promo" aria-label="Другие проекты Дмитрия Костюка">
+    <div class="kp-ecosystem-promo__head"><div><small>Ещё в KOSTYUK PROJECT</small><h2>Магия может стать частью вашей истории</h2></div><p>Билеты на авторское шоу — главное здесь. Для личного праздника или обучения ребёнка выберите соседнее направление.</p></div>
+    <div class="kp-ecosystem-promo__grid">
+      <a class="kp-promo-card" href="/events/"><span class="kp-promo-card__label">Частные события</span><h3>Пригласите Дмитрия на ваш праздник</h3><p>Персональное выступление для свадьбы, юбилея, корпоратива или семейного вечера.</p><span class="kp-promo-card__action">Выбрать выступление <i>↗</i></span></a>
+      <a class="kp-promo-card" href="/school/"><span class="kp-promo-card__label">Дети 7–13 лет</span><h3>Первая школа фокусов в Ярославле</h3><p>Уверенность, речь и артистизм ребёнка через искусство иллюзии.</p><span class="kp-promo-card__action">Познакомиться со школой <i>↗</i></span></a>
+    </div>
+  </section>
+
+  <nav id="kpBottomNav" class="kp-bottom-nav" aria-label="Проекты Дмитрия Костюка">
+    <div class="kp-tab-wrap">
+      <a class="kp-tab" href="/events/">
+        <img class="kp-tab-icon" src="/icons/magician.png" alt="" />
+        <span>Частные события</span>
+      </a>
+    </div>
+    <div class="kp-tab-wrap">
+      <a class="kp-tab" href="/school/">
+        <img class="kp-tab-icon" src="/icons/wand.png" alt="" />
+        <span>Школа фокусов</span>
+      </a>
+    </div>
+    <div class="kp-tab-wrap">
+      <a class="kp-tab active" href="/concerts/" aria-current="page">
+        <img class="kp-tab-icon" src="/icons/smoke.png" alt="" />
+        <span>Авторские шоу</span>
+      </a>
+    </div>
+  </nav>
+
+  <script>
+    (function() {
+      var embers = document.getElementById('embers');
+      for (var i = 0; i < 40; i++) {
+        var e = document.createElement('div');
+        e.className = 'ember';
+        e.style.left = Math.random() * 100 + 'vw';
+        e.style.animationDuration = (8 + Math.random() * 12) + 's';
+        e.style.animationDelay = (Math.random() * 12) + 's';
+        e.style.transform = 'scale(' + (0.5 + Math.random() * 1.5) + ')';
+        embers.appendChild(e);
+      }
+    })();
+
+    window.addEventListener('load', function() {
+      setTimeout(function() {
+        document.querySelectorAll('.reveal').forEach(function(el) { el.classList.add('in'); });
+      }, 100);
+    });
+    var obs = new IntersectionObserver(function(entries) {
+      entries.forEach(function(e) { if (e.isIntersecting) e.target.classList.add('in'); });
+    }, { threshold: 0.15 });
+    document.querySelectorAll('.section__title, .section__text, .trigger, .footer-cta__title, .footer-cta__sub').forEach(function(el) {
+      el.classList.add('reveal');
+      obs.observe(el);
+    });
+
+    // ============== МОДАЛКА ==============
+    var bookingModal = document.getElementById('bookingModal');
+
+    function openHuliganModal() {
+      bookingModal.classList.add('show');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeHuliganModal() {
+      bookingModal.classList.remove('show');
+      document.body.style.overflow = '';
+      setTimeout(function() {
+        document.getElementById('bookingForm').style.display = '';
+        document.getElementById('bookingSuccess').style.display = 'none';
+        var f = document.getElementById('bookingFormEl');
+        if (f) f.reset();
+        setQty(2);
+      }, 300);
+    }
+    window.openHuliganModal = openHuliganModal;
+    window.closeHuliganModal = closeHuliganModal;
+
+    bookingModal.addEventListener('click', function(e) {
+      if (e.target === bookingModal) closeHuliganModal();
+    });
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape' && bookingModal.classList.contains('show')) closeHuliganModal();
+    });
+
+    // ============== СЧЁТЧИК БИЛЕТОВ ==============
+    function setQty(val) {
+      val = Math.max(1, Math.min(10, val));
+      document.getElementById('qtyVal').textContent = val;
+      document.getElementById('ticketCount').value = val;
+      document.getElementById('qtyMinus').disabled = val <= 1;
+      document.getElementById('qtyPlus').disabled = val >= 10;
+    }
+    function changeQty(delta) {
+      var cur = parseInt(document.getElementById('ticketCount').value, 10) || 1;
+      setQty(cur + delta);
+    }
+    window.changeQty = changeQty;
+    setQty(2);
+
+    // ============== ОТПРАВКА ==============
+    function getSource() {
+      try {
+        if (window.vkBridge || /VKBridge/i.test(navigator.userAgent)) return 'vk';
+        if (window.Telegram && window.Telegram.WebApp) return 'tg';
+      } catch (e) {}
+      return 'web';
+    }
+
+    async function submitHuliganBooking(e) {
+      e.preventDefault();
+      var btn = document.getElementById('bookingSubmit');
+      btn.disabled = true;
+      btn.textContent = 'Отправляем...';
+
+      var form = e.target;
+      var data = new FormData(form);
+      var payload = {
+        show: 'huligan',
+        eventDate: data.get('eventDate') || '',
+        ticketType: 'Общий вход',
+        ticketCount: parseInt(data.get('ticketCount'), 10) || 1,
+        name: data.get('name') || '',
+        phone: data.get('phone') || '',
+        telegram: data.get('telegram') || '',
+        comment: data.get('comment') || '',
+        source: getSource(),
+      };
+
+      try {
+        var r = await fetch('/api/lead-concert', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+        });
+        var json = await r.json();
+        if (json && json.ok) {
+          document.getElementById('bookingForm').style.display = 'none';
+          document.getElementById('bookingSuccess').style.display = 'block';
+        } else {
+          alert('Не удалось отправить заявку. Попробуйте позже или напишите Екатерине.');
+          btn.disabled = false;
+          btn.textContent = 'Забронировать';
+        }
+      } catch (err) {
+        alert('Ошибка сети. Попробуйте ещё раз.');
+        btn.disabled = false;
+        btn.textContent = 'Забронировать';
+      }
+      return false;
+    }
+    window.submitHuliganBooking = submitHuliganBooking;
+  </script>
+</body>
+</html>
